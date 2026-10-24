@@ -1,0 +1,161 @@
+shipment_id,origin,destination,transport_mode,carrier,planned_delivery,actual_delivery,shipping_cost,status,shipped_at
+SYN-0001,"Shanghai, China","Rotterdam, Netherlands",Sea,Demo Ocean Two,2026-09-06T00:00:00Z,2026-09-05T00:00:00Z,1590.12,Delivered,2026-08-07T00:00:00Z
+SYN-0002,"Shanghai, China","Rotterdam, Netherlands",Sea,Demo Ocean One,2026-09-18T00:00:00Z,,1662.24,Delivered,2026-08-19T00:00:00Z
+SYN-0003,"Shanghai, China","Rotterdam, Netherlands",Sea,Demo Ocean Two,not-a-date,2026-09-22T00:00:00Z,1927.69,Delivered,2026-08-23T00:00:00Z
+SYN-0004,"Shanghai, China","Rotterdam, Netherlands",Sea,Demo Ocean One,2026-09-09T00:00:00Z,2026-99-99,1576.95,Delivered,2026-08-10T00:00:00Z
+SYN-0005,"Shanghai, China","Rotterdam, Netherlands",Sea,Demo Ocean Two,2026-09-13T00:00:00Z,2026-09-14T00:00:00Z,-250,Delivered,2026-08-14T00:00:00Z
+SYN-0006,,"Rotterdam, Netherlands",Sea,Demo Ocean One,2026-09-24T00:00:00Z,2026-09-27T00:00:00Z,1648.06,Delivered,2026-08-25T00:00:00Z
+SYN-0007,"Shanghai, China","Rotterdam, Netherlands",Sea,,2026-10-08T00:00:00Z,,1855.09,In Transit,2026-09-08T00:00:00Z
+,"Shanghai, China","Rotterdam, Netherlands",Sea,Demo Ocean One,2026-10-09T00:00:00Z,,1637.37,In Transit,2026-09-09T00:00:00Z
+SYN-0009,"Shanghai, China","Rotterdam, Netherlands",Sea,Demo Ocean Two,1995-01-01,,1756.54,In Transit,2026-09-09T00:00:00Z
+SYN-0010,"Shanghai, China","Rotterdam, Netherlands",Sea,Demo Ocean One,2026-10-06T00:00:00Z,,1848.2,In Transit,2026-09-06T00:00:00Z
+SYN-0011,"Shanghai, China","Rotterdam, Netherlands",Sea,Demo Ocean Two,2026-09-26T00:00:00Z,2026-09-27T00:00:00Z,,Delivered,2026-08-27T00:00:00Z
+SYN-0012,"Shanghai, China","Rotterdam, Netherlands",Sea,Demo Ocean One,2026-09-21T00:00:00Z,2026-09-24T00:00:00Z,not-a-cost,Delivered,2026-08-22T00:00:00Z
+SYN-0013,"Shanghai, China","Rotterdam, Netherlands",Sea,Demo Ocean Two,2026-09-16T00:00:00Z,2026-09-15T00:00:00Z,1680.05,unexpected-status,2026-08-17T00:00:00Z
+SYN-0014,"Shanghai, China","Rotterdam, Netherlands",Sea,Demo Ocean One,2026-09-20T00:00:00Z,2026-12-01T00:00:00Z,2046.9,Delivered,2026-08-21T00:00:00Z
+SYN-0015,"Shanghai, China","Rotterdam, Netherlands",Sea,Demo Ocean Two,2026-09-16T00:00:00Z,2026-09-16T00:00:00Z,1585.19,Delivered,2026-08-17T00:00:00Z
+SYN-0016,"Shanghai, China","Rotterdam, Netherlands",,Demo Ocean One,2026-09-14T00:00:00Z,2026-09-14T12:00:00Z,1582.23,Delivered,2026-08-15T00:00:00Z
+SYN-0017,"Shanghai, China","Rotterdam, Netherlands",Sea,Demo Ocean Two,2026-10-03T00:00:00Z,2026-09-25T00:00:00Z,1856.01,In Transit,2026-09-03T00:00:00Z
+SYN-0018,"Shanghai, China","Rotterdam, Netherlands",Sea,Demo Ocean One,2026-09-23T00:00:00Z,,1924.06,In Transit,2026-08-24T00:00:00Z
+SYN-0019,"Shanghai, China","Rotterdam, Netherlands",Sea,Demo Ocean Two,2026-10-09T00:00:00Z,,8100.0,In Transit,2026-09-09T00:00:00Z
+SYN-0020,"Shanghai, China","Rotterdam, Netherlands",Sea,Demo Ocean One,2026-10-04T00:00:00Z,,1572.55,In Transit,2026-09-04T00:00:00Z
+SYN-0021,"Shanghai, China","Rotterdam, Netherlands",Air,Demo Air Two,2026-09-17T00:00:00Z,2026-09-12T00:00:00Z,4724.93,Delivered,2026-09-30T00:00:00Z
+SYN-0022,"Shanghai, China","Rotterdam, Netherlands",Air,Demo Air One,2026-09-07T00:00:00Z,2026-09-07T12:00:00Z,4797.23,Delivered,2026-09-02T00:00:00Z
+SYN-0023,"Shanghai, China","Rotterdam, Netherlands",Air,Demo Air Two,2026-09-15T00:00:00Z,2026-09-16T00:00:00Z,4399.78,Delivered,2026-09-10T00:00:00Z
+SYN-0024,"Shanghai, China","Rotterdam, Netherlands",Air,Demo Air One,2026-09-24T00:00:00Z,2026-09-27T00:00:00Z,3714.11,Delivered,2026-09-19T00:00:00Z
+SYN-0025,"Shanghai, China","Rotterdam, Netherlands",Air,Demo Air Two,2026-09-19T00:00:00Z,2026-09-18T00:00:00Z,4652.26,Delivered,2026-09-14T00:00:00Z
+SYN-0026,"Shanghai, China","Rotterdam, Netherlands",Air,Demo Air One,2026-09-24T00:00:00Z,2026-09-23T20:00:00Z,4758.36,Delivered,2026-09-19T00:00:00Z
+SYN-0027,"Shanghai, China","Rotterdam, Netherlands",Air,Demo Air Two,2026-09-25T00:00:00Z,,4145.36,In Transit,2026-09-20T00:00:00Z
+SYN-0028,"Shanghai, China","Rotterdam, Netherlands",Air,Demo Air One,2026-10-06T00:00:00Z,,4475.03,In Transit,2026-10-01T00:00:00Z
+SYN-0029,"Shanghai, China","Rotterdam, Netherlands",Air,Demo Air Two,2026-10-03T00:00:00Z,,3864.82,In Transit,2026-09-28T00:00:00Z
+SYN-0030,"Shanghai, China","Rotterdam, Netherlands",Air,Demo Air One,2026-10-03T00:00:00Z,,3925.26,In Transit,2026-09-28T00:00:00Z
+SYN-0031,"Shanghai, China","Rotterdam, Netherlands",Air,Demo Air Two,2026-09-18T00:00:00Z,2026-09-17T00:00:00Z,4560.35,Delivered,2026-09-13T00:00:00Z
+SYN-0032,"Shanghai, China","Rotterdam, Netherlands",Air,Demo Air One,2026-09-06T00:00:00Z,2026-09-05T20:00:00Z,3747.11,Delivered,2026-09-01T00:00:00Z
+SYN-0033,"Shanghai, China","Rotterdam, Netherlands",Air,Demo Air Two,2026-09-06T00:00:00Z,2026-09-06T00:00:00Z,3875.77,Delivered,2026-09-01T00:00:00Z
+SYN-0034,"Shanghai, China","Rotterdam, Netherlands",Air,Demo Air One,2026-09-19T00:00:00Z,2026-09-19T12:00:00Z,3865.79,Delivered,2026-09-14T00:00:00Z
+SYN-0035,"Shanghai, China","Rotterdam, Netherlands",Air,Demo Air Two,2026-09-14T00:00:00Z,2026-09-15T00:00:00Z,4003.23,Delivered,2026-09-09T00:00:00Z
+SYN-0036,"Shanghai, China","Rotterdam, Netherlands",Air,Demo Air One,2026-09-06T00:00:00Z,2026-09-09T00:00:00Z,4542.73,Delivered,2026-09-01T00:00:00Z
+SYN-0037,"Shanghai, China","Rotterdam, Netherlands",Air,Demo Air Two,2026-09-29T00:00:00Z,,4538.15,In Transit,2026-09-24T00:00:00Z
+SYN-0038,"Shanghai, China","Rotterdam, Netherlands",Air,Demo Air One,2026-09-23T00:00:00Z,,3950.47,In Transit,2026-09-18T00:00:00Z
+SYN-0039,"Shanghai, China","Rotterdam, Netherlands",Air,Demo Air Two,2026-09-23T00:00:00Z,,4693.51,In Transit,2026-09-18T00:00:00Z
+SYN-0040,"Shanghai, China","Rotterdam, Netherlands",Air,Demo Air One,2026-10-04T00:00:00Z,,4000.39,In Transit,2026-09-29T00:00:00Z
+SYN-0041,"Shenzhen, China","Los Angeles, USA",Sea,Demo Ocean Two,2026-09-20T00:00:00Z,2026-09-21T00:00:00Z,2472.67,Delivered,2026-08-21T00:00:00Z
+SYN-0042,"Shenzhen, China","Los Angeles, USA",Sea,Demo Ocean One,2026-09-08T00:00:00Z,2026-09-11T00:00:00Z,2448.4,Delivered,2026-08-09T00:00:00Z
+SYN-0043,"Shenzhen, China","Los Angeles, USA",Sea,Demo Ocean Two,2026-09-16T00:00:00Z,2026-09-15T00:00:00Z,2010.33,Delivered,2026-08-17T00:00:00Z
+SYN-0044,"Shenzhen, China","Los Angeles, USA",Sea,Demo Ocean One,2026-09-11T00:00:00Z,2026-09-10T20:00:00Z,2131.12,Delivered,2026-08-12T00:00:00Z
+SYN-0045,"Shenzhen, China","Los Angeles, USA",Sea,Demo Ocean Two,2026-09-06T00:00:00Z,2026-09-06T00:00:00Z,2172.84,Delivered,2026-08-07T00:00:00Z
+SYN-0046,"Shenzhen, China","Los Angeles, USA",Sea,Demo Ocean One,2026-09-18T00:00:00Z,2026-09-18T12:00:00Z,1962.16,Delivered,2026-08-19T00:00:00Z
+SYN-0047,"Shenzhen, China","Los Angeles, USA",Sea,Demo Ocean Two,2026-10-09T00:00:00Z,,2225.73,In Transit,2026-09-09T00:00:00Z
+SYN-0048,"Shenzhen, China","Los Angeles, USA",Sea,Demo Ocean One,2026-10-10T00:00:00Z,,2152.77,In Transit,2026-09-10T00:00:00Z
+SYN-0049,"Shenzhen, China","Los Angeles, USA",Sea,Demo Ocean Two,2026-10-10T00:00:00Z,,2133.6,In Transit,2026-09-10T00:00:00Z
+SYN-0050,"Shenzhen, China","Los Angeles, USA",Sea,Demo Ocean One,2026-09-29T00:00:00Z,,2528.24,In Transit,2026-08-30T00:00:00Z
+SYN-0051,"Shenzhen, China","Los Angeles, USA",Sea,Demo Ocean Two,2026-09-22T00:00:00Z,2026-09-22T00:00:00Z,2206.29,Delivered,2026-08-23T00:00:00Z
+SYN-0052,"Shenzhen, China","Los Angeles, USA",Sea,Demo Ocean One,2026-09-24T00:00:00Z,2026-09-24T12:00:00Z,2368.82,Delivered,2026-08-25T00:00:00Z
+SYN-0053,"Shenzhen, China","Los Angeles, USA",Sea,Demo Ocean Two,2026-09-23T00:00:00Z,2026-09-24T00:00:00Z,1970.88,Delivered,2026-08-24T00:00:00Z
+SYN-0054,"Shenzhen, China","Los Angeles, USA",Sea,Demo Ocean One,2026-09-21T00:00:00Z,2026-09-24T00:00:00Z,2392.77,Delivered,2026-08-22T00:00:00Z
+SYN-0055,"Shenzhen, China","Los Angeles, USA",Sea,Demo Ocean Two,2026-09-13T00:00:00Z,2026-09-12T00:00:00Z,2263.63,Delivered,2026-08-14T00:00:00Z
+SYN-0056,"Shenzhen, China","Los Angeles, USA",Sea,Demo Ocean One,2026-09-14T00:00:00Z,2026-09-13T20:00:00Z,2121.87,Delivered,2026-08-15T00:00:00Z
+SYN-0057,"Shenzhen, China","Los Angeles, USA",Sea,Demo Ocean Two,2026-10-06T00:00:00Z,,2219.22,In Transit,2026-09-06T00:00:00Z
+SYN-0058,"Shenzhen, China","Los Angeles, USA",Sea,Demo Ocean One,2026-10-09T00:00:00Z,,2438.11,In Transit,2026-09-09T00:00:00Z
+SYN-0059,"Shenzhen, China","Los Angeles, USA",Sea,Demo Ocean Two,2026-09-22T00:00:00Z,,9900.0,In Transit,2026-08-23T00:00:00Z
+SYN-0060,"Shenzhen, China","Los Angeles, USA",Sea,Demo Ocean One,2026-09-25T00:00:00Z,,2319.93,In Transit,2026-08-26T00:00:00Z
+SYN-0061,"Shenzhen, China","Los Angeles, USA",Air,Demo Air Two,2026-09-09T00:00:00Z,2026-09-08T00:00:00Z,5483.84,Delivered,2026-09-04T00:00:00Z
+SYN-0062,"Shenzhen, China","Los Angeles, USA",Air,Demo Air One,2026-09-06T00:00:00Z,2026-09-05T20:00:00Z,4855.47,Delivered,2026-09-01T00:00:00Z
+SYN-0063,"Shenzhen, China","Los Angeles, USA",Air,Demo Air Two,2026-09-17T00:00:00Z,2026-09-17T00:00:00Z,5000.19,Delivered,2026-09-12T00:00:00Z
+SYN-0064,"Shenzhen, China","Los Angeles, USA",Air,Demo Air One,2026-09-12T00:00:00Z,2026-09-12T12:00:00Z,4339.97,Delivered,2026-09-07T00:00:00Z
+SYN-0065,"Shenzhen, China","Los Angeles, USA",Air,Demo Air Two,2026-09-18T00:00:00Z,2026-09-19T00:00:00Z,5821.99,Delivered,2026-09-13T00:00:00Z
+SYN-0066,"Shenzhen, China","Los Angeles, USA",Air,Demo Air One,2026-09-21T00:00:00Z,2026-09-24T00:00:00Z,5111.75,Delivered,2026-09-16T00:00:00Z
+SYN-0067,"Shenzhen, China","Los Angeles, USA",Air,Demo Air Two,2026-09-25T00:00:00Z,,5666.89,In Transit,2026-09-20T00:00:00Z
+SYN-0068,"Shenzhen, China","Los Angeles, USA",Air,Demo Air One,2026-10-01T00:00:00Z,,5622.75,In Transit,2026-09-26T00:00:00Z
+SYN-0069,"Shenzhen, China","Los Angeles, USA",Air,Demo Air Two,2026-10-08T00:00:00Z,,5266.72,In Transit,2026-10-03T00:00:00Z
+SYN-0070,"Shenzhen, China","Los Angeles, USA",Air,Demo Air One,2026-09-26T00:00:00Z,,4907.09,In Transit,2026-09-21T00:00:00Z
+SYN-0071,"Shenzhen, China","Los Angeles, USA",Air,Demo Air Two,2026-09-21T00:00:00Z,2026-09-22T00:00:00Z,5160.25,Delivered,2026-09-16T00:00:00Z
+SYN-0072,"Shenzhen, China","Los Angeles, USA",Air,Demo Air One,2026-09-10T00:00:00Z,2026-09-13T00:00:00Z,5740.3,Delivered,2026-09-05T00:00:00Z
+SYN-0073,"Shenzhen, China","Los Angeles, USA",Air,Demo Air Two,2026-09-07T00:00:00Z,2026-09-06T00:00:00Z,4830.96,Delivered,2026-09-02T00:00:00Z
+SYN-0074,"Shenzhen, China","Los Angeles, USA",Air,Demo Air One,2026-09-26T00:00:00Z,2026-09-25T20:00:00Z,4506.16,Delivered,2026-09-21T00:00:00Z
+SYN-0075,"Shenzhen, China","Los Angeles, USA",Air,Demo Air Two,2026-09-15T00:00:00Z,2026-09-15T00:00:00Z,5679.44,Delivered,2026-09-10T00:00:00Z
+SYN-0076,"Shenzhen, China","Los Angeles, USA",Air,Demo Air One,2026-09-17T00:00:00Z,2026-09-17T12:00:00Z,4701.36,Delivered,2026-09-12T00:00:00Z
+SYN-0077,"Shenzhen, China","Los Angeles, USA",Air,Demo Air Two,2026-09-29T00:00:00Z,,5678.35,In Transit,2026-09-24T00:00:00Z
+SYN-0078,"Shenzhen, China","Los Angeles, USA",Air,Demo Air One,2026-09-24T00:00:00Z,,4466.05,In Transit,2026-09-19T00:00:00Z
+SYN-0079,"Shenzhen, China","Los Angeles, USA",Air,Demo Air Two,2026-10-07T00:00:00Z,,5583.52,In Transit,2026-10-02T00:00:00Z
+SYN-0080,"Shenzhen, China","Los Angeles, USA",Air,Demo Air One,2026-10-09T00:00:00Z,,5506.73,In Transit,2026-10-04T00:00:00Z
+SYN-0081,"Singapore, Singapore","Hamburg, Germany",Air,Demo Air Two,2026-09-22T00:00:00Z,2026-09-22T00:00:00Z,3248.57,Delivered,2026-09-17T00:00:00Z
+SYN-0082,"Singapore, Singapore","Hamburg, Germany",Air,Demo Air One,2026-09-09T00:00:00Z,2026-09-09T12:00:00Z,2788.57,Delivered,2026-09-04T00:00:00Z
+SYN-0083,"Singapore, Singapore","Hamburg, Germany",Air,Demo Air Two,2026-09-10T00:00:00Z,2026-09-11T00:00:00Z,3446.36,Delivered,2026-09-05T00:00:00Z
+SYN-0084,"Singapore, Singapore","Hamburg, Germany",Air,Demo Air One,2026-09-13T00:00:00Z,2026-09-16T00:00:00Z,3531.86,Delivered,2026-09-08T00:00:00Z
+SYN-0085,"Singapore, Singapore","Hamburg, Germany",Air,Demo Air Two,2026-09-09T00:00:00Z,2026-09-08T00:00:00Z,3337.4,Delivered,2026-09-04T00:00:00Z
+SYN-0086,"Singapore, Singapore","Hamburg, Germany",Air,Demo Air One,2026-09-20T00:00:00Z,2026-09-19T20:00:00Z,3298.04,Delivered,2026-09-15T00:00:00Z
+SYN-0087,"Singapore, Singapore","Hamburg, Germany",Air,Demo Air Two,2026-10-04T00:00:00Z,,3560.49,In Transit,2026-09-29T00:00:00Z
+SYN-0088,"Singapore, Singapore","Hamburg, Germany",Air,Demo Air One,2026-10-03T00:00:00Z,,3042.43,In Transit,2026-09-28T00:00:00Z
+SYN-0089,"Singapore, Singapore","Hamburg, Germany",Air,Demo Air Two,2026-10-08T00:00:00Z,,3054.88,In Transit,2026-10-03T00:00:00Z
+SYN-0090,"Singapore, Singapore","Hamburg, Germany",Air,Demo Air One,2026-09-29T00:00:00Z,,2843.97,In Transit,2026-09-24T00:00:00Z
+SYN-0091,"Singapore, Singapore","Hamburg, Germany",Air,Demo Air Two,2026-09-16T00:00:00Z,2026-09-15T00:00:00Z,2654.56,Delivered,2026-09-11T00:00:00Z
+SYN-0092,"Singapore, Singapore","Hamburg, Germany",Air,Demo Air One,2026-09-09T00:00:00Z,2026-09-08T20:00:00Z,2849.01,Delivered,2026-09-04T00:00:00Z
+SYN-0093,"Singapore, Singapore","Hamburg, Germany",Air,Demo Air Two,2026-09-19T00:00:00Z,2026-09-19T00:00:00Z,2641.69,Delivered,2026-09-14T00:00:00Z
+SYN-0094,"Singapore, Singapore","Hamburg, Germany",Air,Demo Air One,2026-09-06T00:00:00Z,2026-09-06T12:00:00Z,2689.75,Delivered,2026-09-01T00:00:00Z
+SYN-0095,"Singapore, Singapore","Hamburg, Germany",Air,Demo Air Two,2026-09-24T00:00:00Z,2026-09-25T00:00:00Z,3477.04,Delivered,2026-09-19T00:00:00Z
+SYN-0096,"Singapore, Singapore","Hamburg, Germany",Air,Demo Air One,2026-09-16T00:00:00Z,2026-09-19T00:00:00Z,2700.9,Delivered,2026-09-11T00:00:00Z
+SYN-0097,"Singapore, Singapore","Hamburg, Germany",Air,Demo Air Two,2026-09-29T00:00:00Z,,2893.98,In Transit,2026-09-24T00:00:00Z
+SYN-0098,"Singapore, Singapore","Hamburg, Germany",Air,Demo Air One,2026-10-07T00:00:00Z,,2834.24,In Transit,2026-10-02T00:00:00Z
+SYN-0099,"Singapore, Singapore","Hamburg, Germany",Air,Demo Air Two,2026-09-26T00:00:00Z,,13950.0,In Transit,2026-09-21T00:00:00Z
+SYN-0100,"Singapore, Singapore","Hamburg, Germany",Air,Demo Air One,2026-10-10T00:00:00Z,,3170.88,In Transit,2026-10-05T00:00:00Z
+SYN-0101,"Hamburg, Germany","Shanghai, China",Sea,Demo Ocean Two,2026-09-19T00:00:00Z,2026-09-20T00:00:00Z,2062.23,Delivered,2026-08-20T00:00:00Z
+SYN-0102,"Hamburg, Germany","Shanghai, China",Sea,Demo Ocean One,2026-09-13T00:00:00Z,2026-09-16T00:00:00Z,1723.53,Delivered,2026-08-14T00:00:00Z
+SYN-0103,"Hamburg, Germany","Shanghai, China",Sea,Demo Ocean Two,2026-09-23T00:00:00Z,2026-09-22T00:00:00Z,1990.62,Delivered,2026-08-24T00:00:00Z
+SYN-0104,"Hamburg, Germany","Shanghai, China",Sea,Demo Ocean One,2026-09-15T00:00:00Z,2026-09-14T20:00:00Z,1856.44,Delivered,2026-08-16T00:00:00Z
+SYN-0105,"Hamburg, Germany","Shanghai, China",Sea,Demo Ocean Two,2026-09-12T00:00:00Z,2026-09-12T00:00:00Z,2107.39,Delivered,2026-08-13T00:00:00Z
+SYN-0106,"Hamburg, Germany","Shanghai, China",Sea,Demo Ocean One,2026-09-25T00:00:00Z,2026-09-25T12:00:00Z,1998.82,Delivered,2026-08-26T00:00:00Z
+SYN-0107,"Hamburg, Germany","Shanghai, China",Sea,Demo Ocean Two,2026-09-25T00:00:00Z,,1649.55,In Transit,2026-08-26T00:00:00Z
+SYN-0108,"Hamburg, Germany","Shanghai, China",Sea,Demo Ocean One,2026-10-02T00:00:00Z,,2071.34,In Transit,2026-09-02T00:00:00Z
+SYN-0109,"Hamburg, Germany","Shanghai, China",Sea,Demo Ocean Two,2026-09-25T00:00:00Z,,1756.73,In Transit,2026-08-26T00:00:00Z
+SYN-0110,"Hamburg, Germany","Shanghai, China",Sea,Demo Ocean One,2026-09-28T00:00:00Z,,1920.68,In Transit,2026-08-29T00:00:00Z
+SYN-0111,"Hamburg, Germany","Shanghai, China",Sea,Demo Ocean Two,2026-09-22T00:00:00Z,2026-09-22T00:00:00Z,1855.47,Delivered,2026-08-23T00:00:00Z
+SYN-0112,"Hamburg, Germany","Shanghai, China",Sea,Demo Ocean One,2026-09-18T00:00:00Z,2026-09-18T12:00:00Z,1878.7,Delivered,2026-08-19T00:00:00Z
+SYN-0113,"Hamburg, Germany","Shanghai, China",Sea,Demo Ocean Two,2026-09-24T00:00:00Z,2026-09-25T00:00:00Z,1867.58,Delivered,2026-08-25T00:00:00Z
+SYN-0114,"Hamburg, Germany","Shanghai, China",Sea,Demo Ocean One,2026-09-09T00:00:00Z,2026-09-12T00:00:00Z,1670.81,Delivered,2026-08-10T00:00:00Z
+SYN-0115,"Hamburg, Germany","Shanghai, China",Sea,Demo Ocean Two,2026-09-06T00:00:00Z,2026-09-05T00:00:00Z,2184.59,Delivered,2026-08-07T00:00:00Z
+SYN-0116,"Hamburg, Germany","Shanghai, China",Sea,Demo Ocean One,2026-09-26T00:00:00Z,2026-09-25T20:00:00Z,2167.33,Delivered,2026-08-27T00:00:00Z
+SYN-0117,"Hamburg, Germany","Shanghai, China",Sea,Demo Ocean Two,2026-09-29T00:00:00Z,,1709.8,In Transit,2026-08-30T00:00:00Z
+SYN-0118,"Hamburg, Germany","Shanghai, China",Sea,Demo Ocean One,2026-10-07T00:00:00Z,,1889.37,In Transit,2026-09-07T00:00:00Z
+SYN-0119,"Hamburg, Germany","Shanghai, China",Sea,Demo Ocean Two,2026-10-04T00:00:00Z,,2129.39,In Transit,2026-09-04T00:00:00Z
+SYN-0120,"Hamburg, Germany","Shanghai, China",Sea,Demo Ocean One,2026-09-27T00:00:00Z,,1831.01,In Transit,2026-08-28T00:00:00Z
+SYN-0121,"Los Angeles, USA","Singapore, Singapore",Air,Demo Air Two,2026-09-14T00:00:00Z,2026-09-13T00:00:00Z,4461.89,Delivered,2026-09-09T00:00:00Z
+SYN-0122,"Los Angeles, USA","Singapore, Singapore",Air,Demo Air One,2026-09-12T00:00:00Z,2026-09-11T20:00:00Z,4490.76,Delivered,2026-09-07T00:00:00Z
+SYN-0123,"Los Angeles, USA","Singapore, Singapore",Air,Demo Air Two,2026-09-09T00:00:00Z,2026-09-09T00:00:00Z,5033.09,Delivered,2026-09-04T00:00:00Z
+SYN-0124,"Los Angeles, USA","Singapore, Singapore",Air,Demo Air One,2026-09-11T00:00:00Z,2026-09-11T12:00:00Z,4302.91,Delivered,2026-09-06T00:00:00Z
+SYN-0125,"Los Angeles, USA","Singapore, Singapore",Air,Demo Air Two,2026-09-17T00:00:00Z,2026-09-18T00:00:00Z,4393.49,Delivered,2026-09-12T00:00:00Z
+SYN-0126,"Los Angeles, USA","Singapore, Singapore",Air,Demo Air One,2026-09-25T00:00:00Z,2026-09-28T00:00:00Z,4914.02,Delivered,2026-09-20T00:00:00Z
+SYN-0127,"Los Angeles, USA","Singapore, Singapore",Air,Demo Air Two,2026-10-09T00:00:00Z,,4167.78,In Transit,2026-10-04T00:00:00Z
+SYN-0128,"Los Angeles, USA","Singapore, Singapore",Air,Demo Air One,2026-10-02T00:00:00Z,,4162.32,In Transit,2026-09-27T00:00:00Z
+SYN-0129,"Los Angeles, USA","Singapore, Singapore",Air,Demo Air Two,2026-10-10T00:00:00Z,,4766.58,In Transit,2026-10-05T00:00:00Z
+SYN-0130,"Los Angeles, USA","Singapore, Singapore",Air,Demo Air One,2026-10-08T00:00:00Z,,4306.7,In Transit,2026-10-03T00:00:00Z
+SYN-0131,"Los Angeles, USA","Singapore, Singapore",Air,Demo Air Two,2026-09-10T00:00:00Z,2026-09-11T00:00:00Z,4195.36,Delivered,2026-09-05T00:00:00Z
+SYN-0132,"Los Angeles, USA","Singapore, Singapore",Air,Demo Air One,2026-09-21T00:00:00Z,2026-09-24T00:00:00Z,4178.67,Delivered,2026-09-16T00:00:00Z
+SYN-0133,"Los Angeles, USA","Singapore, Singapore",Air,Demo Air Two,2026-09-24T00:00:00Z,2026-09-23T00:00:00Z,5052.31,Delivered,2026-09-19T00:00:00Z
+SYN-0134,"Los Angeles, USA","Singapore, Singapore",Air,Demo Air One,2026-09-19T00:00:00Z,2026-09-18T20:00:00Z,4661.44,Delivered,2026-09-14T00:00:00Z
+SYN-0135,"Los Angeles, USA","Singapore, Singapore",Air,Demo Air Two,2026-09-08T00:00:00Z,2026-09-08T00:00:00Z,4434.55,Delivered,2026-09-03T00:00:00Z
+SYN-0136,"Los Angeles, USA","Singapore, Singapore",Air,Demo Air One,2026-09-07T00:00:00Z,2026-09-07T12:00:00Z,4137.23,Delivered,2026-09-02T00:00:00Z
+SYN-0137,"Los Angeles, USA","Singapore, Singapore",Air,Demo Air Two,2026-09-24T00:00:00Z,,4683.68,In Transit,2026-09-19T00:00:00Z
+SYN-0138,"Los Angeles, USA","Singapore, Singapore",Air,Demo Air One,2026-10-10T00:00:00Z,,4893.93,In Transit,2026-10-05T00:00:00Z
+SYN-0139,"Los Angeles, USA","Singapore, Singapore",Air,Demo Air Two,2026-10-02T00:00:00Z,,21600.0,In Transit,2026-09-27T00:00:00Z
+SYN-0140,"Los Angeles, USA","Singapore, Singapore",Air,Demo Air One,2026-09-28T00:00:00Z,,5044.41,In Transit,2026-09-23T00:00:00Z
+SYN-0141,"Ho Chi Minh City, Vietnam","Seattle, USA",Sea,Demo Ocean Two,2026-09-16T00:00:00Z,2026-09-16T00:00:00Z,2211.85,Delivered,2026-08-17T00:00:00Z
+SYN-0142,"Ho Chi Minh City, Vietnam","Seattle, USA",Sea,Demo Ocean One,2026-09-14T00:00:00Z,2026-09-14T12:00:00Z,2134.23,Delivered,2026-08-15T00:00:00Z
+SYN-0143,"Ho Chi Minh City, Vietnam","Seattle, USA",Sea,Demo Ocean Two,2026-09-06T00:00:00Z,2026-09-07T00:00:00Z,2256.0,Delivered,2026-08-07T00:00:00Z
+SYN-0144,"Ho Chi Minh City, Vietnam","Seattle, USA",Sea,Demo Ocean One,2026-09-16T00:00:00Z,2026-09-19T00:00:00Z,2708.89,Delivered,2026-08-17T00:00:00Z
+SYN-0145,"Ho Chi Minh City, Vietnam","Seattle, USA",Sea,Demo Ocean Two,2026-09-24T00:00:00Z,2026-09-23T00:00:00Z,2046.71,Delivered,2026-08-25T00:00:00Z
+SYN-0146,"Ho Chi Minh City, Vietnam","Seattle, USA",Sea,Demo Ocean One,2026-09-07T00:00:00Z,2026-09-06T20:00:00Z,2758.89,Delivered,2026-08-08T00:00:00Z
+SYN-0147,"Ho Chi Minh City, Vietnam","Seattle, USA",Sea,Demo Ocean Two,2026-09-25T00:00:00Z,,2092.75,In Transit,2026-08-26T00:00:00Z
+SYN-0148,"Ho Chi Minh City, Vietnam","Seattle, USA",Sea,Demo Ocean One,2026-09-28T00:00:00Z,,2404.24,In Transit,2026-08-29T00:00:00Z
+SYN-0149,"Ho Chi Minh City, Vietnam","Seattle, USA",Sea,Demo Ocean Two,2026-09-26T00:00:00Z,,2711.95,In Transit,2026-08-27T00:00:00Z
+SYN-0150,"Ho Chi Minh City, Vietnam","Seattle, USA",Sea,Demo Ocean One,2026-09-24T00:00:00Z,,2673.07,In Transit,2026-08-25T00:00:00Z
+SYN-0151,"Ho Chi Minh City, Vietnam","Seattle, USA",Sea,Demo Ocean Two,2026-09-15T00:00:00Z,2026-09-14T00:00:00Z,2245.19,Delivered,2026-08-16T00:00:00Z
+SYN-0152,"Ho Chi Minh City, Vietnam","Seattle, USA",Sea,Demo Ocean One,2026-09-12T00:00:00Z,2026-09-11T20:00:00Z,2640.3,Delivered,2026-08-13T00:00:00Z
+SYN-0153,"Ho Chi Minh City, Vietnam","Seattle, USA",Sea,Demo Ocean Two,2026-09-17T00:00:00Z,2026-09-17T00:00:00Z,2480.41,Delivered,2026-08-18T00:00:00Z
+SYN-0154,"Ho Chi Minh City, Vietnam","Seattle, USA",Sea,Demo Ocean One,2026-09-06T00:00:00Z,2026-09-06T12:00:00Z,2420.84,Delivered,2026-08-07T00:00:00Z
+SYN-0155,"Ho Chi Minh City, Vietnam","Seattle, USA",Sea,Demo Ocean Two,2026-09-09T00:00:00Z,2026-09-10T00:00:00Z,2255.55,Delivered,2026-08-10T00:00:00Z
+SYN-0156,"Ho Chi Minh City, Vietnam","Seattle, USA",Sea,Demo Ocean One,2026-09-23T00:00:00Z,2026-09-26T00:00:00Z,2716.03,Delivered,2026-08-24T00:00:00Z
+SYN-0157,"Ho Chi Minh City, Vietnam","Seattle, USA",Sea,Demo Ocean Two,2026-09-26T00:00:00Z,,2230.42,In Transit,2026-08-27T00:00:00Z
+SYN-0158,"Ho Chi Minh City, Vietnam","Seattle, USA",Sea,Demo Ocean One,2026-09-25T00:00:00Z,,2574.54,In Transit,2026-08-26T00:00:00Z
+SYN-0159,"Ho Chi Minh City, Vietnam","Seattle, USA",Sea,Demo Ocean Two,2026-09-26T00:00:00Z,,2236.09,In Transit,2026-08-27T00:00:00Z
+SYN-0001,"Ho Chi Minh City, Vietnam","Seattle, USA",Sea,Demo Ocean One,2026-09-28T00:00:00Z,,2556.68,In Transit,2026-08-29T00:00:00Z
