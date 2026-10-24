@@ -3,6 +3,8 @@
 from dataclasses import asdict, dataclass
 from contextlib import contextmanager
 from datetime import datetime, timezone
+import hashlib
+import json
 from pathlib import Path
 import sqlite3
 import uuid
@@ -35,9 +37,9 @@ class CaseInput:
     analysis_date: str = ""
 
     def validate(self):
-        if not self.shipment_id.strip() or len(self.shipment_id) > 200:
+        if not isinstance(self.shipment_id, str) or not self.shipment_id.strip() or len(self.shipment_id) > 200:
             raise ValueError("Shipment ID is required (at most 200 characters).")
-        if not self.exception_type.strip() or len(self.exception_type) > 500:
+        if not isinstance(self.exception_type, str) or not self.exception_type.strip() or len(self.exception_type) > 500:
             raise ValueError("Exception type is required (at most 500 characters).")
         if self.selected_action not in ACTIONS or self.resolution_status not in RESOLUTION_STATUSES:
             raise ValueError("Unsupported action or resolution status.")
@@ -45,8 +47,23 @@ class CaseInput:
             value = getattr(self, key)
             if value is not None and (number(value) is None or number(value) > 1_000_000_000):
                 raise ValueError(f"{key} must be unknown or a finite nonnegative value at most 1,000,000,000.")
-        if len(self.resolution_notes) > 4000:
+        if not isinstance(self.resolution_notes, str) or len(self.resolution_notes) > 4000:
             raise ValueError("Resolution notes must have at most 4,000 characters.")
+        for key in ("origin", "destination", "transport_mode", "carrier", "analysis_date"):
+            if not isinstance(getattr(self, key), str):
+                raise ValueError(f"{key} must be text.")
+        for key in ("assumptions_json", "priority_snapshot_json"):
+            try:
+                value = getattr(self, key)
+                if not isinstance(value, str):
+                    raise ValueError("JSON metadata must be text.")
+                def reject_constant(value):
+                    raise ValueError("Non-finite JSON constants are not allowed.")
+                parsed = json.loads(value, parse_constant=reject_constant)
+                if not isinstance(parsed, dict):
+                    raise ValueError("Metadata must be a JSON object.")
+            except (TypeError, ValueError) as exc:
+                raise ValueError(f"{key} must contain a valid finite JSON object.") from exc
 
 
 def _key(value: str) -> str:
@@ -59,6 +76,7 @@ class HistoryStore:
         self.path.parent.mkdir(parents=True, exist_ok=True)
         with self._connect() as connection:
             connection.execute("PRAGMA journal_mode=WAL")
+            connection.execute("BEGIN IMMEDIATE")
             connection.execute("""CREATE TABLE IF NOT EXISTS cases (
                 case_id TEXT PRIMARY KEY, shipment_id TEXT NOT NULL, exception_type TEXT NOT NULL,
                 selected_action TEXT NOT NULL, estimated_cost REAL, actual_cost REAL,
@@ -66,10 +84,17 @@ class HistoryStore:
                 resolution_notes TEXT NOT NULL, origin TEXT, destination TEXT, transport_mode TEXT,
                 carrier TEXT, assumptions_json TEXT NOT NULL, priority_snapshot_json TEXT NOT NULL,
                 analysis_date TEXT, created_at TEXT NOT NULL, updated_at TEXT NOT NULL,
-                version INTEGER NOT NULL DEFAULT 1, origin_key TEXT, destination_key TEXT, mode_key TEXT
+                version INTEGER NOT NULL DEFAULT 1, origin_key TEXT, destination_key TEXT, mode_key TEXT,
+                request_key TEXT, request_payload_hash TEXT
             )""")
+            # Additive migration: preserve every existing V2 case and outcome.
+            columns = {row[1] for row in connection.execute("PRAGMA table_info(cases)")}
+            for column in ("request_key", "request_payload_hash"):
+                if column not in columns:
+                    connection.execute(f"ALTER TABLE cases ADD COLUMN {column} TEXT")
             connection.execute("CREATE INDEX IF NOT EXISTS case_shipment_idx ON cases(shipment_id)")
             connection.execute("CREATE INDEX IF NOT EXISTS case_match_idx ON cases(origin_key, destination_key, mode_key, exception_type)")
+            connection.execute("CREATE UNIQUE INDEX IF NOT EXISTS case_request_key_idx ON cases(request_key) WHERE request_key IS NOT NULL")
 
     @contextmanager
     def _connect(self):
@@ -80,20 +105,34 @@ class HistoryStore:
         finally:
             connection.close()
 
-    def create_case(self, case: CaseInput) -> str:
+    def create_case(self, case: CaseInput, *, idempotency_key: str | None = None) -> str:
         case.validate()
+        if idempotency_key is not None and (not isinstance(idempotency_key, str) or not idempotency_key.strip() or len(idempotency_key) > 200):
+            raise ValueError("Idempotency key must be nonblank text with at most 200 characters.")
         record = asdict(case)
         for key in ("estimated_cost", "actual_cost", "estimated_delay", "actual_delay"):
             if record[key] is not None:
                 record[key] = float(record[key])
         record["shipment_id"] = record["shipment_id"].strip()
         record["exception_type"] = record["exception_type"].strip()
+        canonical = dict(record)
+        for key in ("assumptions_json", "priority_snapshot_json"):
+            canonical[key] = json.loads(canonical[key])
+        payload_hash = hashlib.sha256(json.dumps(canonical, sort_keys=True, allow_nan=False).encode()).hexdigest()
         record.update(case_id=uuid.uuid4().hex, created_at=datetime.now(timezone.utc).isoformat(),
                       updated_at=datetime.now(timezone.utc).isoformat(), version=1,
-                      origin_key=_key(case.origin), destination_key=_key(case.destination), mode_key=_key(case.transport_mode))
+                      origin_key=_key(case.origin), destination_key=_key(case.destination), mode_key=_key(case.transport_mode),
+                      request_key=idempotency_key, request_payload_hash=payload_hash)
         columns = list(record)
         with self._connect() as connection:
-            connection.execute(f"INSERT INTO cases ({','.join(columns)}) VALUES ({','.join('?' for _ in columns)})", [record[key] for key in columns])
+            cursor = connection.execute(
+                f"INSERT INTO cases ({','.join(columns)}) VALUES ({','.join('?' for _ in columns)}) "
+                "ON CONFLICT(request_key) WHERE request_key IS NOT NULL DO NOTHING", [record[key] for key in columns])
+            if cursor.rowcount == 0:
+                existing = connection.execute("SELECT case_id, request_payload_hash FROM cases WHERE request_key = ?", (idempotency_key,)).fetchone()
+                if existing is None or existing[1] != payload_hash:
+                    raise ValueError("This submission key was already used for different decision data.")
+                return existing[0]
         return record["case_id"]
 
     def list_cases(self, shipment_id: str | None = None, resolution_status: str | None = None,

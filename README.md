@@ -15,6 +15,8 @@ validated forecasting system. It is not DHL, Maersk or any company's operating d
 
 See the [generated example report](docs/sample_report.md) and
 [actual validation results](docs/VALIDATION.md).
+The latest [stability and quality audit](TEST_REPORT.md) records measured results,
+failure reproductions, fixes and remaining platform checks.
 
 ## Features
 
@@ -111,7 +113,7 @@ The local MVP accepts up to 20 MB and 100,000 data rows per upload.
 | `carrier` | Carrier name; fictional names in demo data |
 | `planned_delivery` | ISO planned date/time |
 | `actual_delivery` | ISO actual date/time; leave blank while not delivered |
-| `shipping_cost` | Finite nonnegative USD number; valid thousands separators accepted |
+| `shipping_cost` | Finite USD number from 0 to 1,000,000,000,000; valid thousands separators accepted. The upper bound is a numeric safety guard, not a market benchmark |
 | `status` | Delivered, In Transit, Pending, Delivery Failed or Returned |
 | `shipped_at` (optional) | ISO shipment start date/time for chronology checks |
 
@@ -138,6 +140,10 @@ the app cannot infer a shipment's actual starting time.
   All source rows remain available for review/export. This is not an automated merge.
 - Other field errors do not discard the whole shipment. Invalid cost is excluded
   only from cost metrics; invalid planned dates exclude the on-time/overdue comparison.
+- Duplicate named headers in either format are rejected before pandas can rename
+  them. CSV records with more fields than the header are rejected rather than
+  silently shifting shipment IDs and costs into the wrong columns. Short records
+  still retain missing values for review. Malformed Excel XML shows an input error.
 - `Delivered` without a valid actual date is unverified and excluded from delivered
   and on-time counts. A future actual date is not counted as completed at the cutoff.
 - Non-delivered statuses with a supplied actual date are flagged as conflicting;
@@ -438,6 +444,15 @@ status may be Open, In Progress, Resolved or Cancelled; recording Resolved does 
 invent an actual cost or delay. Actual cost uses the same **incremental USD** basis
 as estimated cost; delay is lateness against the case's selected deadline in hours.
 
+Unchanged repeated submissions (including after a refresh/restart) reuse the same
+case instead of inserting duplicates. The identity covers the shipment, analysis
+cutoff, action, assumptions, priority snapshot and original decision notes. Change
+the action, assumptions or notes to record a distinct decision. A retry never
+reopens a resolved case or overwrites its actual outcomes. Database initialization
+adds nullable request-key columns/indexes to older V2 databases without removing
+or deduplicating existing records. Programmatic `create_case` callers may supply
+an explicit idempotency key; omitting it deliberately creates a new history event.
+
 Saved context includes route/mode/carrier, analysis date, all action assumptions
 and the priority snapshot. History supports exact ID/status/exception filters,
 CSV download, explicit status/outcome updates, timestamps and optimistic version
@@ -515,3 +530,20 @@ Install `requirements-dev.txt` and Playwright Chromium as described above; for a
 system browser set `BROWSER_EXECUTABLE_PATH`. The V2 browser script refuses the
 default `data/local/` database and checks the displayed server path before writing.
 The existing `tests/browser_smoke.py` remains the V1 upload/download regression.
+
+## Reproducing the stability audit
+
+```bash
+python -m pytest -q
+python -m scripts.audit_benchmark --ui
+python -m scripts.audit_browser
+```
+
+The benchmark verifies independently calculated KPIs at 100, 500 and 5,000 rows
+and records timings in `artifacts/audit/`. The optional browser command requires
+`requirements-dev.txt` plus Chromium, starts its own isolated server/database,
+checks uploads/downloads and cold-restart persistence, then stops that server.
+Set `BROWSER_EXECUTABLE_PATH` only when using a system Chromium instead of the
+Playwright-installed browser. Pytest automatically isolates **all** history paths
+under temporary test directories. No audit command needs to open your real case
+database. See `TEST_REPORT.md` for actual results and explicit Not Tested items.

@@ -1,0 +1,297 @@
+{
+  "date": "2026-10-24T20:53:04.408197+08:00",
+  "environment": {
+    "python": "3.12.14",
+    "os": "Linux-6.18.55-x86_64-with-glibc2.41",
+    "sqlite": "3.53.1",
+    "packages": {
+      "streamlit": "1.50.0",
+      "pandas": "2.3.3",
+      "numpy": "2.5.4",
+      "plotly": "6.3.1",
+      "openpyxl": "3.1.5",
+      "pytest": "8.4.2",
+      "playwright": "1.62.0"
+    }
+  },
+  "original_suite": {
+    "total": 103,
+    "passed": 103,
+    "failed": 0,
+    "errors": 0,
+    "skipped": 0,
+    "seconds": 10.817,
+    "failures": []
+  },
+  "new_regressions_before_fix": {
+    "total": 14,
+    "passed": 6,
+    "failed": 8,
+    "errors": 0,
+    "skipped": 0,
+    "seconds": 5.586,
+    "failures": [
+      {
+        "test": "tests.test_audit_regressions::test_duplicate_named_headers_are_rejected_before_pandas_mangling[csv]",
+        "type": null,
+        "message": "Failed: DID NOT RAISE <class 'src.schema.DataInputError'>"
+      },
+      {
+        "test": "tests.test_audit_regressions::test_duplicate_named_headers_are_rejected_before_pandas_mangling[xlsx]",
+        "type": null,
+        "message": "Failed: DID NOT RAISE <class 'src.schema.DataInputError'>"
+      },
+      {
+        "test": "tests.test_audit_regressions::test_damaged_excel_xml_is_an_input_error_not_an_uncaught_exception",
+        "type": null,
+        "message": "xml.etree.ElementTree.ParseError: unclosed token: line 1, column 0"
+      },
+      {
+        "test": "tests.test_audit_regressions::test_extreme_costs_cannot_overflow_kpis",
+        "type": null,
+        "message": "assert False\n +  where False = <built-in function isfinite>(inf)\n +    where <built-in function isfinite> = math.isfinite"
+      },
+      {
+        "test": "tests.test_audit_regressions::test_unchanged_repeated_save_click_reuses_case",
+        "type": null,
+        "message": "AssertionError: assert 2 == 1\n +  where 2 = len(                            case_id  ... mode_key\\n0  22ccf8ea5aa04a298788790f56f6a6c4  ...      air\\n1  e190813ed8c4419a96af4c4eab882fa1  ...      air\\n\\n[2 rows x 23 columns])\n +    where                             case_id  ... mode_key\\n0  22ccf8ea5aa04a298788790f56f6a6c4  ...      air\\n1  e190813ed8c4419a96af4c4eab882fa1  ...      air\\n\\n[2 rows x 23 columns] = list_cases()\n +      where list_cases = <src.history.HistoryStore object at 0x7fa51c386d80>.list_cases\n +        where <src.history.HistoryStore object at 0x7fa51c386d80> = HistoryStore(PosixPath('/tmp/pytest-of-agent/pytest-7/test_unchanged_repeated_save_c0/double-click.sqlite3'))"
+      },
+      {
+        "test": "tests.test_audit_regressions::test_invalid_saved_metadata_is_rejected[assumptions_json]",
+        "type": null,
+        "message": "Failed: DID NOT RAISE <class 'ValueError'>"
+      },
+      {
+        "test": "tests.test_audit_regressions::test_invalid_saved_metadata_is_rejected[priority_snapshot_json]",
+        "type": null,
+        "message": "Failed: DID NOT RAISE <class 'ValueError'>"
+      },
+      {
+        "test": "tests.test_audit_regressions::test_mutated_priority_config_is_revalidated",
+        "type": null,
+        "message": "ZeroDivisionError: division by zero"
+      }
+    ]
+  },
+  "additional_csv_probe_before_fix": {
+    "total": 1,
+    "passed": 0,
+    "failed": 1,
+    "errors": 0,
+    "skipped": 0,
+    "seconds": 1.155,
+    "failures": [
+      {
+        "test": "tests.test_audit_regressions::test_extra_csv_fields_cannot_silently_shift_shipment_columns",
+        "type": null,
+        "message": "Failed: DID NOT RAISE <class 'src.schema.DataInputError'>"
+      }
+    ]
+  },
+  "final_suite": {
+    "total": 132,
+    "passed": 132,
+    "failed": 0,
+    "errors": 0,
+    "skipped": 0,
+    "seconds": 15.822,
+    "failures": []
+  },
+  "benchmark": {
+    "environment": {
+      "python": "3.12.14",
+      "platform": "Linux-6.18.55-x86_64-with-glibc2.41",
+      "pandas": "2.3.3",
+      "timestamp_utc": "2026-10-24T12:50:52.614811+00:00"
+    },
+    "method": "Clean synthetic four-case pattern, hand-calculated KPIs; 3 pipeline repeats by default. UI timing is one server-side AppTest run per size, not browser latency.",
+    "results": [
+      {
+        "rows": 100,
+        "repeats": 3,
+        "median_seconds": {
+          "csv_read_s": 0.00227,
+          "analysis_s": 0.039741,
+          "priority_s": 0.016143,
+          "report_exports_s": 0.033461,
+          "pipeline_s": 0.092427
+        },
+        "runs": [
+          {
+            "csv_read_s": 0.004357141995569691,
+            "analysis_s": 0.050549069012049586,
+            "priority_s": 0.016142994980327785,
+            "report_exports_s": 0.03663413299364038,
+            "pipeline_s": 0.10768333898158744
+          },
+          {
+            "csv_read_s": 0.0022403030015993863,
+            "analysis_s": 0.03759772301418707,
+            "priority_s": 0.010985228000208735,
+            "report_exports_s": 0.0323790039983578,
+            "pipeline_s": 0.08320225801435299
+          },
+          {
+            "csv_read_s": 0.0022702809947077185,
+            "analysis_s": 0.039741135988151655,
+            "priority_s": 0.01695440901676193,
+            "report_exports_s": 0.03346078499453142,
+            "pipeline_s": 0.09242661099415272
+          }
+        ],
+        "kpis_verified": true,
+        "errors": [],
+        "csv_bytes": 27848,
+        "apptest_seconds": 0.56701,
+        "apptest_verified": true
+      },
+      {
+        "rows": 500,
+        "repeats": 3,
+        "median_seconds": {
+          "csv_read_s": 0.005625,
+          "analysis_s": 0.055008,
+          "priority_s": 0.048669,
+          "report_exports_s": 0.065975,
+          "pipeline_s": 0.168572
+        },
+        "runs": [
+          {
+            "csv_read_s": 0.005866018997039646,
+            "analysis_s": 0.10546571901068091,
+            "priority_s": 0.04888434099848382,
+            "report_exports_s": 0.06597543897805735,
+            "pipeline_s": 0.22619151798426174
+          },
+          {
+            "csv_read_s": 0.004733760986709967,
+            "analysis_s": 0.05500783701427281,
+            "priority_s": 0.04429823000100441,
+            "report_exports_s": 0.06299772398779169,
+            "pipeline_s": 0.16703755198977888
+          },
+          {
+            "csv_read_s": 0.0056246480089612305,
+            "analysis_s": 0.04748188497615047,
+            "priority_s": 0.04866880099871196,
+            "report_exports_s": 0.06679672401514836,
+            "pipeline_s": 0.168572057998972
+          }
+        ],
+        "kpis_verified": true,
+        "errors": [],
+        "csv_bytes": 138048,
+        "apptest_seconds": 0.399766,
+        "apptest_verified": true
+      },
+      {
+        "rows": 5000,
+        "repeats": 3,
+        "median_seconds": {
+          "csv_read_s": 0.035335,
+          "analysis_s": 0.106918,
+          "priority_s": 0.442546,
+          "report_exports_s": 0.404098,
+          "pipeline_s": 0.989959
+        },
+        "runs": [
+          {
+            "csv_read_s": 0.03533471797709353,
+            "analysis_s": 0.11065133300144225,
+            "priority_s": 0.43972434700117446,
+            "report_exports_s": 0.40424887600238435,
+            "pipeline_s": 0.9899592739820946
+          },
+          {
+            "csv_read_s": 0.03274686899385415,
+            "analysis_s": 0.10667028100579046,
+            "priority_s": 0.44254634898970835,
+            "report_exports_s": 0.40409776399610564,
+            "pipeline_s": 0.9860612629854586
+          },
+          {
+            "csv_read_s": 0.03617108898470178,
+            "analysis_s": 0.10691829200368375,
+            "priority_s": 0.4713894849992357,
+            "report_exports_s": 0.39811761799501255,
+            "pipeline_s": 1.0125964839826338
+          }
+        ],
+        "kpis_verified": true,
+        "errors": [],
+        "csv_bytes": 1377798,
+        "apptest_seconds": 1.595422,
+        "apptest_verified": true
+      }
+    ]
+  },
+  "browser": {
+    "completed": true,
+    "browser_regressions": [
+      {
+        "script": "browser_smoke.py",
+        "exit_code": 0
+      },
+      {
+        "script": "browser_copilot.py",
+        "exit_code": 0
+      }
+    ],
+    "workloads": [
+      {
+        "rows": 100,
+        "upload_to_decision_ready_seconds": 2.883179,
+        "kpis_verified": true
+      },
+      {
+        "rows": 500,
+        "upload_to_decision_ready_seconds": 1.125887,
+        "kpis_verified": true
+      },
+      {
+        "rows": 5000,
+        "upload_to_decision_ready_seconds": 1.952885,
+        "kpis_verified": true
+      }
+    ],
+    "input_errors": [
+      {
+        "file": "empty.csv",
+        "message": "The file is empty.",
+        "handled": true
+      },
+      {
+        "file": "missing.csv",
+        "message": "Missing required columns:",
+        "handled": true
+      },
+      {
+        "file": "duplicates.csv",
+        "message": "Column names must be unique",
+        "handled": true
+      },
+      {
+        "file": "ragged.csv",
+        "message": "columns cannot be aligned safely",
+        "handled": true
+      },
+      {
+        "file": "damaged.xlsx",
+        "message": "The file could not be read.",
+        "handled": true
+      }
+    ],
+    "first_server_pid": 105719,
+    "restarted_server_pid": 106126,
+    "cold_restart_history_preserved": true,
+    "large_download_rows_verified": {
+      "processed": 5000,
+      "exceptions": 2500
+    },
+    "bad_field_kpis_verified": true
+  },
+  "existing_history_protection": {
+    "checkpoint_files": 1,
+    "unchanged_since_pre_regression_checkpoint": true
+  }
+}

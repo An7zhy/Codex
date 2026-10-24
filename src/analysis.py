@@ -7,7 +7,7 @@ import math
 import pandas as pd
 
 from src.ingestion import validate_columns
-from src.schema import EARLIEST_DATE, MIN_COST_GROUP_SIZE, REQUIRED_COLUMNS
+from src.schema import EARLIEST_DATE, MAX_SHIPPING_COST, MIN_COST_GROUP_SIZE, REQUIRED_COLUMNS
 
 ISSUE_COLUMNS = ["source_row", "shipment_id", "field", "code", "severity", "message", "raw_value"]
 STATUS_ALIASES = {
@@ -125,10 +125,10 @@ def analyze_shipments(raw: pd.DataFrame, as_of: date | str) -> AnalysisResult:
     cost_text = cost_text.where(~thousands, cost_text.str.replace(",", "", regex=False))
     cost = pd.to_numeric(cost_text, errors="coerce").astype("float64")
     finite = cost.map(math.isfinite).astype(bool)
-    frame["valid_cost"] = finite & cost.ge(0)
+    frame["valid_cost"] = finite & cost.ge(0) & cost.le(MAX_SHIPPING_COST)
     frame["shipping_cost"] = cost.where(frame["valid_cost"])
     add(_text(original["shipping_cost"]).eq(""), "shipping_cost", "missing_cost", "Missing cost; excluded from cost metrics.")
-    add(_text(original["shipping_cost"]).ne("") & ~frame["valid_cost"], "shipping_cost", "invalid_cost", "Cost must be a finite, nonnegative number in USD.")
+    add(_text(original["shipping_cost"]).ne("") & ~frame["valid_cost"], "shipping_cost", "invalid_cost", f"Cost must be a finite USD number between 0 and {MAX_SHIPPING_COST:,} (technical safety limit).")
 
     plan_valid = frame["planned_delivery"].notna() & ~planned_before_shipping & ~invalid_shipping
     frame["is_delivered"] = (

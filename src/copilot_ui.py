@@ -1,6 +1,7 @@
 """V2 Streamlit views. Scoring, scenarios, storage and evaluation remain separate."""
 
-from dataclasses import replace
+from dataclasses import asdict, replace
+import hashlib
 import json
 import os
 from pathlib import Path
@@ -9,7 +10,7 @@ import sqlite3
 import pandas as pd
 import streamlit as st
 
-from src.decisions import ACTIONS, ActionAssumption, compare_actions, default_assumptions
+from src.decisions import ActionAssumption, compare_actions, default_assumptions
 from src.evaluation import run_evaluation
 from src.exports import csv_bytes
 from src.history import CaseInput, HistoryStore, RESOLUTION_STATUSES
@@ -69,8 +70,9 @@ def render_priority_queue(view: pd.DataFrame, cutoff: pd.Timestamp):
         review = priorities.loc[~priorities.index.isin(complete.index) & ~priorities.index.isin(missing.index)]
         st.dataframe(review[columns], hide_index=True, width="stretch")
     if not priorities.empty:
+        labels = priorities.set_index("source_row")["shipment_id"].to_dict()
         source_row = st.selectbox("Explain a priority record", priorities["source_row"].tolist(),
-                                 format_func=lambda value: f"Row {value}: {priorities.loc[priorities['source_row'].eq(value), 'shipment_id'].iloc[0] or '(missing ID)'}")
+                                 format_func=lambda value: f"Row {value}: {labels[value] or '(missing ID)'}")
         chosen = priorities.loc[priorities["source_row"].eq(source_row)].iloc[0]
         st.write(chosen["explanation"])
         st.json(json.loads(chosen["priority_details_json"]), expanded=False)
@@ -89,8 +91,9 @@ def render_decision_center(priorities: pd.DataFrame | None, cutoff: pd.Timestamp
         st.info("No active In Transit exception in this selection. Completed shipments remain available in V1 and case history.")
         return
     active = active.sort_values("priority_score", ascending=False, na_position="last")
+    labels = active.set_index("source_row")["shipment_id"].to_dict()
     source_row = st.selectbox("Shipment for decision review", active["source_row"].tolist(),
-                             format_func=lambda value: str(active.loc[active["source_row"].eq(value), "shipment_id"].iloc[0]))
+                             format_func=lambda value: str(labels[value]))
     row = active.loc[active["source_row"].eq(source_row)].iloc[0]
     shipment_id = str(row["shipment_id"])
     deadline, deadline_source = delivery_deadline(row)
@@ -138,7 +141,7 @@ def render_decision_center(priorities: pd.DataFrame | None, cutoff: pd.Timestamp
                            "deadline": deadline.isoformat() if deadline is not None else None,
                            "provenance": "User-editable simulation assumptions, not a carrier offer."}
             try:
-                case_id = history_store().create_case(CaseInput(
+                case = CaseInput(
                     shipment_id, exception_type, selected,
                     estimated_cost=float(chosen["estimated_additional_cost_usd"]),
                     estimated_delay=None if pd.isna(chosen["estimated_delay_hours"]) else float(chosen["estimated_delay_hours"]),
@@ -146,12 +149,15 @@ def render_decision_center(priorities: pd.DataFrame | None, cutoff: pd.Timestamp
                     transport_mode=row["transport_mode"], carrier=row["carrier"],
                     assumptions_json=json.dumps(assumptions, allow_nan=False),
                     priority_snapshot_json=json.dumps(snapshot, allow_nan=False), analysis_date=str(cutoff.date()),
-                ))
-                st.success("Decision saved locally. Case ID: " + case_id + ". Actual cost and actual delay remain unknown until entered.")
+                )
+                fingerprint = hashlib.sha256(json.dumps(asdict(case), sort_keys=True, allow_nan=False).encode()).hexdigest()
+                case_id = history_store().create_case(case, idempotency_key="ui:" + fingerprint)
+                st.success("Decision saved locally. Case ID: " + case_id + ". Repeated submissions preserve the existing case status and actual outcomes.")
             except (sqlite3.Error, OSError, ValueError) as exc:
                 st.error(f"Could not save case history: {exc}. V1 analysis is still available.")
     else:
         st.info("All three actions are unavailable in this scenario; no action can be saved.")
+    st.caption("Unchanged repeated saves reuse the same case, including after a reload. Change the action, assumptions or notes to record a distinct decision.")
     st.subheader("Past similar cases")
     st.caption("Exact directional route, mode and exception-type match; excludes this shipment. Matching records are not a validated recommendation or a predicted outcome.")
     try:
@@ -186,8 +192,11 @@ def render_case_history():
                                 format_func=lambda value: f"{value[:8]} — {cases.loc[cases['case_id'].eq(value), 'shipment_id'].iloc[0]}")
         current = store.get_case(selected)
         with st.expander("Saved assumptions and priority snapshot"):
-            st.json(json.loads(current["assumptions_json"]), expanded=False)
-            st.json(json.loads(current["priority_snapshot_json"]), expanded=False)
+            for key in ("assumptions_json", "priority_snapshot_json"):
+                try:
+                    st.json(json.loads(current[key]), expanded=False)
+                except (TypeError, ValueError):
+                    st.warning(f"Saved {key} is not valid JSON. The original record is preserved; outcome updates remain available.")
         with st.form(f"update_case_{selected}_{current['version']}"):
             resolution = st.selectbox("Update resolution status", list(RESOLUTION_STATUSES), index=RESOLUTION_STATUSES.index(current["resolution_status"]))
             columns = st.columns(2)

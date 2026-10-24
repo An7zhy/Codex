@@ -2,6 +2,12 @@ import pandas as pd
 import pytest
 
 
+@pytest.fixture(autouse=True)
+def isolated_history_database(tmp_path, monkeypatch):
+    """Even read-only-looking AppTest runs initialize SQLite; never use user history."""
+    monkeypatch.setenv("LOGISTICS_DB_PATH", str(tmp_path / "history.sqlite3"))
+
+
 @pytest.fixture
 def make_rows():
     def make(*overrides):

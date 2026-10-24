@@ -165,6 +165,9 @@ def score_shipment(row: Mapping, cutoff: pd.Timestamp, config: PriorityConfig) -
 
 def prioritize_shipments(shipments: pd.DataFrame, cutoff: pd.Timestamp, config: PriorityConfig | None = None) -> pd.DataFrame:
     config = config or PriorityConfig.load()
+    # frozen dataclasses do not freeze nested dictionaries: validate/copy at the
+    # public batch boundary so mutated settings cannot silently corrupt scores.
+    config = PriorityConfig(**config.to_dict())
     frame = shipments.copy()
     records = [score_shipment(row, cutoff, config) for row in frame.to_dict("records")]
     columns = list(score_shipment({}, cutoff, config))
