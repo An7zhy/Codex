@@ -22,7 +22,8 @@ def test_scenario_edit_save_and_actual_outcome_update(tmp_path, monkeypatch):
     assert not app.exception
     assert len(app.metric) == 7
     first_cost = next(widget for widget in app.number_input if widget.label == "Additional cost (USD)")
-    first_cost.set_value(111.0).run(timeout=30)
+    first_cost.set_value(111.0)
+    element(app.button, "Recalculate scenarios").click().run(timeout=30)
     table = next(widget.value for widget in app.dataframe if "estimated_additional_cost_usd" in widget.value)
     assert table.iloc[0]["estimated_additional_cost_usd"] == 111
     element(app.button, "Save decision to local history").click().run(timeout=30)
@@ -57,7 +58,7 @@ def test_bad_priority_settings_and_unavailable_database_preserve_v1(tmp_path, mo
     for widget in app.number_input:
         if widget.key and widget.key.startswith("weight_"):
             widget.set_value(0.0)
-    app.run(timeout=30)
+    element(app.button, "Apply priority settings").click().run(timeout=30)
     assert not app.exception
     assert any("Weights" in item.value for item in app.error)
     assert app.metric[0].value == "158"

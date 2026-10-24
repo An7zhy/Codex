@@ -1,0 +1,111 @@
+{
+  "completed": true,
+  "same_shipment_score": {
+    "shipment_id": "SYN-0027",
+    "financial_weight_before": 20,
+    "financial_weight_after": 100,
+    "score_before": 78.6667,
+    "score_after": 88.1481
+  },
+  "ranking_changed": true,
+  "selection_and_assumptions_preserved": true,
+  "scenario_before_after": {
+    "shipment_id": "SYN-0027",
+    "remaining_before": 96,
+    "remaining_after": 48,
+    "delay_before": 71.99999999999972,
+    "delay_after": 23.999999999999723,
+    "cost_after": 450
+  },
+  "cost_is_not_implicitly_a_time_model": true,
+  "evaluation_refreshed_without_rerun_button": true,
+  "automated_suite": {
+    "tests": "135",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0",
+    "time": "28.394"
+  },
+  "user_acceptance": {
+    "reported_before_fix": {
+      "scoring_sensitivity": "Failed",
+      "decision_comparison": "Failed"
+    },
+    "after_fix": "Pending user retest"
+  },
+  "reproduced_original_ui_reset": {
+    "source_row_before_weights": 160,
+    "source_row_after_weights": 28,
+    "edited_cost_before": 333,
+    "displayed_cost_after": 0
+  },
+  "full_browser_regression": {
+    "completed": true,
+    "browser_regressions": [
+      {
+        "script": "browser_smoke.py",
+        "exit_code": 0
+      },
+      {
+        "script": "browser_copilot.py",
+        "exit_code": 0
+      },
+      {
+        "script": "browser_parameter_changes.py",
+        "exit_code": 0
+      }
+    ],
+    "workloads": [
+      {
+        "rows": 100,
+        "upload_to_decision_ready_seconds": 2.397158,
+        "kpis_verified": true
+      },
+      {
+        "rows": 500,
+        "upload_to_decision_ready_seconds": 1.235716,
+        "kpis_verified": true
+      },
+      {
+        "rows": 5000,
+        "upload_to_decision_ready_seconds": 2.365549,
+        "kpis_verified": true
+      }
+    ],
+    "input_errors": [
+      {
+        "file": "empty.csv",
+        "message": "The file is empty.",
+        "handled": true
+      },
+      {
+        "file": "missing.csv",
+        "message": "Missing required columns:",
+        "handled": true
+      },
+      {
+        "file": "duplicates.csv",
+        "message": "Column names must be unique",
+        "handled": true
+      },
+      {
+        "file": "ragged.csv",
+        "message": "columns cannot be aligned safely",
+        "handled": true
+      },
+      {
+        "file": "damaged.xlsx",
+        "message": "The file could not be read.",
+        "handled": true
+      }
+    ],
+    "first_server_pid": 117063,
+    "restarted_server_pid": 117703,
+    "cold_restart_history_preserved": true,
+    "large_download_rows_verified": {
+      "processed": 5000,
+      "exceptions": 2500
+    },
+    "bad_field_kpis_verified": true
+  }
+}

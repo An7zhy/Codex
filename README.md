@@ -396,6 +396,13 @@ breaking V1. Defaults are in `config/priority_rules.json`; the UI can download t
 current settings. UI edits last for the session, while each saved case retains its
 own scoring configuration snapshot.
 
+Open **Configure priority rules**, edit the values and click **Apply priority
+settings**. Until submitted, values are drafts; the queue, downloads and evaluation
+use the last successfully applied settings. Applied normalized weights are shown
+below the form. Scores may change without changing rank; multiplying all weights
+by the same factor does not change a normalized score. V1 KPIs do not depend on
+these weights. Applying weights preserves the selected Decision Center shipment.
+
 ### Optional upload fields
 
 V1 requires no new columns. For V2 triage, add:
@@ -423,6 +430,26 @@ These what-if inputs are independent of the supplied delay estimate used in
 priority scoring. Scenario edits do not overwrite shipment facts or automatically
 rescore priorities. This is not a total expected-cost optimizer: no penalty or
 damage cost is invented from delay or cargo value.
+
+Click **Recalculate scenarios** to apply the three options together. The page
+identifies the shipment and echoes the applied values below the comparison. Edits
+are drafts until recalculated; saving history records the displayed comparison.
+Applied scenario inputs are retained per shipment during the session, including
+when switching shipments or changing priority weights. They are not live quotes
+and are not a cost-to-speed prediction model.
+
+For a reproducible manual check, use **Synthetic Demo Data**, date **2026-10-01**
+and default settings:
+
+| Operation | Expected synthetic result |
+| --- | --- |
+| Financial weight 20 → 100; click Apply priority settings | SYN-0027 score 78.6667 → 88.1481 |
+| Select SYN-0027; Wait and monitor remaining time 96 → 48h, extra cost 0 → 450 USD; click Recalculate scenarios | Scenario delay 72 → 24h; extra cost 450 USD |
+| Change only that extra cost to 900 USD; recalculate | Extra cost 900 USD, delay still 24h |
+
+Price and remaining time are independent assumptions. A larger price does not
+automatically buy a faster service. These checks validate UI application and
+arithmetic, not operational effectiveness.
 
 ```text
 scenario arrival = selected UTC cutoff + assumed remaining hours
@@ -496,7 +523,9 @@ python -m src.evaluation --output-dir artifacts/evaluation
 
 The reproducible CLI writes comparison CSV, weight-sensitivity CSV,
 action-sensitivity CSV and evaluation JSON. The Evaluation tab runs the same logic
-with the currently configured weights. It reports:
+with the last applied weights. Once generated, results stay visible and refresh
+automatically when new priority settings are applied. The displayed applied-weight
+summary identifies the configuration used by that evaluation. It reports:
 
 - V1 detected exception versus V2 score, level, disposition and missing inputs.
 - Pairwise rank concordance on the reference-ranked cases with complete scores;

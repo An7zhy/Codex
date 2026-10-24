@@ -77,6 +77,9 @@ def test_unchanged_repeated_save_click_reuses_case(tmp_path, monkeypatch):
         next(button for button in app.button if button.label == "Save decision to local history").click().run(timeout=30)
         assert not app.exception
     assert len(HistoryStore(database).list_cases()) == 1
+    next(button for button in app.button if button.label == "Apply priority settings").click().run(timeout=30)
+    next(button for button in app.button if button.label == "Save decision to local history").click().run(timeout=30)
+    assert len(HistoryStore(database).list_cases()) == 1
     app = AppTest.from_file(str(ROOT / "app.py")).run(timeout=30)
     next(button for button in app.button if button.label == "Save decision to local history").click().run(timeout=30)
     assert not app.exception

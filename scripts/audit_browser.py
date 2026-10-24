@@ -76,7 +76,7 @@ def main():
 
             server = start()
             evidence["first_server_pid"] = server.pid
-            for script in ("browser_smoke.py", "browser_copilot.py"):
+            for script in ("browser_smoke.py", "browser_copilot.py", "browser_parameter_changes.py"):
                 result = subprocess.run([sys.executable, str(ROOT / "tests" / script)], cwd=ROOT, env=environment, capture_output=True, text=True, timeout=180)
                 (OUTPUT / (script + ".log")).write_text(result.stdout + result.stderr)
                 evidence["browser_regressions"].append({"script": script, "exit_code": result.returncode})
