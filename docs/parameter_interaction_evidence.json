@@ -31,7 +31,9 @@
       "scoring_sensitivity": "Failed",
       "decision_comparison": "Failed"
     },
-    "after_fix": "Pending user retest"
+    "after_fix": "Passed (user-reported manual retest)",
+    "confirmation": "User stated all tests were successful after the update and parameter instructions.",
+    "scope_note": "Manual acceptance only; not a new automated run or a full Windows/Python 3.14 test matrix."
   },
   "reproduced_original_ui_reset": {
     "source_row_before_weights": 160,
