@@ -1,0 +1,23 @@
+{
+  "reference_source": "Hand-authored synthetic teaching cases and ordinal preferences. Ranks are authored here, never computed by the priority formula; not expert-validated ground truth.",
+  "as_of": "2026-10-01",
+  "base_shipment": {
+    "origin": "Shanghai, China", "destination": "Rotterdam, Netherlands", "transport_mode": "Sea",
+    "carrier": "Demo Reference Carrier", "planned_delivery": "2026-09-29T00:00:00Z",
+    "actual_delivery": "", "shipped_at": "2026-09-01T00:00:00Z", "shipping_cost": 1000,
+    "status": "In Transit", "financial_impact_basis": "Fictional contractual exposure supplied by the fixture author.",
+    "downstream_risk_basis": "Fictional dependency list supplied by the fixture author.",
+    "decision_context_source": "Synthetic evaluation fixture; not validated real-world evidence."
+  },
+  "cases": [
+    {"case_name": "urgent_low_value", "shipment_id": "REF-URGENT", "delivery_deadline": "2026-10-02T02:00:00Z", "estimated_delay_hours": 72, "estimated_financial_impact": 12000, "shipment_value": 1000, "downstream_dependency_count": 5, "reference_rank": 1, "reference_disposition": "Scored", "reference_rationale": "Immediate deadline and multiple explicitly declared operational/financial exposures outweigh low cargo value in this teaching case."},
+    {"case_name": "next_shift", "shipment_id": "REF-NEXT", "delivery_deadline": "2026-10-02T12:00:00Z", "estimated_delay_hours": 48, "estimated_financial_impact": 3000, "shipment_value": 20000, "downstream_dependency_count": 3, "reference_rank": 2, "reference_disposition": "Scored", "reference_rationale": "Next-shift deadline and three declared dependencies warrant attention after the immediate-deadline case."},
+    {"case_name": "valuable_with_slack", "shipment_id": "REF-VALUE", "delivery_deadline": "2026-10-06T00:00:00Z", "estimated_delay_hours": 12, "estimated_financial_impact": 0, "shipment_value": 1000000, "downstream_dependency_count": 0, "reference_rank": 3, "reference_disposition": "Scored", "reference_rationale": "High declared cargo value with deadline slack, explicitly zero financial exposure assumption and no declared downstream dependencies does not imply high loss."},
+    {"case_name": "routine_review", "shipment_id": "REF-ROUTINE", "delivery_deadline": "2026-10-10T00:00:00Z", "estimated_delay_hours": 0, "estimated_financial_impact": 0, "shipment_value": 100, "downstream_dependency_count": 0, "reference_rank": 4, "reference_disposition": "Scored", "reference_rationale": "Deadline slack and explicitly minimal scenario exposures permit lower triage priority while still monitoring the V1 overdue exception."},
+    {"case_name": "unknown_financial", "shipment_id": "REF-MISSING", "delivery_deadline": "2026-10-02T02:00:00Z", "estimated_delay_hours": 72, "estimated_financial_impact": null, "financial_impact_basis": "", "shipment_value": 1000000, "downstream_dependency_count": 5, "reference_rank": null, "reference_disposition": "Insufficient information", "reference_rationale": "High cargo value must not fill in a missing financial estimate or its basis."},
+    {"case_name": "invalid_context", "shipment_id": "REF-INVALID", "delivery_deadline": "not-a-date", "estimated_delay_hours": -10, "estimated_financial_impact": "invalid", "financial_impact_basis": "", "shipment_value": null, "downstream_dependency_count": 1.5, "downstream_risk_basis": "", "reference_rank": null, "reference_disposition": "Insufficient information", "reference_rationale": "Invalid or absent context must remain unknown across all five components."},
+    {"case_name": "not_an_exception", "shipment_id": "REF-NORMAL", "planned_delivery": "2026-10-10T00:00:00Z", "reference_rank": null, "reference_disposition": "Not an exception", "reference_rationale": "No V1 exception detected; do not manufacture an active exception priority."},
+    {"case_name": "already_delivered", "shipment_id": "REF-CLOSED", "status": "Delivered", "actual_delivery": "2026-09-30T00:00:00Z", "reference_rank": null, "reference_disposition": "Review only", "reference_rationale": "Completed late delivery belongs in retrospective review, not simulated transport intervention."},
+    {"case_name": "unidentified", "shipment_id": "", "reference_rank": null, "reference_disposition": "Excluded", "reference_rationale": "Unidentified row is quarantined by V1 before any priority ranking."}
+  ]
+}

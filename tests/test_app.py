@@ -23,7 +23,8 @@ def test_demo_dashboard_and_in_transit_filter():
 
 def test_no_matching_filter_and_upload_empty_state():
     app = AppTest.from_file(APP).run(timeout=30)
-    app.text_input[0].set_value("DOES-NOT-EXIST").run(timeout=30)
+    search = next(widget for widget in app.text_input if widget.label == "Shipment ID contains")
+    search.set_value("DOES-NOT-EXIST").run(timeout=30)
     assert not app.exception
     assert app.metric[0].value == "0"
     assert any("No records match" in warning.value for warning in app.warning)

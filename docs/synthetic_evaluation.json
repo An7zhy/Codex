@@ -1,0 +1,595 @@
+{
+  "summary": {
+    "reference_source": "Hand-authored synthetic teaching cases and ordinal preferences. Ranks are authored here, never computed by the priority formula; not expert-validated ground truth.",
+    "analysis_date": "2026-10-01",
+    "case_count": 9,
+    "v1_exception_rows": 8,
+    "comparable_pairs": 6,
+    "concordant_pairs": 6,
+    "discordant_pairs": 0,
+    "tied_pairs": 0,
+    "pairwise_concordance": 1.0,
+    "reference_ranked_cases": 4,
+    "scored_reference_cases": 4,
+    "disposition_matches": 9,
+    "disposition_cases": 9,
+    "component_rules_with_valid_examples": [
+      "delay",
+      "downstream",
+      "financial",
+      "urgency",
+      "value"
+    ],
+    "component_rules_with_missing_or_invalid_examples": [
+      "delay",
+      "downstream",
+      "financial",
+      "urgency",
+      "value"
+    ],
+    "rule_coverage_definition": "Presence of valid and missing/invalid fixture examples per component, not code coverage or predictive accuracy.",
+    "warning": "Synthetic ordinal consistency only. No real-world prediction accuracy, carrier capability or validated loss estimate is established.",
+    "config": {
+      "weights": {
+        "urgency": 30,
+        "delay": 25,
+        "financial": 20,
+        "value": 10,
+        "downstream": 15
+      },
+      "urgency_window_hours": 72,
+      "delay_scale_hours": 72,
+      "financial_scale_usd": 10000,
+      "value_scale_usd": 100000,
+      "dependency_scale": 5,
+      "medium_threshold": 40,
+      "high_threshold": 70
+    }
+  },
+  "comparison": [
+    {
+      "case_name": "urgent_low_value",
+      "shipment_id": "REF-URGENT",
+      "is_exception": true,
+      "exception_types": "Overdue in transit",
+      "reference_rank": 1.0,
+      "reference_disposition": "Scored",
+      "priority_score": 89.2667,
+      "priority_level": "High",
+      "coverage_percent": 100.0,
+      "missing_information": "",
+      "reference_rationale": "Immediate deadline and multiple explicitly declared operational/financial exposures outweigh low cargo value in this teaching case.",
+      "observed_disposition": "Scored",
+      "reference_disposition_matches": true
+    },
+    {
+      "case_name": "next_shift",
+      "shipment_id": "REF-NEXT",
+      "is_exception": true,
+      "exception_types": "Overdue in transit",
+      "reference_rank": 2.0,
+      "reference_disposition": "Scored",
+      "priority_score": 58.6667,
+      "priority_level": "Medium",
+      "coverage_percent": 100.0,
+      "missing_information": "",
+      "reference_rationale": "Next-shift deadline and three declared dependencies warrant attention after the immediate-deadline case.",
+      "observed_disposition": "Scored",
+      "reference_disposition_matches": true
+    },
+    {
+      "case_name": "valuable_with_slack",
+      "shipment_id": "REF-VALUE",
+      "is_exception": true,
+      "exception_types": "Overdue in transit",
+      "reference_rank": 3.0,
+      "reference_disposition": "Scored",
+      "priority_score": 14.1667,
+      "priority_level": "Low",
+      "coverage_percent": 100.0,
+      "missing_information": "",
+      "reference_rationale": "High declared cargo value with deadline slack, explicitly zero financial exposure assumption and no declared downstream dependencies does not imply high loss.",
+      "observed_disposition": "Scored",
+      "reference_disposition_matches": true
+    },
+    {
+      "case_name": "routine_review",
+      "shipment_id": "REF-ROUTINE",
+      "is_exception": true,
+      "exception_types": "Overdue in transit",
+      "reference_rank": 4.0,
+      "reference_disposition": "Scored",
+      "priority_score": 0.01,
+      "priority_level": "Low",
+      "coverage_percent": 100.0,
+      "missing_information": "",
+      "reference_rationale": "Deadline slack and explicitly minimal scenario exposures permit lower triage priority while still monitoring the V1 overdue exception.",
+      "observed_disposition": "Scored",
+      "reference_disposition_matches": true
+    },
+    {
+      "case_name": "unknown_financial",
+      "shipment_id": "REF-MISSING",
+      "is_exception": true,
+      "exception_types": "Overdue in transit",
+      "reference_rank": null,
+      "reference_disposition": "Insufficient information",
+      "priority_score": null,
+      "priority_level": "Insufficient information",
+      "coverage_percent": 80.0,
+      "missing_information": "financial: estimated_financial_impact and financial_impact_basis required",
+      "reference_rationale": "High cargo value must not fill in a missing financial estimate or its basis.",
+      "observed_disposition": "Insufficient information",
+      "reference_disposition_matches": true
+    },
+    {
+      "case_name": "invalid_context",
+      "shipment_id": "REF-INVALID",
+      "is_exception": true,
+      "exception_types": "Overdue in transit",
+      "reference_rank": null,
+      "reference_disposition": "Insufficient information",
+      "priority_score": null,
+      "priority_level": "Insufficient information",
+      "coverage_percent": 0.0,
+      "missing_information": "urgency: valid delivery_deadline or valid planned_delivery required; delay: finite nonnegative estimated_delay_hours required; financial: estimated_financial_impact and financial_impact_basis required; value: finite nonnegative shipment_value required; downstream: nonnegative integer downstream_dependency_count and downstream_risk_basis required",
+      "reference_rationale": "Invalid or absent context must remain unknown across all five components.",
+      "observed_disposition": "Insufficient information",
+      "reference_disposition_matches": true
+    },
+    {
+      "case_name": "not_an_exception",
+      "shipment_id": "REF-NORMAL",
+      "is_exception": false,
+      "exception_types": "",
+      "reference_rank": null,
+      "reference_disposition": "Not an exception",
+      "priority_score": null,
+      "priority_level": "Not an exception",
+      "coverage_percent": 0.0,
+      "missing_information": "",
+      "reference_rationale": "No V1 exception detected; do not manufacture an active exception priority.",
+      "observed_disposition": "Not an exception",
+      "reference_disposition_matches": true
+    },
+    {
+      "case_name": "already_delivered",
+      "shipment_id": "REF-CLOSED",
+      "is_exception": true,
+      "exception_types": "Delayed delivery",
+      "reference_rank": null,
+      "reference_disposition": "Review only",
+      "priority_score": null,
+      "priority_level": "Review only",
+      "coverage_percent": 0.0,
+      "missing_information": "",
+      "reference_rationale": "Completed late delivery belongs in retrospective review, not simulated transport intervention.",
+      "observed_disposition": "Review only",
+      "reference_disposition_matches": true
+    },
+    {
+      "case_name": "unidentified",
+      "shipment_id": "",
+      "is_exception": true,
+      "exception_types": "Data quality",
+      "reference_rank": null,
+      "reference_disposition": "Excluded",
+      "priority_score": null,
+      "priority_level": "Excluded",
+      "coverage_percent": 0.0,
+      "missing_information": "",
+      "reference_rationale": "Unidentified row is quarantined by V1 before any priority ranking.",
+      "observed_disposition": "Excluded",
+      "reference_disposition_matches": true
+    }
+  ],
+  "weight_sensitivity": [
+    {
+      "profile": "Current weights",
+      "case_name": "urgent_low_value",
+      "priority_score": 89.2667,
+      "observed_rank": 1.0,
+      "priority_level": "High",
+      "weights_json": "{\"urgency\": 30, \"delay\": 25, \"financial\": 20, \"value\": 10, \"downstream\": 15}"
+    },
+    {
+      "profile": "Current weights",
+      "case_name": "next_shift",
+      "priority_score": 58.6667,
+      "observed_rank": 2.0,
+      "priority_level": "Medium",
+      "weights_json": "{\"urgency\": 30, \"delay\": 25, \"financial\": 20, \"value\": 10, \"downstream\": 15}"
+    },
+    {
+      "profile": "Current weights",
+      "case_name": "valuable_with_slack",
+      "priority_score": 14.1667,
+      "observed_rank": 3.0,
+      "priority_level": "Low",
+      "weights_json": "{\"urgency\": 30, \"delay\": 25, \"financial\": 20, \"value\": 10, \"downstream\": 15}"
+    },
+    {
+      "profile": "Current weights",
+      "case_name": "routine_review",
+      "priority_score": 0.01,
+      "observed_rank": 4.0,
+      "priority_level": "Low",
+      "weights_json": "{\"urgency\": 30, \"delay\": 25, \"financial\": 20, \"value\": 10, \"downstream\": 15}"
+    },
+    {
+      "profile": "Current weights",
+      "case_name": "unknown_financial",
+      "priority_score": null,
+      "observed_rank": null,
+      "priority_level": "Insufficient information",
+      "weights_json": "{\"urgency\": 30, \"delay\": 25, \"financial\": 20, \"value\": 10, \"downstream\": 15}"
+    },
+    {
+      "profile": "Current weights",
+      "case_name": "invalid_context",
+      "priority_score": null,
+      "observed_rank": null,
+      "priority_level": "Insufficient information",
+      "weights_json": "{\"urgency\": 30, \"delay\": 25, \"financial\": 20, \"value\": 10, \"downstream\": 15}"
+    },
+    {
+      "profile": "Current weights",
+      "case_name": "not_an_exception",
+      "priority_score": null,
+      "observed_rank": null,
+      "priority_level": "Not an exception",
+      "weights_json": "{\"urgency\": 30, \"delay\": 25, \"financial\": 20, \"value\": 10, \"downstream\": 15}"
+    },
+    {
+      "profile": "Current weights",
+      "case_name": "already_delivered",
+      "priority_score": null,
+      "observed_rank": null,
+      "priority_level": "Review only",
+      "weights_json": "{\"urgency\": 30, \"delay\": 25, \"financial\": 20, \"value\": 10, \"downstream\": 15}"
+    },
+    {
+      "profile": "Current weights",
+      "case_name": "unidentified",
+      "priority_score": null,
+      "observed_rank": null,
+      "priority_level": "Excluded",
+      "weights_json": "{\"urgency\": 30, \"delay\": 25, \"financial\": 20, \"value\": 10, \"downstream\": 15}"
+    },
+    {
+      "profile": "Urgency emphasis",
+      "case_name": "urgent_low_value",
+      "priority_score": 93.1056,
+      "observed_rank": 1.0,
+      "priority_level": "High",
+      "weights_json": "{\"urgency\": 70, \"delay\": 10, \"financial\": 10, \"value\": 5, \"downstream\": 5}"
+    },
+    {
+      "profile": "Urgency emphasis",
+      "case_name": "next_shift",
+      "priority_score": 72.0,
+      "observed_rank": 2.0,
+      "priority_level": "High",
+      "weights_json": "{\"urgency\": 70, \"delay\": 10, \"financial\": 10, \"value\": 5, \"downstream\": 5}"
+    },
+    {
+      "profile": "Urgency emphasis",
+      "case_name": "valuable_with_slack",
+      "priority_score": 6.6667,
+      "observed_rank": 3.0,
+      "priority_level": "Low",
+      "weights_json": "{\"urgency\": 70, \"delay\": 10, \"financial\": 10, \"value\": 5, \"downstream\": 5}"
+    },
+    {
+      "profile": "Urgency emphasis",
+      "case_name": "routine_review",
+      "priority_score": 0.005,
+      "observed_rank": 4.0,
+      "priority_level": "Low",
+      "weights_json": "{\"urgency\": 70, \"delay\": 10, \"financial\": 10, \"value\": 5, \"downstream\": 5}"
+    },
+    {
+      "profile": "Urgency emphasis",
+      "case_name": "unknown_financial",
+      "priority_score": null,
+      "observed_rank": null,
+      "priority_level": "Insufficient information",
+      "weights_json": "{\"urgency\": 70, \"delay\": 10, \"financial\": 10, \"value\": 5, \"downstream\": 5}"
+    },
+    {
+      "profile": "Urgency emphasis",
+      "case_name": "invalid_context",
+      "priority_score": null,
+      "observed_rank": null,
+      "priority_level": "Insufficient information",
+      "weights_json": "{\"urgency\": 70, \"delay\": 10, \"financial\": 10, \"value\": 5, \"downstream\": 5}"
+    },
+    {
+      "profile": "Urgency emphasis",
+      "case_name": "not_an_exception",
+      "priority_score": null,
+      "observed_rank": null,
+      "priority_level": "Not an exception",
+      "weights_json": "{\"urgency\": 70, \"delay\": 10, \"financial\": 10, \"value\": 5, \"downstream\": 5}"
+    },
+    {
+      "profile": "Urgency emphasis",
+      "case_name": "already_delivered",
+      "priority_score": null,
+      "observed_rank": null,
+      "priority_level": "Review only",
+      "weights_json": "{\"urgency\": 70, \"delay\": 10, \"financial\": 10, \"value\": 5, \"downstream\": 5}"
+    },
+    {
+      "profile": "Urgency emphasis",
+      "case_name": "unidentified",
+      "priority_score": null,
+      "observed_rank": null,
+      "priority_level": "Excluded",
+      "weights_json": "{\"urgency\": 70, \"delay\": 10, \"financial\": 10, \"value\": 5, \"downstream\": 5}"
+    },
+    {
+      "profile": "Financial emphasis",
+      "case_name": "urgent_low_value",
+      "priority_score": 94.7722,
+      "observed_rank": 1.0,
+      "priority_level": "High",
+      "weights_json": "{\"urgency\": 10, \"delay\": 10, \"financial\": 70, \"value\": 5, \"downstream\": 5}"
+    },
+    {
+      "profile": "Financial emphasis",
+      "case_name": "next_shift",
+      "priority_score": 40.0,
+      "observed_rank": 2.0,
+      "priority_level": "Medium",
+      "weights_json": "{\"urgency\": 10, \"delay\": 10, \"financial\": 70, \"value\": 5, \"downstream\": 5}"
+    },
+    {
+      "profile": "Financial emphasis",
+      "case_name": "valuable_with_slack",
+      "priority_score": 6.6667,
+      "observed_rank": 3.0,
+      "priority_level": "Low",
+      "weights_json": "{\"urgency\": 10, \"delay\": 10, \"financial\": 70, \"value\": 5, \"downstream\": 5}"
+    },
+    {
+      "profile": "Financial emphasis",
+      "case_name": "routine_review",
+      "priority_score": 0.005,
+      "observed_rank": 4.0,
+      "priority_level": "Low",
+      "weights_json": "{\"urgency\": 10, \"delay\": 10, \"financial\": 70, \"value\": 5, \"downstream\": 5}"
+    },
+    {
+      "profile": "Financial emphasis",
+      "case_name": "unknown_financial",
+      "priority_score": null,
+      "observed_rank": null,
+      "priority_level": "Insufficient information",
+      "weights_json": "{\"urgency\": 10, \"delay\": 10, \"financial\": 70, \"value\": 5, \"downstream\": 5}"
+    },
+    {
+      "profile": "Financial emphasis",
+      "case_name": "invalid_context",
+      "priority_score": null,
+      "observed_rank": null,
+      "priority_level": "Insufficient information",
+      "weights_json": "{\"urgency\": 10, \"delay\": 10, \"financial\": 70, \"value\": 5, \"downstream\": 5}"
+    },
+    {
+      "profile": "Financial emphasis",
+      "case_name": "not_an_exception",
+      "priority_score": null,
+      "observed_rank": null,
+      "priority_level": "Not an exception",
+      "weights_json": "{\"urgency\": 10, \"delay\": 10, \"financial\": 70, \"value\": 5, \"downstream\": 5}"
+    },
+    {
+      "profile": "Financial emphasis",
+      "case_name": "already_delivered",
+      "priority_score": null,
+      "observed_rank": null,
+      "priority_level": "Review only",
+      "weights_json": "{\"urgency\": 10, \"delay\": 10, \"financial\": 70, \"value\": 5, \"downstream\": 5}"
+    },
+    {
+      "profile": "Financial emphasis",
+      "case_name": "unidentified",
+      "priority_score": null,
+      "observed_rank": null,
+      "priority_level": "Excluded",
+      "weights_json": "{\"urgency\": 10, \"delay\": 10, \"financial\": 70, \"value\": 5, \"downstream\": 5}"
+    },
+    {
+      "profile": "Value emphasis (stress test)",
+      "case_name": "urgent_low_value",
+      "priority_score": 20.6611,
+      "observed_rank": 3.0,
+      "priority_level": "Low",
+      "weights_json": "{\"urgency\": 5, \"delay\": 5, \"financial\": 5, \"value\": 80, \"downstream\": 5}"
+    },
+    {
+      "profile": "Value emphasis (stress test)",
+      "case_name": "next_shift",
+      "priority_score": 28.0,
+      "observed_rank": 2.0,
+      "priority_level": "Low",
+      "weights_json": "{\"urgency\": 5, \"delay\": 5, \"financial\": 5, \"value\": 80, \"downstream\": 5}"
+    },
+    {
+      "profile": "Value emphasis (stress test)",
+      "case_name": "valuable_with_slack",
+      "priority_score": 80.8333,
+      "observed_rank": 1.0,
+      "priority_level": "High",
+      "weights_json": "{\"urgency\": 5, \"delay\": 5, \"financial\": 5, \"value\": 80, \"downstream\": 5}"
+    },
+    {
+      "profile": "Value emphasis (stress test)",
+      "case_name": "routine_review",
+      "priority_score": 0.08,
+      "observed_rank": 4.0,
+      "priority_level": "Low",
+      "weights_json": "{\"urgency\": 5, \"delay\": 5, \"financial\": 5, \"value\": 80, \"downstream\": 5}"
+    },
+    {
+      "profile": "Value emphasis (stress test)",
+      "case_name": "unknown_financial",
+      "priority_score": null,
+      "observed_rank": null,
+      "priority_level": "Insufficient information",
+      "weights_json": "{\"urgency\": 5, \"delay\": 5, \"financial\": 5, \"value\": 80, \"downstream\": 5}"
+    },
+    {
+      "profile": "Value emphasis (stress test)",
+      "case_name": "invalid_context",
+      "priority_score": null,
+      "observed_rank": null,
+      "priority_level": "Insufficient information",
+      "weights_json": "{\"urgency\": 5, \"delay\": 5, \"financial\": 5, \"value\": 80, \"downstream\": 5}"
+    },
+    {
+      "profile": "Value emphasis (stress test)",
+      "case_name": "not_an_exception",
+      "priority_score": null,
+      "observed_rank": null,
+      "priority_level": "Not an exception",
+      "weights_json": "{\"urgency\": 5, \"delay\": 5, \"financial\": 5, \"value\": 80, \"downstream\": 5}"
+    },
+    {
+      "profile": "Value emphasis (stress test)",
+      "case_name": "already_delivered",
+      "priority_score": null,
+      "observed_rank": null,
+      "priority_level": "Review only",
+      "weights_json": "{\"urgency\": 5, \"delay\": 5, \"financial\": 5, \"value\": 80, \"downstream\": 5}"
+    },
+    {
+      "profile": "Value emphasis (stress test)",
+      "case_name": "unidentified",
+      "priority_score": null,
+      "observed_rank": null,
+      "priority_level": "Excluded",
+      "weights_json": "{\"urgency\": 5, \"delay\": 5, \"financial\": 5, \"value\": 80, \"downstream\": 5}"
+    }
+  ],
+  "action_sensitivity": [
+    {
+      "action": "Wait and monitor",
+      "estimated_additional_cost_usd": 0.0,
+      "assumed_remaining_hours": 96.0,
+      "assumed_available": true,
+      "scenario_arrival_utc": "2026-10-05T23:59+00:00",
+      "estimated_delay_hours": 84.0,
+      "deadline_impact": "Misses deadline in scenario (84.0h late)",
+      "key_assumptions": "Simulation only; capacity, price and service commitments are unverified.",
+      "assumptions_json": "{\"action\": \"Wait and monitor\", \"additional_cost\": 0.0, \"remaining_hours\": 96.0, \"assumed_available\": true, \"notes\": \"Simulation only; capacity, price and service commitments are unverified.\"}",
+      "scenario": "wait=96h, expedited=48h/$250",
+      "case_name": "next_shift"
+    },
+    {
+      "action": "Request expedited handling",
+      "estimated_additional_cost_usd": 250.0,
+      "assumed_remaining_hours": 48.0,
+      "assumed_available": true,
+      "scenario_arrival_utc": "2026-10-03T23:59+00:00",
+      "estimated_delay_hours": 36.0,
+      "deadline_impact": "Misses deadline in scenario (36.0h late)",
+      "key_assumptions": "Simulation only; capacity, price and service commitments are unverified.",
+      "assumptions_json": "{\"action\": \"Request expedited handling\", \"additional_cost\": 250.0, \"remaining_hours\": 48.0, \"assumed_available\": true, \"notes\": \"Simulation only; capacity, price and service commitments are unverified.\"}",
+      "scenario": "wait=96h, expedited=48h/$250",
+      "case_name": "next_shift"
+    },
+    {
+      "action": "Alternative transport arrangement",
+      "estimated_additional_cost_usd": 800.0,
+      "assumed_remaining_hours": 24.0,
+      "assumed_available": true,
+      "scenario_arrival_utc": "2026-10-02T23:59+00:00",
+      "estimated_delay_hours": 12.0,
+      "deadline_impact": "Misses deadline in scenario (12.0h late)",
+      "key_assumptions": "Simulation only; capacity, price and service commitments are unverified.",
+      "assumptions_json": "{\"action\": \"Alternative transport arrangement\", \"additional_cost\": 800.0, \"remaining_hours\": 24.0, \"assumed_available\": true, \"notes\": \"Simulation only; capacity, price and service commitments are unverified.\"}",
+      "scenario": "wait=96h, expedited=48h/$250",
+      "case_name": "next_shift"
+    },
+    {
+      "action": "Wait and monitor",
+      "estimated_additional_cost_usd": 0.0,
+      "assumed_remaining_hours": 120.0,
+      "assumed_available": true,
+      "scenario_arrival_utc": "2026-10-06T23:59+00:00",
+      "estimated_delay_hours": 108.0,
+      "deadline_impact": "Misses deadline in scenario (108.0h late)",
+      "key_assumptions": "Simulation only; capacity, price and service commitments are unverified.",
+      "assumptions_json": "{\"action\": \"Wait and monitor\", \"additional_cost\": 0.0, \"remaining_hours\": 120.0, \"assumed_available\": true, \"notes\": \"Simulation only; capacity, price and service commitments are unverified.\"}",
+      "scenario": "wait=120h, expedited=72h/$500",
+      "case_name": "next_shift"
+    },
+    {
+      "action": "Request expedited handling",
+      "estimated_additional_cost_usd": 500.0,
+      "assumed_remaining_hours": 72.0,
+      "assumed_available": true,
+      "scenario_arrival_utc": "2026-10-04T23:59+00:00",
+      "estimated_delay_hours": 60.0,
+      "deadline_impact": "Misses deadline in scenario (60.0h late)",
+      "key_assumptions": "Simulation only; capacity, price and service commitments are unverified.",
+      "assumptions_json": "{\"action\": \"Request expedited handling\", \"additional_cost\": 500.0, \"remaining_hours\": 72.0, \"assumed_available\": true, \"notes\": \"Simulation only; capacity, price and service commitments are unverified.\"}",
+      "scenario": "wait=120h, expedited=72h/$500",
+      "case_name": "next_shift"
+    },
+    {
+      "action": "Alternative transport arrangement",
+      "estimated_additional_cost_usd": 800.0,
+      "assumed_remaining_hours": 24.0,
+      "assumed_available": true,
+      "scenario_arrival_utc": "2026-10-02T23:59+00:00",
+      "estimated_delay_hours": 12.0,
+      "deadline_impact": "Misses deadline in scenario (12.0h late)",
+      "key_assumptions": "Simulation only; capacity, price and service commitments are unverified.",
+      "assumptions_json": "{\"action\": \"Alternative transport arrangement\", \"additional_cost\": 800.0, \"remaining_hours\": 24.0, \"assumed_available\": true, \"notes\": \"Simulation only; capacity, price and service commitments are unverified.\"}",
+      "scenario": "wait=120h, expedited=72h/$500",
+      "case_name": "next_shift"
+    },
+    {
+      "action": "Wait and monitor",
+      "estimated_additional_cost_usd": 0.0,
+      "assumed_remaining_hours": 72.0,
+      "assumed_available": true,
+      "scenario_arrival_utc": "2026-10-04T23:59+00:00",
+      "estimated_delay_hours": 60.0,
+      "deadline_impact": "Misses deadline in scenario (60.0h late)",
+      "key_assumptions": "Simulation only; capacity, price and service commitments are unverified.",
+      "assumptions_json": "{\"action\": \"Wait and monitor\", \"additional_cost\": 0.0, \"remaining_hours\": 72.0, \"assumed_available\": true, \"notes\": \"Simulation only; capacity, price and service commitments are unverified.\"}",
+      "scenario": "wait=72h, expedited=8h/$400",
+      "case_name": "next_shift"
+    },
+    {
+      "action": "Request expedited handling",
+      "estimated_additional_cost_usd": 400.0,
+      "assumed_remaining_hours": 8.0,
+      "assumed_available": true,
+      "scenario_arrival_utc": "2026-10-02T07:59+00:00",
+      "estimated_delay_hours": 0.0,
+      "deadline_impact": "Within deadline in scenario (4.0h spare)",
+      "key_assumptions": "Simulation only; capacity, price and service commitments are unverified.",
+      "assumptions_json": "{\"action\": \"Request expedited handling\", \"additional_cost\": 400.0, \"remaining_hours\": 8.0, \"assumed_available\": true, \"notes\": \"Simulation only; capacity, price and service commitments are unverified.\"}",
+      "scenario": "wait=72h, expedited=8h/$400",
+      "case_name": "next_shift"
+    },
+    {
+      "action": "Alternative transport arrangement",
+      "estimated_additional_cost_usd": 800.0,
+      "assumed_remaining_hours": 24.0,
+      "assumed_available": true,
+      "scenario_arrival_utc": "2026-10-02T23:59+00:00",
+      "estimated_delay_hours": 12.0,
+      "deadline_impact": "Misses deadline in scenario (12.0h late)",
+      "key_assumptions": "Simulation only; capacity, price and service commitments are unverified.",
+      "assumptions_json": "{\"action\": \"Alternative transport arrangement\", \"additional_cost\": 800.0, \"remaining_hours\": 24.0, \"assumed_available\": true, \"notes\": \"Simulation only; capacity, price and service commitments are unverified.\"}",
+      "scenario": "wait=72h, expedited=8h/$400",
+      "case_name": "next_shift"
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "weights": {"urgency": 30, "delay": 25, "financial": 20, "value": 10, "downstream": 15},
+  "urgency_window_hours": 72,
+  "delay_scale_hours": 72,
+  "financial_scale_usd": 10000,
+  "value_scale_usd": 100000,
+  "dependency_scale": 5,
+  "medium_threshold": 40,
+  "high_threshold": 70
+}

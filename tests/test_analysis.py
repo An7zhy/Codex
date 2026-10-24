@@ -194,3 +194,9 @@ def test_analysis_does_not_mutate_input(make_rows):
     before = data.copy(deep=True)
     analyze_shipments(data, AS_OF)
     pd.testing.assert_frame_equal(data, before)
+
+
+def test_last_fractional_second_is_inside_the_inclusive_cutoff(make_rows):
+    result = analyze_shipments(make_rows({"actual_delivery": "2026-10-01T23:59:59.999999998Z"}), AS_OF)
+    assert result.cutoff.value == pd.Timestamp("2026-10-01T23:59:59.999999999Z").value
+    assert calculate_kpis(result.shipments)["delivered_shipments"] == 1

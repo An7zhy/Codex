@@ -8,6 +8,8 @@ import streamlit as st
 
 from src.analysis import analyze_shipments, calculate_kpis, carrier_performance, exception_shipments
 from src.demo import DEMO_AS_OF, DEMO_LABEL, demo_xlsx_bytes, generate_demo_data
+from src.decision_demo import with_demo_context
+from src.copilot_ui import render_priority_queue, render_decision_center, render_case_history, render_evaluation
 from src.exports import csv_bytes
 from src.ingestion import load_shipments
 from src.reporting import RuleBasedReportGenerator
@@ -101,8 +103,8 @@ def main() -> None:
         @media (max-width: 700px) { .block-container { padding: 1.2rem 1rem; } }
         </style>""", unsafe_allow_html=True)
     st.title("Logistics Insight AI")
-    st.write("Find shipment exceptions, understand service performance, and export an evidence-based operations report.")
-    st.caption("Phase 1 MVP. Deterministic Python analysis; no paid service or API key required.")
+    st.write("Lightweight, explainable logistics exception decision copilot for small freight forwarders.")
+    st.caption("Engineering prototype validated on synthetic data. Deterministic rules; no live carrier network, validated forecasting or API key required.")
 
     with st.sidebar:
         st.header("Analysis controls")
@@ -124,9 +126,11 @@ def main() -> None:
             st.download_button("Demo CSV", sample_csv, "synthetic_shipments.csv", "text/csv", key="demo_csv", on_click="ignore")
             st.download_button("Demo Excel", sample_xlsx, "synthetic_shipments.xlsx",
                                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", key="demo_xlsx", on_click="ignore")
+            st.download_button("Decision demo CSV", csv_bytes(with_demo_context(generate_demo_data())),
+                               "synthetic_decision_shipments.csv", "text/csv", on_click="ignore")
 
     if source == DEMO_LABEL:
-        raw = generate_demo_data()
+        raw = with_demo_context(generate_demo_data())
         source_label = DEMO_LABEL + " — fictional orders and carriers"
         st.info("Synthetic Demo Data — 160 fictional source rows across China, Europe, the USA and Southeast Asia. Includes intentional errors. This is not real enterprise operating data.")
     else:
@@ -190,7 +194,8 @@ def main() -> None:
         column.metric(label, value, help=KPI_DEFINITIONS[label])
     st.caption(f"On-time denominator: {k['eligible_deliveries']} eligible completed deliveries. Average delay uses {k['delayed_shipments']} late deliveries. Cost total uses {k['cost_eligible_shipments']} valid costs.")
 
-    overview, exceptions_tab, quality_tab, downloads_tab = st.tabs(["Overview", "Exceptions", "Data quality", "Report & downloads"])
+    overview, exceptions_tab, quality_tab, downloads_tab, priority_tab, decision_tab, history_tab, evaluation_tab = st.tabs(
+        ["Overview", "Exceptions", "Data quality", "Report & downloads", "Priority queue", "Decision Center", "Case history", "Evaluation"])
     with overview:
         show_overview(view)
         with st.expander("KPI definitions and rule assumptions"):
@@ -234,6 +239,15 @@ def main() -> None:
         columns[1].download_button("Exceptions CSV", csv_bytes(exception_shipments(view)), "shipment_exceptions.csv", "text/csv", on_click="ignore")
         columns[2].download_button("English report", report.encode("utf-8"), "logistics_operations_report.md", "text/markdown", on_click="ignore")
         st.markdown(report)
+
+    with priority_tab:
+        priorities, priority_settings = render_priority_queue(view, result.cutoff)
+    with decision_tab:
+        render_decision_center(priorities, result.cutoff, source_label)
+    with history_tab:
+        render_case_history()
+    with evaluation_tab:
+        render_evaluation(priority_settings)
 
 
 if __name__ == "__main__":

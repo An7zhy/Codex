@@ -54,7 +54,9 @@ def analyze_shipments(raw: pd.DataFrame, as_of: date | str) -> AnalysisResult:
     if pd.isna(day):
         raise ValueError("Choose a valid analysis date.")
     day = (day.tz_localize("UTC") if day.tzinfo is None else day.tz_convert("UTC")).normalize()
-    cutoff = day.replace(hour=23, minute=59, second=59, microsecond=999999, nanosecond=999)
+    # Parse at nanosecond resolution; Timestamp.replace on a seconds-resolution
+    # Timestamp can display fractions that its underlying value does not retain.
+    cutoff = pd.Timestamp(day.date().isoformat() + "T23:59:59.999999999Z")
     earliest = pd.Timestamp(EARLIEST_DATE, tz="UTC")
     issues: list[dict] = []
 
