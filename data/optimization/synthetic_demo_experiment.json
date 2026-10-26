@@ -1,0 +1,1240 @@
+{
+  "schema": "logistics-insight-v3-experiment-1",
+  "provenance": "Synthetic Demo Data; hypothetical capacities, prices and lognormal transit assumptions",
+  "data": {
+    "orders": [
+      {
+        "shipment_id": "PLAN-0001",
+        "origin": "Shanghai, China",
+        "destination": "Rotterdam, Netherlands",
+        "weight_kg": 72.0,
+        "volume_m3": 0.99,
+        "deadline_hours": 48.0
+      },
+      {
+        "shipment_id": "PLAN-0002",
+        "origin": "Shenzhen, China",
+        "destination": "Los Angeles, USA",
+        "weight_kg": 244.0,
+        "volume_m3": 1.745,
+        "deadline_hours": 48.0
+      },
+      {
+        "shipment_id": "PLAN-0003",
+        "origin": "Singapore",
+        "destination": "Hamburg, Germany",
+        "weight_kg": 71.0,
+        "volume_m3": 0.37,
+        "deadline_hours": 48.0
+      },
+      {
+        "shipment_id": "PLAN-0004",
+        "origin": "Shanghai, China",
+        "destination": "Rotterdam, Netherlands",
+        "weight_kg": 225.0,
+        "volume_m3": 1.956,
+        "deadline_hours": 96.0
+      },
+      {
+        "shipment_id": "PLAN-0005",
+        "origin": "Shenzhen, China",
+        "destination": "Los Angeles, USA",
+        "weight_kg": 234.0,
+        "volume_m3": 1.615,
+        "deadline_hours": 96.0
+      },
+      {
+        "shipment_id": "PLAN-0006",
+        "origin": "Singapore",
+        "destination": "Hamburg, Germany",
+        "weight_kg": 241.0,
+        "volume_m3": 0.431,
+        "deadline_hours": 96.0
+      },
+      {
+        "shipment_id": "PLAN-0007",
+        "origin": "Shanghai, China",
+        "destination": "Rotterdam, Netherlands",
+        "weight_kg": 260.0,
+        "volume_m3": 0.867,
+        "deadline_hours": 384.0
+      },
+      {
+        "shipment_id": "PLAN-0008",
+        "origin": "Shenzhen, China",
+        "destination": "Los Angeles, USA",
+        "weight_kg": 163.0,
+        "volume_m3": 1.868,
+        "deadline_hours": 384.0
+      },
+      {
+        "shipment_id": "PLAN-0009",
+        "origin": "Singapore",
+        "destination": "Hamburg, Germany",
+        "weight_kg": 246.0,
+        "volume_m3": 1.681,
+        "deadline_hours": 384.0
+      },
+      {
+        "shipment_id": "PLAN-0010",
+        "origin": "Shanghai, China",
+        "destination": "Rotterdam, Netherlands",
+        "weight_kg": 211.0,
+        "volume_m3": 0.998,
+        "deadline_hours": 384.0
+      },
+      {
+        "shipment_id": "PLAN-0011",
+        "origin": "Shenzhen, China",
+        "destination": "Los Angeles, USA",
+        "weight_kg": 163.0,
+        "volume_m3": 1.198,
+        "deadline_hours": 384.0
+      },
+      {
+        "shipment_id": "PLAN-0012",
+        "origin": "Singapore",
+        "destination": "Hamburg, Germany",
+        "weight_kg": 107.0,
+        "volume_m3": 0.315,
+        "deadline_hours": 384.0
+      }
+    ],
+    "services": [
+      {
+        "service_id": "SYN-L1-PRIORITY",
+        "origin": "Shanghai, China",
+        "destination": "Rotterdam, Netherlands",
+        "mode": "Air",
+        "mean_hours": 24.0,
+        "std_hours": 6.0,
+        "weight_capacity_kg": 576.0,
+        "volume_capacity_m3": 3.608,
+        "shipment_capacity": 3
+      },
+      {
+        "service_id": "SYN-L1-REGULAR",
+        "origin": "Shanghai, China",
+        "destination": "Rotterdam, Netherlands",
+        "mode": "Air",
+        "mean_hours": 48.0,
+        "std_hours": 12.0,
+        "weight_capacity_kg": 576.0,
+        "volume_capacity_m3": 3.608,
+        "shipment_capacity": 3
+      },
+      {
+        "service_id": "SYN-L1-ECONOMY",
+        "origin": "Shanghai, China",
+        "destination": "Rotterdam, Netherlands",
+        "mode": "Sea",
+        "mean_hours": 336.0,
+        "std_hours": 48.0,
+        "weight_capacity_kg": 576.0,
+        "volume_capacity_m3": 3.608,
+        "shipment_capacity": 3
+      },
+      {
+        "service_id": "SYN-L2-PRIORITY",
+        "origin": "Shenzhen, China",
+        "destination": "Los Angeles, USA",
+        "mode": "Air",
+        "mean_hours": 24.0,
+        "std_hours": 6.0,
+        "weight_capacity_kg": 603.0,
+        "volume_capacity_m3": 4.819,
+        "shipment_capacity": 3
+      },
+      {
+        "service_id": "SYN-L2-REGULAR",
+        "origin": "Shenzhen, China",
+        "destination": "Los Angeles, USA",
+        "mode": "Air",
+        "mean_hours": 48.0,
+        "std_hours": 12.0,
+        "weight_capacity_kg": 603.0,
+        "volume_capacity_m3": 4.819,
+        "shipment_capacity": 3
+      },
+      {
+        "service_id": "SYN-L2-ECONOMY",
+        "origin": "Shenzhen, China",
+        "destination": "Los Angeles, USA",
+        "mode": "Sea",
+        "mean_hours": 336.0,
+        "std_hours": 48.0,
+        "weight_capacity_kg": 603.0,
+        "volume_capacity_m3": 4.819,
+        "shipment_capacity": 3
+      },
+      {
+        "service_id": "SYN-L3-PRIORITY",
+        "origin": "Singapore",
+        "destination": "Hamburg, Germany",
+        "mode": "Air",
+        "mean_hours": 24.0,
+        "std_hours": 6.0,
+        "weight_capacity_kg": 498.75,
+        "volume_capacity_m3": 2.098,
+        "shipment_capacity": 3
+      },
+      {
+        "service_id": "SYN-L3-REGULAR",
+        "origin": "Singapore",
+        "destination": "Hamburg, Germany",
+        "mode": "Air",
+        "mean_hours": 48.0,
+        "std_hours": 12.0,
+        "weight_capacity_kg": 498.75,
+        "volume_capacity_m3": 2.098,
+        "shipment_capacity": 3
+      },
+      {
+        "service_id": "SYN-L3-ECONOMY",
+        "origin": "Singapore",
+        "destination": "Hamburg, Germany",
+        "mode": "Sea",
+        "mean_hours": 336.0,
+        "std_hours": 48.0,
+        "weight_capacity_kg": 498.75,
+        "volume_capacity_m3": 2.098,
+        "shipment_capacity": 3
+      }
+    ],
+    "candidates": [
+      {
+        "shipment_id": "PLAN-0001",
+        "service_id": "SYN-L1-PRIORITY",
+        "cost_usd": 1476.0
+      },
+      {
+        "shipment_id": "PLAN-0004",
+        "service_id": "SYN-L1-PRIORITY",
+        "cost_usd": 2700.0
+      },
+      {
+        "shipment_id": "PLAN-0007",
+        "service_id": "SYN-L1-PRIORITY",
+        "cost_usd": 2980.0
+      },
+      {
+        "shipment_id": "PLAN-0010",
+        "service_id": "SYN-L1-PRIORITY",
+        "cost_usd": 2588.0
+      },
+      {
+        "shipment_id": "PLAN-0001",
+        "service_id": "SYN-L1-REGULAR",
+        "cost_usd": 860.0
+      },
+      {
+        "shipment_id": "PLAN-0004",
+        "service_id": "SYN-L1-REGULAR",
+        "cost_usd": 1625.0
+      },
+      {
+        "shipment_id": "PLAN-0007",
+        "service_id": "SYN-L1-REGULAR",
+        "cost_usd": 1800.0
+      },
+      {
+        "shipment_id": "PLAN-0010",
+        "service_id": "SYN-L1-REGULAR",
+        "cost_usd": 1555.0
+      },
+      {
+        "shipment_id": "PLAN-0001",
+        "service_id": "SYN-L1-ECONOMY",
+        "cost_usd": 258.0
+      },
+      {
+        "shipment_id": "PLAN-0004",
+        "service_id": "SYN-L1-ECONOMY",
+        "cost_usd": 487.5
+      },
+      {
+        "shipment_id": "PLAN-0007",
+        "service_id": "SYN-L1-ECONOMY",
+        "cost_usd": 540.0
+      },
+      {
+        "shipment_id": "PLAN-0010",
+        "service_id": "SYN-L1-ECONOMY",
+        "cost_usd": 466.5
+      },
+      {
+        "shipment_id": "PLAN-0002",
+        "service_id": "SYN-L2-PRIORITY",
+        "cost_usd": 2852.0
+      },
+      {
+        "shipment_id": "PLAN-0005",
+        "service_id": "SYN-L2-PRIORITY",
+        "cost_usd": 2772.0
+      },
+      {
+        "shipment_id": "PLAN-0008",
+        "service_id": "SYN-L2-PRIORITY",
+        "cost_usd": 2204.0
+      },
+      {
+        "shipment_id": "PLAN-0011",
+        "service_id": "SYN-L2-PRIORITY",
+        "cost_usd": 2204.0
+      },
+      {
+        "shipment_id": "PLAN-0002",
+        "service_id": "SYN-L2-REGULAR",
+        "cost_usd": 1720.0
+      },
+      {
+        "shipment_id": "PLAN-0005",
+        "service_id": "SYN-L2-REGULAR",
+        "cost_usd": 1670.0
+      },
+      {
+        "shipment_id": "PLAN-0008",
+        "service_id": "SYN-L2-REGULAR",
+        "cost_usd": 1315.0
+      },
+      {
+        "shipment_id": "PLAN-0011",
+        "service_id": "SYN-L2-REGULAR",
+        "cost_usd": 1315.0
+      },
+      {
+        "shipment_id": "PLAN-0002",
+        "service_id": "SYN-L2-ECONOMY",
+        "cost_usd": 516.0
+      },
+      {
+        "shipment_id": "PLAN-0005",
+        "service_id": "SYN-L2-ECONOMY",
+        "cost_usd": 501.0
+      },
+      {
+        "shipment_id": "PLAN-0008",
+        "service_id": "SYN-L2-ECONOMY",
+        "cost_usd": 394.5
+      },
+      {
+        "shipment_id": "PLAN-0011",
+        "service_id": "SYN-L2-ECONOMY",
+        "cost_usd": 394.5
+      },
+      {
+        "shipment_id": "PLAN-0003",
+        "service_id": "SYN-L3-PRIORITY",
+        "cost_usd": 1468.0
+      },
+      {
+        "shipment_id": "PLAN-0006",
+        "service_id": "SYN-L3-PRIORITY",
+        "cost_usd": 2828.0
+      },
+      {
+        "shipment_id": "PLAN-0009",
+        "service_id": "SYN-L3-PRIORITY",
+        "cost_usd": 2868.0
+      },
+      {
+        "shipment_id": "PLAN-0012",
+        "service_id": "SYN-L3-PRIORITY",
+        "cost_usd": 1756.0
+      },
+      {
+        "shipment_id": "PLAN-0003",
+        "service_id": "SYN-L3-REGULAR",
+        "cost_usd": 855.0
+      },
+      {
+        "shipment_id": "PLAN-0006",
+        "service_id": "SYN-L3-REGULAR",
+        "cost_usd": 1705.0
+      },
+      {
+        "shipment_id": "PLAN-0009",
+        "service_id": "SYN-L3-REGULAR",
+        "cost_usd": 1730.0
+      },
+      {
+        "shipment_id": "PLAN-0012",
+        "service_id": "SYN-L3-REGULAR",
+        "cost_usd": 1035.0
+      },
+      {
+        "shipment_id": "PLAN-0003",
+        "service_id": "SYN-L3-ECONOMY",
+        "cost_usd": 256.5
+      },
+      {
+        "shipment_id": "PLAN-0006",
+        "service_id": "SYN-L3-ECONOMY",
+        "cost_usd": 511.5
+      },
+      {
+        "shipment_id": "PLAN-0009",
+        "service_id": "SYN-L3-ECONOMY",
+        "cost_usd": 519.0
+      },
+      {
+        "shipment_id": "PLAN-0012",
+        "service_id": "SYN-L3-ECONOMY",
+        "cost_usd": 310.5
+      }
+    ]
+  },
+  "constraints": {
+    "budget_usd": 28696.0,
+    "allow_unassigned": false,
+    "unassigned_penalty_usd": 100000.0,
+    "time_limit_seconds": 5
+  },
+  "preferences": {
+    "cost": 0.3,
+    "time": 0.3,
+    "risk": 0.4
+  },
+  "seed": 2026,
+  "scenario_count": 2000,
+  "scenario_fingerprint": "164d928f68b47d732a412051f672f99ddcc8d91aaef91c33cef316608462f189",
+  "elapsed_seconds": 0.06810851499903947,
+  "summary": [
+    {
+      "strategy": "Lowest Cost",
+      "status": "OPTIMAL",
+      "has_feasible_solution": true,
+      "fully_assigned": true,
+      "total_shipping_cost_usd": 11060.0,
+      "unassigned_orders": 0,
+      "unresolved_orders": 0,
+      "assigned_orders": 12,
+      "unassigned_penalty_objective_usd": 0.0,
+      "allocation_seconds": 0.019064153,
+      "weight_utilization": 0.4444444444,
+      "volume_utilization": 0.4444655582,
+      "slot_utilization": 0.4444444444,
+      "simulated_on_time_rate_all_orders": 0.8071666667,
+      "simulated_on_time_rate_assigned": 0.8071666667,
+      "simulated_late_probability_assigned": 0.1928333333,
+      "on_time_rate_monte_carlo_se": 0.0028306101,
+      "expected_on_time_rate_all_orders": 1.0,
+      "mean_simulated_delay_hours_assigned": 3.5518810139,
+      "p95_total_delay_hours": 153.9216423153,
+      "analytic_late_probability_assigned": 0.1912255523,
+      "scenario_count": 2000,
+      "scenario_fingerprint": "164d928f68b47d732a412051f672f99ddcc8d91aaef91c33cef316608462f189",
+      "simulation_seconds": 0.005323253,
+      "same_full_fulfillment_comparison": true
+    },
+    {
+      "strategy": "Fastest Delivery",
+      "status": "OPTIMAL",
+      "has_feasible_solution": true,
+      "fully_assigned": true,
+      "total_shipping_cost_usd": 25351.0,
+      "unassigned_orders": 0,
+      "unresolved_orders": 0,
+      "assigned_orders": 12,
+      "unassigned_penalty_objective_usd": 0.0,
+      "allocation_seconds": 0.012576602,
+      "weight_utilization": 0.4444444444,
+      "volume_utilization": 0.4444655582,
+      "slot_utilization": 0.4444444444,
+      "simulated_on_time_rate_all_orders": 0.9615,
+      "simulated_on_time_rate_assigned": 0.9615,
+      "simulated_late_probability_assigned": 0.0385,
+      "on_time_rate_monte_carlo_se": 0.0009385325,
+      "expected_on_time_rate_all_orders": 1.0,
+      "mean_simulated_delay_hours_assigned": 0.3946443872,
+      "p95_total_delay_hours": 22.0469127656,
+      "analytic_late_probability_assigned": 0.0379967358,
+      "scenario_count": 2000,
+      "scenario_fingerprint": "164d928f68b47d732a412051f672f99ddcc8d91aaef91c33cef316608462f189",
+      "simulation_seconds": 0.003280603,
+      "same_full_fulfillment_comparison": true
+    },
+    {
+      "strategy": "Optimized Allocation",
+      "status": "OPTIMAL",
+      "has_feasible_solution": true,
+      "fully_assigned": true,
+      "total_shipping_cost_usd": 13013.5,
+      "unassigned_orders": 0,
+      "unresolved_orders": 0,
+      "assigned_orders": 12,
+      "unassigned_penalty_objective_usd": 0.0,
+      "allocation_seconds": 0.014758953,
+      "weight_utilization": 0.4444444444,
+      "volume_utilization": 0.4444655582,
+      "slot_utilization": 0.4444444444,
+      "simulated_on_time_rate_all_orders": 0.8953333333,
+      "simulated_on_time_rate_assigned": 0.8953333333,
+      "simulated_late_probability_assigned": 0.1046666667,
+      "on_time_rate_monte_carlo_se": 0.0022315455,
+      "expected_on_time_rate_all_orders": 1.0,
+      "mean_simulated_delay_hours_assigned": 2.390155935,
+      "p95_total_delay_hours": 133.1145639712,
+      "analytic_late_probability_assigned": 0.1033222107,
+      "scenario_count": 2000,
+      "scenario_fingerprint": "164d928f68b47d732a412051f672f99ddcc8d91aaef91c33cef316608462f189",
+      "simulation_seconds": 0.002125665,
+      "same_full_fulfillment_comparison": true
+    }
+  ],
+  "results": {
+    "Lowest Cost": {
+      "status": "OPTIMAL",
+      "objective_value_integer_units": 1106000.0,
+      "best_bound_integer_units": 1106000.0,
+      "diagnostics": [],
+      "unassigned_ids": [],
+      "assignments": [
+        {
+          "shipment_id": "PLAN-0001",
+          "service_id": "SYN-L1-REGULAR",
+          "cost_usd": 860.0,
+          "expected_hours": 48.0,
+          "std_hours": 12.0,
+          "deadline_hours": 48.0,
+          "assumed_late_probability": 0.4510098623,
+          "weight_kg": 72.0,
+          "volume_m3": 0.99
+        },
+        {
+          "shipment_id": "PLAN-0004",
+          "service_id": "SYN-L1-REGULAR",
+          "cost_usd": 1625.0,
+          "expected_hours": 48.0,
+          "std_hours": 12.0,
+          "deadline_hours": 96.0,
+          "assumed_late_probability": 0.0016503194,
+          "weight_kg": 225.0,
+          "volume_m3": 1.956
+        },
+        {
+          "shipment_id": "PLAN-0007",
+          "service_id": "SYN-L1-ECONOMY",
+          "cost_usd": 540.0,
+          "expected_hours": 336.0,
+          "std_hours": 48.0,
+          "deadline_hours": 384.0,
+          "assumed_late_probability": 0.1561210138,
+          "weight_kg": 260.0,
+          "volume_m3": 0.867
+        },
+        {
+          "shipment_id": "PLAN-0010",
+          "service_id": "SYN-L1-ECONOMY",
+          "cost_usd": 466.5,
+          "expected_hours": 336.0,
+          "std_hours": 48.0,
+          "deadline_hours": 384.0,
+          "assumed_late_probability": 0.1561210138,
+          "weight_kg": 211.0,
+          "volume_m3": 0.998
+        },
+        {
+          "shipment_id": "PLAN-0002",
+          "service_id": "SYN-L2-REGULAR",
+          "cost_usd": 1720.0,
+          "expected_hours": 48.0,
+          "std_hours": 12.0,
+          "deadline_hours": 48.0,
+          "assumed_late_probability": 0.4510098623,
+          "weight_kg": 244.0,
+          "volume_m3": 1.745
+        },
+        {
+          "shipment_id": "PLAN-0005",
+          "service_id": "SYN-L2-REGULAR",
+          "cost_usd": 1670.0,
+          "expected_hours": 48.0,
+          "std_hours": 12.0,
+          "deadline_hours": 96.0,
+          "assumed_late_probability": 0.0016503194,
+          "weight_kg": 234.0,
+          "volume_m3": 1.615
+        },
+        {
+          "shipment_id": "PLAN-0008",
+          "service_id": "SYN-L2-ECONOMY",
+          "cost_usd": 394.5,
+          "expected_hours": 336.0,
+          "std_hours": 48.0,
+          "deadline_hours": 384.0,
+          "assumed_late_probability": 0.1561210138,
+          "weight_kg": 163.0,
+          "volume_m3": 1.868
+        },
+        {
+          "shipment_id": "PLAN-0011",
+          "service_id": "SYN-L2-ECONOMY",
+          "cost_usd": 394.5,
+          "expected_hours": 336.0,
+          "std_hours": 48.0,
+          "deadline_hours": 384.0,
+          "assumed_late_probability": 0.1561210138,
+          "weight_kg": 163.0,
+          "volume_m3": 1.198
+        },
+        {
+          "shipment_id": "PLAN-0003",
+          "service_id": "SYN-L3-REGULAR",
+          "cost_usd": 855.0,
+          "expected_hours": 48.0,
+          "std_hours": 12.0,
+          "deadline_hours": 48.0,
+          "assumed_late_probability": 0.4510098623,
+          "weight_kg": 71.0,
+          "volume_m3": 0.37
+        },
+        {
+          "shipment_id": "PLAN-0006",
+          "service_id": "SYN-L3-REGULAR",
+          "cost_usd": 1705.0,
+          "expected_hours": 48.0,
+          "std_hours": 12.0,
+          "deadline_hours": 96.0,
+          "assumed_late_probability": 0.0016503194,
+          "weight_kg": 241.0,
+          "volume_m3": 0.431
+        },
+        {
+          "shipment_id": "PLAN-0009",
+          "service_id": "SYN-L3-ECONOMY",
+          "cost_usd": 519.0,
+          "expected_hours": 336.0,
+          "std_hours": 48.0,
+          "deadline_hours": 384.0,
+          "assumed_late_probability": 0.1561210138,
+          "weight_kg": 246.0,
+          "volume_m3": 1.681
+        },
+        {
+          "shipment_id": "PLAN-0012",
+          "service_id": "SYN-L3-ECONOMY",
+          "cost_usd": 310.5,
+          "expected_hours": 336.0,
+          "std_hours": 48.0,
+          "deadline_hours": 384.0,
+          "assumed_late_probability": 0.1561210138,
+          "weight_kg": 107.0,
+          "volume_m3": 0.315
+        }
+      ],
+      "capacity": [
+        {
+          "service_id": "SYN-L1-PRIORITY",
+          "weight_used_kg": 0.0,
+          "weight_capacity_kg": 576.0,
+          "volume_used_m3": 0.0,
+          "volume_capacity_m3": 3.608,
+          "shipments_used": 0,
+          "shipment_capacity": 3,
+          "weight_utilization": 0.0,
+          "volume_utilization": 0.0,
+          "slot_utilization": 0.0
+        },
+        {
+          "service_id": "SYN-L1-REGULAR",
+          "weight_used_kg": 297.0,
+          "weight_capacity_kg": 576.0,
+          "volume_used_m3": 2.946,
+          "volume_capacity_m3": 3.608,
+          "shipments_used": 2,
+          "shipment_capacity": 3,
+          "weight_utilization": 0.515625,
+          "volume_utilization": 0.816518847,
+          "slot_utilization": 0.6666666667
+        },
+        {
+          "service_id": "SYN-L1-ECONOMY",
+          "weight_used_kg": 471.0,
+          "weight_capacity_kg": 576.0,
+          "volume_used_m3": 1.865,
+          "volume_capacity_m3": 3.608,
+          "shipments_used": 2,
+          "shipment_capacity": 3,
+          "weight_utilization": 0.8177083333,
+          "volume_utilization": 0.5169068736,
+          "slot_utilization": 0.6666666667
+        },
+        {
+          "service_id": "SYN-L2-PRIORITY",
+          "weight_used_kg": 0.0,
+          "weight_capacity_kg": 603.0,
+          "volume_used_m3": 0.0,
+          "volume_capacity_m3": 4.819,
+          "shipments_used": 0,
+          "shipment_capacity": 3,
+          "weight_utilization": 0.0,
+          "volume_utilization": 0.0,
+          "slot_utilization": 0.0
+        },
+        {
+          "service_id": "SYN-L2-REGULAR",
+          "weight_used_kg": 478.0,
+          "weight_capacity_kg": 603.0,
+          "volume_used_m3": 3.36,
+          "volume_capacity_m3": 4.819,
+          "shipments_used": 2,
+          "shipment_capacity": 3,
+          "weight_utilization": 0.7927031509,
+          "volume_utilization": 0.6972400913,
+          "slot_utilization": 0.6666666667
+        },
+        {
+          "service_id": "SYN-L2-ECONOMY",
+          "weight_used_kg": 326.0,
+          "weight_capacity_kg": 603.0,
+          "volume_used_m3": 3.066,
+          "volume_capacity_m3": 4.819,
+          "shipments_used": 2,
+          "shipment_capacity": 3,
+          "weight_utilization": 0.5406301824,
+          "volume_utilization": 0.6362315833,
+          "slot_utilization": 0.6666666667
+        },
+        {
+          "service_id": "SYN-L3-PRIORITY",
+          "weight_used_kg": 0.0,
+          "weight_capacity_kg": 498.75,
+          "volume_used_m3": 0.0,
+          "volume_capacity_m3": 2.098,
+          "shipments_used": 0,
+          "shipment_capacity": 3,
+          "weight_utilization": 0.0,
+          "volume_utilization": 0.0,
+          "slot_utilization": 0.0
+        },
+        {
+          "service_id": "SYN-L3-REGULAR",
+          "weight_used_kg": 312.0,
+          "weight_capacity_kg": 498.75,
+          "volume_used_m3": 0.801,
+          "volume_capacity_m3": 2.098,
+          "shipments_used": 2,
+          "shipment_capacity": 3,
+          "weight_utilization": 0.6255639098,
+          "volume_utilization": 0.381792183,
+          "slot_utilization": 0.6666666667
+        },
+        {
+          "service_id": "SYN-L3-ECONOMY",
+          "weight_used_kg": 353.0,
+          "weight_capacity_kg": 498.75,
+          "volume_used_m3": 1.996,
+          "volume_capacity_m3": 2.098,
+          "shipments_used": 2,
+          "shipment_capacity": 3,
+          "weight_utilization": 0.7077694236,
+          "volume_utilization": 0.9513822688,
+          "slot_utilization": 0.6666666667
+        }
+      ]
+    },
+    "Fastest Delivery": {
+      "status": "OPTIMAL",
+      "objective_value_integer_units": 360000.0,
+      "best_bound_integer_units": 360000.0,
+      "diagnostics": [],
+      "unassigned_ids": [],
+      "assignments": [
+        {
+          "shipment_id": "PLAN-0001",
+          "service_id": "SYN-L1-PRIORITY",
+          "cost_usd": 1476.0,
+          "expected_hours": 24.0,
+          "std_hours": 6.0,
+          "deadline_hours": 48.0,
+          "assumed_late_probability": 0.0016503194,
+          "weight_kg": 72.0,
+          "volume_m3": 0.99
+        },
+        {
+          "shipment_id": "PLAN-0007",
+          "service_id": "SYN-L1-PRIORITY",
+          "cost_usd": 2980.0,
+          "expected_hours": 24.0,
+          "std_hours": 6.0,
+          "deadline_hours": 384.0,
+          "assumed_late_probability": 2.520874065e-30,
+          "weight_kg": 260.0,
+          "volume_m3": 0.867
+        },
+        {
+          "shipment_id": "PLAN-0010",
+          "service_id": "SYN-L1-PRIORITY",
+          "cost_usd": 2588.0,
+          "expected_hours": 24.0,
+          "std_hours": 6.0,
+          "deadline_hours": 384.0,
+          "assumed_late_probability": 2.520874065e-30,
+          "weight_kg": 211.0,
+          "volume_m3": 0.998
+        },
+        {
+          "shipment_id": "PLAN-0004",
+          "service_id": "SYN-L1-REGULAR",
+          "cost_usd": 1625.0,
+          "expected_hours": 48.0,
+          "std_hours": 12.0,
+          "deadline_hours": 96.0,
+          "assumed_late_probability": 0.0016503194,
+          "weight_kg": 225.0,
+          "volume_m3": 1.956
+        },
+        {
+          "shipment_id": "PLAN-0005",
+          "service_id": "SYN-L2-PRIORITY",
+          "cost_usd": 2772.0,
+          "expected_hours": 24.0,
+          "std_hours": 6.0,
+          "deadline_hours": 96.0,
+          "assumed_late_probability": 4.4e-09,
+          "weight_kg": 234.0,
+          "volume_m3": 1.615
+        },
+        {
+          "shipment_id": "PLAN-0008",
+          "service_id": "SYN-L2-PRIORITY",
+          "cost_usd": 2204.0,
+          "expected_hours": 24.0,
+          "std_hours": 6.0,
+          "deadline_hours": 384.0,
+          "assumed_late_probability": 2.520874065e-30,
+          "weight_kg": 163.0,
+          "volume_m3": 1.868
+        },
+        {
+          "shipment_id": "PLAN-0011",
+          "service_id": "SYN-L2-PRIORITY",
+          "cost_usd": 2204.0,
+          "expected_hours": 24.0,
+          "std_hours": 6.0,
+          "deadline_hours": 384.0,
+          "assumed_late_probability": 2.520874065e-30,
+          "weight_kg": 163.0,
+          "volume_m3": 1.198
+        },
+        {
+          "shipment_id": "PLAN-0002",
+          "service_id": "SYN-L2-REGULAR",
+          "cost_usd": 1720.0,
+          "expected_hours": 48.0,
+          "std_hours": 12.0,
+          "deadline_hours": 48.0,
+          "assumed_late_probability": 0.4510098623,
+          "weight_kg": 244.0,
+          "volume_m3": 1.745
+        },
+        {
+          "shipment_id": "PLAN-0003",
+          "service_id": "SYN-L3-PRIORITY",
+          "cost_usd": 1468.0,
+          "expected_hours": 24.0,
+          "std_hours": 6.0,
+          "deadline_hours": 48.0,
+          "assumed_late_probability": 0.0016503194,
+          "weight_kg": 71.0,
+          "volume_m3": 0.37
+        },
+        {
+          "shipment_id": "PLAN-0006",
+          "service_id": "SYN-L3-PRIORITY",
+          "cost_usd": 2828.0,
+          "expected_hours": 24.0,
+          "std_hours": 6.0,
+          "deadline_hours": 96.0,
+          "assumed_late_probability": 4.4e-09,
+          "weight_kg": 241.0,
+          "volume_m3": 0.431
+        },
+        {
+          "shipment_id": "PLAN-0012",
+          "service_id": "SYN-L3-PRIORITY",
+          "cost_usd": 1756.0,
+          "expected_hours": 24.0,
+          "std_hours": 6.0,
+          "deadline_hours": 384.0,
+          "assumed_late_probability": 2.520874065e-30,
+          "weight_kg": 107.0,
+          "volume_m3": 0.315
+        },
+        {
+          "shipment_id": "PLAN-0009",
+          "service_id": "SYN-L3-REGULAR",
+          "cost_usd": 1730.0,
+          "expected_hours": 48.0,
+          "std_hours": 12.0,
+          "deadline_hours": 384.0,
+          "assumed_late_probability": 5.239870382e-18,
+          "weight_kg": 246.0,
+          "volume_m3": 1.681
+        }
+      ],
+      "capacity": [
+        {
+          "service_id": "SYN-L1-PRIORITY",
+          "weight_used_kg": 543.0,
+          "weight_capacity_kg": 576.0,
+          "volume_used_m3": 2.855,
+          "volume_capacity_m3": 3.608,
+          "shipments_used": 3,
+          "shipment_capacity": 3,
+          "weight_utilization": 0.9427083333,
+          "volume_utilization": 0.7912971175,
+          "slot_utilization": 1.0
+        },
+        {
+          "service_id": "SYN-L1-REGULAR",
+          "weight_used_kg": 225.0,
+          "weight_capacity_kg": 576.0,
+          "volume_used_m3": 1.956,
+          "volume_capacity_m3": 3.608,
+          "shipments_used": 1,
+          "shipment_capacity": 3,
+          "weight_utilization": 0.390625,
+          "volume_utilization": 0.5421286031,
+          "slot_utilization": 0.3333333333
+        },
+        {
+          "service_id": "SYN-L1-ECONOMY",
+          "weight_used_kg": 0.0,
+          "weight_capacity_kg": 576.0,
+          "volume_used_m3": 0.0,
+          "volume_capacity_m3": 3.608,
+          "shipments_used": 0,
+          "shipment_capacity": 3,
+          "weight_utilization": 0.0,
+          "volume_utilization": 0.0,
+          "slot_utilization": 0.0
+        },
+        {
+          "service_id": "SYN-L2-PRIORITY",
+          "weight_used_kg": 560.0,
+          "weight_capacity_kg": 603.0,
+          "volume_used_m3": 4.681,
+          "volume_capacity_m3": 4.819,
+          "shipments_used": 3,
+          "shipment_capacity": 3,
+          "weight_utilization": 0.9286898839,
+          "volume_utilization": 0.9713633534,
+          "slot_utilization": 1.0
+        },
+        {
+          "service_id": "SYN-L2-REGULAR",
+          "weight_used_kg": 244.0,
+          "weight_capacity_kg": 603.0,
+          "volume_used_m3": 1.745,
+          "volume_capacity_m3": 4.819,
+          "shipments_used": 1,
+          "shipment_capacity": 3,
+          "weight_utilization": 0.4046434494,
+          "volume_utilization": 0.3621083212,
+          "slot_utilization": 0.3333333333
+        },
+        {
+          "service_id": "SYN-L2-ECONOMY",
+          "weight_used_kg": 0.0,
+          "weight_capacity_kg": 603.0,
+          "volume_used_m3": 0.0,
+          "volume_capacity_m3": 4.819,
+          "shipments_used": 0,
+          "shipment_capacity": 3,
+          "weight_utilization": 0.0,
+          "volume_utilization": 0.0,
+          "slot_utilization": 0.0
+        },
+        {
+          "service_id": "SYN-L3-PRIORITY",
+          "weight_used_kg": 419.0,
+          "weight_capacity_kg": 498.75,
+          "volume_used_m3": 1.116,
+          "volume_capacity_m3": 2.098,
+          "shipments_used": 3,
+          "shipment_capacity": 3,
+          "weight_utilization": 0.8401002506,
+          "volume_utilization": 0.5319351764,
+          "slot_utilization": 1.0
+        },
+        {
+          "service_id": "SYN-L3-REGULAR",
+          "weight_used_kg": 246.0,
+          "weight_capacity_kg": 498.75,
+          "volume_used_m3": 1.681,
+          "volume_capacity_m3": 2.098,
+          "shipments_used": 1,
+          "shipment_capacity": 3,
+          "weight_utilization": 0.4932330827,
+          "volume_utilization": 0.8012392755,
+          "slot_utilization": 0.3333333333
+        },
+        {
+          "service_id": "SYN-L3-ECONOMY",
+          "weight_used_kg": 0.0,
+          "weight_capacity_kg": 498.75,
+          "volume_used_m3": 0.0,
+          "volume_capacity_m3": 2.098,
+          "shipments_used": 0,
+          "shipment_capacity": 3,
+          "weight_utilization": 0.0,
+          "volume_utilization": 0.0,
+          "slot_utilization": 0.0
+        }
+      ]
+    },
+    "Optimized Allocation": {
+      "status": "OPTIMAL",
+      "objective_value_integer_units": 615716.0,
+      "best_bound_integer_units": 615716.0,
+      "diagnostics": [],
+      "unassigned_ids": [],
+      "assignments": [
+        {
+          "shipment_id": "PLAN-0001",
+          "service_id": "SYN-L1-PRIORITY",
+          "cost_usd": 1476.0,
+          "expected_hours": 24.0,
+          "std_hours": 6.0,
+          "deadline_hours": 48.0,
+          "assumed_late_probability": 0.0016503194,
+          "weight_kg": 72.0,
+          "volume_m3": 0.99
+        },
+        {
+          "shipment_id": "PLAN-0004",
+          "service_id": "SYN-L1-REGULAR",
+          "cost_usd": 1625.0,
+          "expected_hours": 48.0,
+          "std_hours": 12.0,
+          "deadline_hours": 96.0,
+          "assumed_late_probability": 0.0016503194,
+          "weight_kg": 225.0,
+          "volume_m3": 1.956
+        },
+        {
+          "shipment_id": "PLAN-0007",
+          "service_id": "SYN-L1-ECONOMY",
+          "cost_usd": 540.0,
+          "expected_hours": 336.0,
+          "std_hours": 48.0,
+          "deadline_hours": 384.0,
+          "assumed_late_probability": 0.1561210138,
+          "weight_kg": 260.0,
+          "volume_m3": 0.867
+        },
+        {
+          "shipment_id": "PLAN-0010",
+          "service_id": "SYN-L1-ECONOMY",
+          "cost_usd": 466.5,
+          "expected_hours": 336.0,
+          "std_hours": 48.0,
+          "deadline_hours": 384.0,
+          "assumed_late_probability": 0.1561210138,
+          "weight_kg": 211.0,
+          "volume_m3": 0.998
+        },
+        {
+          "shipment_id": "PLAN-0002",
+          "service_id": "SYN-L2-REGULAR",
+          "cost_usd": 1720.0,
+          "expected_hours": 48.0,
+          "std_hours": 12.0,
+          "deadline_hours": 48.0,
+          "assumed_late_probability": 0.4510098623,
+          "weight_kg": 244.0,
+          "volume_m3": 1.745
+        },
+        {
+          "shipment_id": "PLAN-0005",
+          "service_id": "SYN-L2-REGULAR",
+          "cost_usd": 1670.0,
+          "expected_hours": 48.0,
+          "std_hours": 12.0,
+          "deadline_hours": 96.0,
+          "assumed_late_probability": 0.0016503194,
+          "weight_kg": 234.0,
+          "volume_m3": 1.615
+        },
+        {
+          "shipment_id": "PLAN-0008",
+          "service_id": "SYN-L2-ECONOMY",
+          "cost_usd": 394.5,
+          "expected_hours": 336.0,
+          "std_hours": 48.0,
+          "deadline_hours": 384.0,
+          "assumed_late_probability": 0.1561210138,
+          "weight_kg": 163.0,
+          "volume_m3": 1.868
+        },
+        {
+          "shipment_id": "PLAN-0011",
+          "service_id": "SYN-L2-ECONOMY",
+          "cost_usd": 394.5,
+          "expected_hours": 336.0,
+          "std_hours": 48.0,
+          "deadline_hours": 384.0,
+          "assumed_late_probability": 0.1561210138,
+          "weight_kg": 163.0,
+          "volume_m3": 1.198
+        },
+        {
+          "shipment_id": "PLAN-0003",
+          "service_id": "SYN-L3-PRIORITY",
+          "cost_usd": 1468.0,
+          "expected_hours": 24.0,
+          "std_hours": 6.0,
+          "deadline_hours": 48.0,
+          "assumed_late_probability": 0.0016503194,
+          "weight_kg": 71.0,
+          "volume_m3": 0.37
+        },
+        {
+          "shipment_id": "PLAN-0006",
+          "service_id": "SYN-L3-REGULAR",
+          "cost_usd": 1705.0,
+          "expected_hours": 48.0,
+          "std_hours": 12.0,
+          "deadline_hours": 96.0,
+          "assumed_late_probability": 0.0016503194,
+          "weight_kg": 241.0,
+          "volume_m3": 0.431
+        },
+        {
+          "shipment_id": "PLAN-0012",
+          "service_id": "SYN-L3-REGULAR",
+          "cost_usd": 1035.0,
+          "expected_hours": 48.0,
+          "std_hours": 12.0,
+          "deadline_hours": 384.0,
+          "assumed_late_probability": 5.239870382e-18,
+          "weight_kg": 107.0,
+          "volume_m3": 0.315
+        },
+        {
+          "shipment_id": "PLAN-0009",
+          "service_id": "SYN-L3-ECONOMY",
+          "cost_usd": 519.0,
+          "expected_hours": 336.0,
+          "std_hours": 48.0,
+          "deadline_hours": 384.0,
+          "assumed_late_probability": 0.1561210138,
+          "weight_kg": 246.0,
+          "volume_m3": 1.681
+        }
+      ],
+      "capacity": [
+        {
+          "service_id": "SYN-L1-PRIORITY",
+          "weight_used_kg": 72.0,
+          "weight_capacity_kg": 576.0,
+          "volume_used_m3": 0.99,
+          "volume_capacity_m3": 3.608,
+          "shipments_used": 1,
+          "shipment_capacity": 3,
+          "weight_utilization": 0.125,
+          "volume_utilization": 0.2743902439,
+          "slot_utilization": 0.3333333333
+        },
+        {
+          "service_id": "SYN-L1-REGULAR",
+          "weight_used_kg": 225.0,
+          "weight_capacity_kg": 576.0,
+          "volume_used_m3": 1.956,
+          "volume_capacity_m3": 3.608,
+          "shipments_used": 1,
+          "shipment_capacity": 3,
+          "weight_utilization": 0.390625,
+          "volume_utilization": 0.5421286031,
+          "slot_utilization": 0.3333333333
+        },
+        {
+          "service_id": "SYN-L1-ECONOMY",
+          "weight_used_kg": 471.0,
+          "weight_capacity_kg": 576.0,
+          "volume_used_m3": 1.865,
+          "volume_capacity_m3": 3.608,
+          "shipments_used": 2,
+          "shipment_capacity": 3,
+          "weight_utilization": 0.8177083333,
+          "volume_utilization": 0.5169068736,
+          "slot_utilization": 0.6666666667
+        },
+        {
+          "service_id": "SYN-L2-PRIORITY",
+          "weight_used_kg": 0.0,
+          "weight_capacity_kg": 603.0,
+          "volume_used_m3": 0.0,
+          "volume_capacity_m3": 4.819,
+          "shipments_used": 0,
+          "shipment_capacity": 3,
+          "weight_utilization": 0.0,
+          "volume_utilization": 0.0,
+          "slot_utilization": 0.0
+        },
+        {
+          "service_id": "SYN-L2-REGULAR",
+          "weight_used_kg": 478.0,
+          "weight_capacity_kg": 603.0,
+          "volume_used_m3": 3.36,
+          "volume_capacity_m3": 4.819,
+          "shipments_used": 2,
+          "shipment_capacity": 3,
+          "weight_utilization": 0.7927031509,
+          "volume_utilization": 0.6972400913,
+          "slot_utilization": 0.6666666667
+        },
+        {
+          "service_id": "SYN-L2-ECONOMY",
+          "weight_used_kg": 326.0,
+          "weight_capacity_kg": 603.0,
+          "volume_used_m3": 3.066,
+          "volume_capacity_m3": 4.819,
+          "shipments_used": 2,
+          "shipment_capacity": 3,
+          "weight_utilization": 0.5406301824,
+          "volume_utilization": 0.6362315833,
+          "slot_utilization": 0.6666666667
+        },
+        {
+          "service_id": "SYN-L3-PRIORITY",
+          "weight_used_kg": 71.0,
+          "weight_capacity_kg": 498.75,
+          "volume_used_m3": 0.37,
+          "volume_capacity_m3": 2.098,
+          "shipments_used": 1,
+          "shipment_capacity": 3,
+          "weight_utilization": 0.1423558897,
+          "volume_utilization": 0.1763584366,
+          "slot_utilization": 0.3333333333
+        },
+        {
+          "service_id": "SYN-L3-REGULAR",
+          "weight_used_kg": 348.0,
+          "weight_capacity_kg": 498.75,
+          "volume_used_m3": 0.746,
+          "volume_capacity_m3": 2.098,
+          "shipments_used": 2,
+          "shipment_capacity": 3,
+          "weight_utilization": 0.6977443609,
+          "volume_utilization": 0.3555767398,
+          "slot_utilization": 0.6666666667
+        },
+        {
+          "service_id": "SYN-L3-ECONOMY",
+          "weight_used_kg": 246.0,
+          "weight_capacity_kg": 498.75,
+          "volume_used_m3": 1.681,
+          "volume_capacity_m3": 2.098,
+          "shipments_used": 1,
+          "shipment_capacity": 3,
+          "weight_utilization": 0.4932330827,
+          "volume_utilization": 0.8012392755,
+          "slot_utilization": 0.3333333333
+        }
+      ]
+    }
+  }
+}

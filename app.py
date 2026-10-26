@@ -106,6 +106,13 @@ def main() -> None:
     st.write("Lightweight, explainable logistics exception decision copilot for small freight forwarders.")
     st.caption("Engineering prototype validated on synthetic data. Deterministic rules; no live carrier network, validated forecasting or API key required.")
 
+    workspace = st.sidebar.selectbox("Workspace", ["V1/V2 Exception Copilot", "V3 Transportation Optimization"], key="workspace")
+    if workspace == "V3 Transportation Optimization":
+        from src.transport.ui import render_transportation
+
+        render_transportation()
+        return
+
     with st.sidebar:
         st.header("Analysis controls")
         source = st.radio("Data source", [DEMO_LABEL, "Upload a file"], key="data_source")

@@ -6,7 +6,8 @@ information, compare hypothetical interventions and record handling outcomes.
 Built as a transport/logistics student portfolio project with Python 3.12,
 Streamlit, pandas, Plotly and local SQLite.
 
-**V2 extends the working V1 dashboard with deterministic decision support. No LLM,
+**V3 adds a synthetic, capacity-constrained transportation planning sandbox to the
+working V1 dashboard and V2 exception copilot. No LLM,
 API key, paid service or logistics company API is required.** This is an engineering
 prototype evaluated on **Synthetic Demo Data**, not a live carrier network or a
 validated forecasting system. It is not DHL, Maersk or any company's operating data.
@@ -35,6 +36,69 @@ failure reproductions, fixes and remaining platform checks.
 - Edit costs, remaining time and availability assumptions for three intervention scenarios.
 - Persist decisions and manually entered outcomes in SQLite; query, update and match similar cases.
 - Reproduce V1/V2 comparisons and weight/assumption sensitivity on independently authored synthetic references.
+- Screen individual transport candidates against hard constraints before ranking preferences.
+- Allocate multiple orders to shared weight, volume and shipment-slot capacities with Google OR-Tools.
+- Compare constrained Lowest Cost, Fastest Delivery and Optimized Allocation strategies.
+- Run seeded Monte Carlo scenarios and budget/deadline/capacity/weight what-if experiments.
+- Export V3 allocations, eligibility checks, strategy results and a replayable experiment JSON.
+
+## V3 transportation optimization
+
+V3 is developed on **`feature/v3-optimization`**. When downloading a ZIP from GitHub,
+select this branch; `main` remains the V2 baseline until the feature is merged.
+Reinstall `requirements.txt` after updating: V3 adds **Google OR-Tools 9.15.6755**.
+The launch command stays `python -m streamlit run app.py`.
+
+In the sidebar, change **Workspace → V3 Transportation Optimization**, then click
+**Run transportation optimization**. V1/V2 is still the default workspace. V3 has
+its own explicitly synthetic planning orders; it does not silently reinterpret
+V1 uploads, modify their KPIs or write transport plans into case history.
+
+The four new views are **Transportation Decision Center**, **Optimization Dashboard**,
+**Strategy Comparison** and **What-if Scenario Analysis**. The form commits all
+parameters together. Results/downloads always use the last successfully applied
+run; invalid drafts retain the previous result with a visible explanation.
+
+Hard constraints cover exact directional routes, expected arrival by deadline,
+shared service weight/volume/slots and a total shipping budget. Cost, time and
+assumed late probability are preferences **only after eligibility**. In strict mode
+every order must be assigned; insufficient resources return `INFEASIBLE`, with no
+fabricated zero-cost benefit. Optional penalized unassignment is explicitly labeled.
+`FEASIBLE` never means proven optimal; `UNKNOWN` never means proven infeasible.
+
+All three strategies use the same constraints and Monte Carlo draws. Baselines
+also use OR-Tools so they cannot overbook shared capacities. The assumed lognormal
+late probabilities are **not real carrier on-time rates or validated predictions**.
+Expected-time deadlines are not chance constraints or delivery guarantees.
+
+Reproducible command-line demos, from the project root:
+
+```bash
+python -m scripts.v3_experiment --orders 12 --case standard
+python -m scripts.v3_experiment --orders 12 --case capacity-shortage
+python -m scripts.v3_experiment --orders 12 --case budget-shortage
+python -m scripts.v3_experiment --orders 12 --case no-eligible-service
+python -m scripts.v3_experiment --orders 12 --case allow-unassigned
+python -m scripts.v3_experiment --orders 0 --case empty
+python -m scripts.v3_experiment --replay data/optimization/synthetic_demo_experiment.json
+python -m scripts.v3_experiment --benchmark --output artifacts/v3/benchmark.json
+```
+
+Default CLI output is `artifacts/v3/experiment.json` and the accompanying strategy
+CSV; `--output` selects a different path. Each CLI run overwrites only its chosen
+output, never shipment uploads or SQLite history. Saved experiments include all
+inputs, weights, constraints and random seed, and can be recomputed without trusting
+saved result fields. Solver times and time-limited incumbent solutions may vary.
+
+Manual checks: set budget to **0%** → strict infeasibility; enable unassigned →
+12 unassigned orders; restore budget and set weight capacity to **0%** → infeasibility;
+restore capacity and set deadline shift to **−400 h** → no eligible candidate.
+Restore default constraints and set weights to cost/time/risk **0/100/0** → a
+time-focused allocation; proportional scaling of all weights should change nothing.
+Click Run after each change. `0` orders tests empty input without crashing.
+
+Read [V3_TECHNICAL_REPORT.md](V3_TECHNICAL_REPORT.md) for the mathematical model,
+assumptions, measured 100/500-order results, testing evidence and limitations.
 
 ## Quick start
 
@@ -211,6 +275,13 @@ src/
   evaluation.py            Independent synthetic reference comparisons and sensitivity
   decision_demo.py         Optional fictional context without changing V1 inputs
   copilot_ui.py            V2 Streamlit views
+  transport/
+    models.py              Validated V3 orders, services, candidates and settings
+    demo.py                Seeded fictional planning data and scenario adjustments
+    engine.py              Hard eligibility, CP-SAT assignment and independent audit
+    simulation.py          Common seeded lognormal Monte Carlo scenarios
+    experiments.py         Constrained strategy comparison, JSON export/replay
+    ui.py                  Four V3 Streamlit planning views
 config/priority_rules.json Default weights, scales and priority thresholds
 data/                      Labelled synthetic CSV, Excel and provenance notes
 tests/                     Core rules, input/output, reports and Streamlit tests
@@ -221,6 +292,8 @@ docs/                      Browser screenshots, sample report and validation evi
 .agents/skills/            Previously installed development skills
 requirements.txt           Pinned direct runtime/test dependencies
 requirements-dev.txt       Optional Playwright browser test dependency
+scripts/v3_experiment.py    Reproducible V3 cases, replay and 100/500-order benchmark
+V3_TECHNICAL_REPORT.md      Formulation, assumptions and actual V3 verification
 ```
 
 ```mermaid
@@ -284,8 +357,9 @@ The generator intentionally overwrites those named demo files, not uploads.
   predictive accuracy or represent actual carrier operating performance.
 - Order snapshots do not explain customs, port, weather or operational root causes.
   Reports recommend verification rather than inventing explanations.
-- All prices must use USD. No exchange-rate conversion, weight/volume normalization,
-  service-level adjustment or seasonal cost model is included.
+- All prices must use USD. V1 cost screening has no weight/volume normalization,
+  service-level adjustment or seasonal cost model. V3 uses synthetic weight/volume
+  capacity constraints; neither workspace converts currencies or obtains real quotes.
 - Exact location labels are not geocoded or mapped to UN/LOCODE. Equivalent spellings
   beyond case and whitespace may form different groups.
 - Uploaded data is analyzed in memory with local-sized limits. Only explicitly
@@ -327,6 +401,19 @@ V1 和 V2 都不需要 API Key，也不会访问物流公司的接口。新增�
 保存及更新处理历史，并运行对照评估。缺少评分信息时显示 Insufficient information，不假定低风险。
 历史保存在本地 `data/local/`，重新下载代码更新时请保留这个目录。
 报告和决策建议不会把猜测写成真实事件；当前分析由可测试的 Python 规则完成。
+
+**V3 新手启动：** 下载 GitHub 的 `feature/v3-optimization` 分支，保留自己的 `data/local/`。
+在显示旧服务 `Local URL` 的终端按 `Ctrl+C`，更新代码后在项目目录执行：
+
+```powershell
+.\.venv\Scripts\python.exe -m pip install -r requirements.txt
+.\.venv\Scripts\python.exe -m streamlit run app.py
+```
+
+浏览器左侧 **Workspace** 选择 **V3 Transportation Optimization**，再点击
+**Run transportation optimization**。默认界面保留 V1/V2，因此需要主动切换。
+所有运输成本、运力和随机时间都是模拟假设；该模块不实际订舱、不承诺到达时间。
+推荐 Python 3.12；本次没有在 Windows/Python 3.14 上执行完整自动化验证。
 
 ## Product differentiation
 
