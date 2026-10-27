@@ -1,0 +1,27 @@
+{
+  "python": "3.12.14",
+  "platform": "Linux-6.18.55-x86_64-with-glibc2.41",
+  "packages": {
+    "fastapi": "0.162.0",
+    "uvicorn": "0.54.0",
+    "httpx": "0.28.1",
+    "python-multipart": "0.0.32",
+    "pandas": "2.3.3",
+    "ortools": "9.15.6755",
+    "streamlit": "1.50.0",
+    "pytest": "8.4.2"
+  },
+  "python_tests": {
+    "passed": 225,
+    "failed": 0,
+    "skipped": 0,
+    "elapsed_seconds": 85.52
+  },
+  "checks": {
+    "compileall": true,
+    "pip_check": true,
+    "next_build": true,
+    "typescript": true
+  },
+  "tested_mode": "Next.js production build and loopback FastAPI; temporary SQLite"
+}

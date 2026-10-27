@@ -295,3 +295,22 @@ Streamlit 把它当作新的控件，切换了订单；原方案参数也随订�
 [V3_TECHNICAL_REPORT.md](V3_TECHNICAL_REPORT.md)。原 V1/V2 审计数据和以上
 Windows/Python 3.14 **Not Tested** 范围仍然有效；V3 优化本轮最高实测 500 单。
 允许进行作品集演示和受控后续迭代，尚未验证真实物流生产决策有效性。
+
+## 13. Premium 官网与独立网页平台回归（2026-10-27）
+
+新分支 `feature/premium-web-redesign` 以 V3 `35ba988` 为起点，并创建稳定标签
+`stable/v3-before-premium-web`。原 `src/`、`app.py`、`requirements.txt` 未修改。
+新增 Next.js 前端、FastAPI 适配和独立 SQLite 工作区表，案例继续使用原 HistoryStore。
+
+修改前完整测试 **200 passed in 55.93s**；新增25项 HTTP 数值/持久化/错误输入测试后，
+完整结果为 **225 passed in 85.52s，0 failed，0 skipped**。TypeScript、Next生产构建、
+Python compileall和pip check已实际执行通过。新界面使用原计算函数，不在TypeScript复写算法。
+
+原 V1/V2 浏览器审计、临时数据库冷重启、100/500/5000条真实上传继续通过。
+新官网/独立菜单路由、筛选上传导出、评分变更、方案比较、案例保存更新、V3求解、
+Monte Carlo展示与页面刷新通过生产浏览器操作；实际重启API新进程后，数据、设置、
+案例和实验保留。自动化始终使用临时数据库，没有破坏用户现有记录。
+
+完整范围、修复记录、真实截图和Not Tested项目见
+[WEB_TEST_REPORT.md](WEB_TEST_REPORT.md)。Windows执行、完整Python3.14平台矩阵、
+公开多用户部署和真实业务有效性仍未验证；不将网页视觉升级解释为生产就绪。

@@ -6,6 +6,120 @@ information, compare hypothetical interventions and record handling outcomes.
 Built as a transport/logistics student portfolio project with Python 3.12,
 Streamlit, pandas, Plotly and local SQLite.
 
+## Premium website and application
+
+The **`feature/premium-web-redesign`** branch adds an original dark enterprise
+website and a connected Next.js application. The stable V3 source is preserved
+at Git tag **`stable/v3-before-premium-web`** (`35ba988`); Streamlit remains a
+working fallback. Download this feature branch to obtain the new `web/` folder.
+
+- **`/`**: original marketing site with an SVG routing lens, locally bundled
+  typography, reduced-motion behavior and an API-computed synthetic demo preview.
+- **`/app`**: operational dashboard using the existing V1 Python calculations.
+- **`/app/shipments`**: persisted CSV/Excel uploads, server filters, pagination,
+  source-quality review and full-selection CSV export.
+- **`/app/exceptions`**: V2 priorities, missing information and individual explanations.
+- **`/app/decisions`**: V2 what-if comparisons and saving an applied decision.
+- **`/app/decisions/history`**: query/update original SQLite case history and outcomes.
+- **`/app/optimization`**: original V3 CP-SAT allocation, local eligibility,
+  capacity/deadline/budget controls, strategy comparison and downloadable runs.
+- **`/app/analytics`**: saved V3 Monte Carlo results and original V2 reference evaluation.
+- **`/app/settings`**: persistent V2 priority weights, scales and methodology.
+
+These are real App Router pages, not anchor sections or screenshots. Chart values
+and business outputs come from FastAPI adapters calling existing `src/` modules.
+Next's prerendered HTML is the page shell; workspace data is fetched from the
+Python API. No KPI growth rates, customer logos or live carrier claims are invented.
+
+![Premium homepage, captured from the running application](docs/images/premium/landing-desktop.png)
+![Premium operational dashboard with computed synthetic KPIs](docs/images/premium/overview-desktop.png)
+
+### Start the new website
+
+Prerequisites: **Node.js 24 LTS** (includes npm), **Python 3.12 recommended**, and
+internet for the first dependency installation. No paid API, key or account is needed.
+After installation the demo works locally without third-party data services.
+
+On Windows, install Node.js, reopen your terminal, and double-click **`start-web.bat`**.
+This intentionally runs the launcher: it creates `.venv` if needed, installs
+`requirements-web.txt`, runs `npm ci`/`npm run build` and opens the homepage. It
+uses the `py` launcher rather than relying on Windows' potentially ambiguous
+`python` alias. Review errors in the terminal if installation fails.
+
+Alternatively, Windows PowerShell, from the folder containing this README:
+
+```powershell
+py -3.12 -m venv .venv
+.\.venv\Scripts\python.exe -m pip install -r requirements-web.txt
+cd web
+npm.cmd ci
+npm.cmd run build
+cd ..
+.\.venv\Scripts\python.exe -m scripts.start_web --open
+```
+
+macOS/Linux:
+
+```bash
+python3.12 -m venv .venv
+source .venv/bin/activate
+python -m pip install -r requirements-web.txt
+cd web
+npm ci
+npm run build
+cd ..
+python -m scripts.start_web
+```
+
+Open **http://127.0.0.1:3000** for the website, then click **Launch platform**.
+The launcher starts FastAPI at `127.0.0.1:8000` and Next at `127.0.0.1:3000`.
+Keep its terminal open; **Ctrl+C** stops both child process trees. If 3000 is
+occupied, stop your old server or use `python -m scripts.start_web --port 3100`.
+Port 8000 must remain available. Do not mistake Streamlit's port 8501 for this website.
+
+For development, use `python -m scripts.start_web --dev` after dependency
+installation. For separate terminals, run `python -m uvicorn backend.main:app
+--host 127.0.0.1 --port 8000`, then `npm run dev` from `web/`. Interactive API
+documentation is at `http://127.0.0.1:8000/docs`.
+
+The original interface still starts with **`python -m streamlit run app.py`**.
+It only needs `requirements.txt`; the new web dependencies are isolated in
+`requirements-web.txt`. Python API tests are skipped if those optional packages
+are absent; the complete verification and CI install them.
+
+### Persistence, exports and data boundaries
+
+The web API uses `data/local/web_workspace.sqlite3` for uploaded datasets,
+priority settings and optimization experiments. It shares the existing
+`data/local/exception_history.sqlite3` case store with Streamlit. `LOGISTICS_WEB_DB_PATH`
+and `LOGISTICS_DB_PATH` can override these paths for tests. All automated browser
+audits use temporary databases. **Preserve and back up `data/local/` when updating.**
+Web priority settings are persistent; Streamlit session settings remain separate.
+The browser remembers the active dataset/date, while the server retains uploads.
+
+The built-in shipment demo has 160 deliberately imperfect source rows and 158
+retained unique IDs at 2026-10-01. Uploaded files are labeled **provenance
+unverified**, even when a user uploads a synthetic example. V3 uses a separate,
+explicitly synthetic planning scenario; it never treats V1 uploads as complete
+candidate/capacity inputs. No uploaded real data is silently invented or enriched.
+
+Exports include the complete filtered selection even when a table is paginated
+or capped. The exception/quality view displays up to 500 records; batch assignments
+and simulation details display up to 100, with full outputs available via CSV/JSON.
+Unchanged decision saves reuse an existing case, and updates require the current
+version. Saving uses **applied assumptions**, not unapplied draft edits.
+
+See [the Chinese startup guide](docs/WEB_RUN_ZH.md),
+[web validation report](WEB_TEST_REPORT.md),
+[API/architecture notes](docs/WEB_ARCHITECTURE.md) and
+[design direction](docs/PREMIUM_DESIGN.md). Actual screenshots are in
+[`docs/images/premium/`](docs/images/premium/).
+
+Windows launcher/runtime behavior and a complete Windows/Python 3.14 matrix are
+**Not Tested** in the Linux execution environment. This is a trusted local
+single-workspace prototype without authentication, public-deployment hardening
+or commercial validation.
+
 **V3 adds a synthetic, capacity-constrained transportation planning sandbox to the
 working V1 dashboard and V2 exception copilot. No LLM,
 API key, paid service or logistics company API is required.** This is an engineering
@@ -42,10 +156,11 @@ failure reproductions, fixes and remaining platform checks.
 - Run seeded Monte Carlo scenarios and budget/deadline/capacity/weight what-if experiments.
 - Export V3 allocations, eligibility checks, strategy results and a replayable experiment JSON.
 
-## V3 transportation optimization
+## Original Streamlit V3 transportation optimization
 
-V3 is developed on **`feature/v3-optimization`**. When downloading a ZIP from GitHub,
-select this branch; `main` remains the V2 baseline until the feature is merged.
+The original V3 is preserved on **`feature/v3-optimization`**. To obtain the new
+website as well, download **`feature/premium-web-redesign`** instead. `main`
+remains the V2 baseline until a feature is merged.
 Reinstall `requirements.txt` after updating: V3 adds **Google OR-Tools 9.15.6755**.
 The launch command stays `python -m streamlit run app.py`.
 
@@ -262,6 +377,12 @@ complete upload **before** filters and remain fixed when filtering.
 
 ```text
 app.py                     Streamlit UI, filters, charts and downloads
+backend/                   FastAPI adapters, validation and SQLite workspace store
+web/                       Next.js App Router, shared components and design system
+scripts/start_web.py       Cross-platform API + website process launcher
+start-web.bat              Windows dependency/build/start helper
+requirements-web.txt       Optional pinned Python API dependencies
+WEB_TEST_REPORT.md         Actual web verification, screenshots and limitations
 src/
   schema.py                Input contract, constants, KPI definitions
   ingestion.py             CSV/Excel loading and file/schema validation
@@ -362,8 +483,9 @@ The generator intentionally overwrites those named demo files, not uploads.
   capacity constraints; neither workspace converts currencies or obtains real quotes.
 - Exact location labels are not geocoded or mapped to UN/LOCODE. Equivalent spellings
   beyond case and whitespace may form different groups.
-- Uploaded data is analyzed in memory with local-sized limits. Only explicitly
-  saved case history persists in local SQLite. There is no authentication,
+- Streamlit analyzes uploads in memory; the premium web workspace also persists
+  uploads, settings and experiments in a separate local SQLite database.
+  Both interfaces use the original saved case history. There is no authentication,
   scheduling, live tracking or production deployment configuration.
 - Only the first Excel worksheet and UTF-8 comma-separated CSVs are read. Badly
   structured CSV records, password-protected/corrupt workbooks or a missing schema
