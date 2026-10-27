@@ -1,0 +1,11 @@
+{
+  "repository": "https://github.com/plotly/datasets",
+  "commit": "0c447c47b757ad74edecab31f0d72f849d2e67c2",
+  "file": "2011_february_us_airport_traffic.csv",
+  "repository_license": "MIT; included LICENSE copied from the same commit",
+  "sha256": "4a51d44ecf94db6f46299c56a623e4f499fd97f8598fd6faa5fb0c6c215c46bb",
+  "rows": 221,
+  "retrieval": "Public Git clone; direct HTTP source requests returned proxy 403",
+  "source_origin_in_upstream_readme": "Unknown",
+  "scope": "Public transport visualization sample, not shipment SLA data; do not claim independently verified operations or real freight validation."
+}

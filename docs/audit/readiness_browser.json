@@ -1,0 +1,221 @@
+{
+  "audit_of_commit": "69ca7e0",
+  "completed": true,
+  "observations": {
+    "decision_route_state": {
+      "applied_cost_before": 333,
+      "input_cost_after_route_return": "0",
+      "applied_result_still_rendered": false,
+      "scope": "Unsaved scenarios are component-local; saved SQLite cases are tested separately."
+    },
+    "unavailable_selected_action": {
+      "visible_select_value": "Wait and monitor",
+      "submitted_action": "Request expedited handling",
+      "http_status": 400,
+      "server_detail": "Choose an available action from the applied comparison."
+    },
+    "filter_reload": {
+      "before": "In Transit",
+      "after": "",
+      "dataset_after": "demo"
+    },
+    "responsive_page_matrix": [
+      {
+        "route": "/app",
+        "viewport": 360,
+        "document": 376,
+        "h1_count": 1,
+        "horizontal_overflow": true
+      },
+      {
+        "route": "/app/shipments",
+        "viewport": 360,
+        "document": 360,
+        "h1_count": 1,
+        "horizontal_overflow": false
+      },
+      {
+        "route": "/app/exceptions",
+        "viewport": 360,
+        "document": 448,
+        "h1_count": 1,
+        "horizontal_overflow": true
+      },
+      {
+        "route": "/app/decisions",
+        "viewport": 360,
+        "document": 360,
+        "h1_count": 1,
+        "horizontal_overflow": false
+      },
+      {
+        "route": "/app/optimization",
+        "viewport": 360,
+        "document": 360,
+        "h1_count": 2,
+        "horizontal_overflow": false
+      },
+      {
+        "route": "/app/analytics",
+        "viewport": 360,
+        "document": 360,
+        "h1_count": 2,
+        "horizontal_overflow": false
+      },
+      {
+        "route": "/app/settings",
+        "viewport": 360,
+        "document": 360,
+        "h1_count": 1,
+        "horizontal_overflow": false
+      },
+      {
+        "route": "/app",
+        "viewport": 393,
+        "document": 393,
+        "h1_count": 1,
+        "horizontal_overflow": false
+      },
+      {
+        "route": "/app/shipments",
+        "viewport": 393,
+        "document": 393,
+        "h1_count": 1,
+        "horizontal_overflow": false
+      },
+      {
+        "route": "/app/exceptions",
+        "viewport": 393,
+        "document": 448,
+        "h1_count": 1,
+        "horizontal_overflow": true
+      },
+      {
+        "route": "/app/decisions",
+        "viewport": 393,
+        "document": 393,
+        "h1_count": 1,
+        "horizontal_overflow": false
+      },
+      {
+        "route": "/app/optimization",
+        "viewport": 393,
+        "document": 393,
+        "h1_count": 2,
+        "horizontal_overflow": false
+      },
+      {
+        "route": "/app/analytics",
+        "viewport": 393,
+        "document": 393,
+        "h1_count": 2,
+        "horizontal_overflow": false
+      },
+      {
+        "route": "/app/settings",
+        "viewport": 393,
+        "document": 393,
+        "h1_count": 1,
+        "horizontal_overflow": false
+      },
+      {
+        "route": "/app",
+        "viewport": 768,
+        "document": 768,
+        "h1_count": 1,
+        "horizontal_overflow": false
+      },
+      {
+        "route": "/app/shipments",
+        "viewport": 768,
+        "document": 768,
+        "h1_count": 1,
+        "horizontal_overflow": false
+      },
+      {
+        "route": "/app/exceptions",
+        "viewport": 768,
+        "document": 768,
+        "h1_count": 1,
+        "horizontal_overflow": false
+      },
+      {
+        "route": "/app/decisions",
+        "viewport": 768,
+        "document": 768,
+        "h1_count": 1,
+        "horizontal_overflow": false
+      },
+      {
+        "route": "/app/optimization",
+        "viewport": 768,
+        "document": 768,
+        "h1_count": 2,
+        "horizontal_overflow": false
+      },
+      {
+        "route": "/app/analytics",
+        "viewport": 768,
+        "document": 768,
+        "h1_count": 2,
+        "horizontal_overflow": false
+      },
+      {
+        "route": "/app/settings",
+        "viewport": 768,
+        "document": 768,
+        "h1_count": 1,
+        "horizontal_overflow": false
+      },
+      {
+        "route": "/app",
+        "viewport": 1440,
+        "document": 1440,
+        "h1_count": 1,
+        "horizontal_overflow": false
+      },
+      {
+        "route": "/app/shipments",
+        "viewport": 1440,
+        "document": 1440,
+        "h1_count": 1,
+        "horizontal_overflow": false
+      },
+      {
+        "route": "/app/exceptions",
+        "viewport": 1440,
+        "document": 1440,
+        "h1_count": 1,
+        "horizontal_overflow": false
+      },
+      {
+        "route": "/app/decisions",
+        "viewport": 1440,
+        "document": 1440,
+        "h1_count": 1,
+        "horizontal_overflow": false
+      },
+      {
+        "route": "/app/optimization",
+        "viewport": 1440,
+        "document": 1440,
+        "h1_count": 2,
+        "horizontal_overflow": false
+      },
+      {
+        "route": "/app/analytics",
+        "viewport": 1440,
+        "document": 1440,
+        "h1_count": 2,
+        "horizontal_overflow": false
+      },
+      {
+        "route": "/app/settings",
+        "viewport": 1440,
+        "document": 1440,
+        "h1_count": 1,
+        "horizontal_overflow": false
+      }
+    ]
+  }
+}

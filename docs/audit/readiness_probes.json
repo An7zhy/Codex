@@ -1,0 +1,375 @@
+{
+  "audit_of_commit": "69ca7e0",
+  "timestamp_utc": "2026-10-27T14:25:22.569125+00:00",
+  "python": "3.12.14",
+  "platform": "Linux-6.18.55-x86_64-with-glibc2.41",
+  "data_warning": "All authored contract probes are synthetic. The separately attributed public airport sample is not freight SLA validation.",
+  "observations": {
+    "anonymous_cross_session_read": {
+      "list_status": 200,
+      "other_session_sees_dataset": true,
+      "workspace_status": 200,
+      "extra_column_in_response": true,
+      "extra_column_in_export": true,
+      "note": "Two independent unauthenticated cookie sessions, not two authenticated tenant accounts."
+    },
+    "anonymous_global_settings_write": {
+      "write_status": 200,
+      "other_session_financial_weight": 100.0
+    },
+    "anonymous_case_update": {
+      "status": 200,
+      "status_after": "Resolved"
+    },
+    "comparison_configuration_revision": {
+      "compare_status": 200,
+      "score_when_compared": 78.6667,
+      "saved_snapshot_score": 88.1481,
+      "snapshot_config_version_in_compare_response": false,
+      "meaning": "Saving recomputes priority with current global settings, not a version pinned by the displayed comparison."
+    },
+    "public_transport_input": {
+      "status": 400,
+      "detail": "Missing required columns: actual_delivery, carrier, destination, origin, planned_delivery, shipment_id, shipping_cost, status, transport_mode",
+      "provenance": {
+        "repository": "https://github.com/plotly/datasets",
+        "commit": "0c447c47b757ad74edecab31f0d72f849d2e67c2",
+        "file": "2011_february_us_airport_traffic.csv",
+        "repository_license": "MIT; included LICENSE copied from the same commit",
+        "sha256": "4a51d44ecf94db6f46299c56a623e4f499fd97f8598fd6faa5fb0c6c215c46bb",
+        "rows": 221,
+        "retrieval": "Public Git clone; direct HTTP source requests returned proxy 403",
+        "source_origin_in_upstream_readme": "Unknown",
+        "scope": "Public transport visualization sample, not shipment SLA data; do not claim independently verified operations or real freight validation."
+      },
+      "not_verified": "Upstream identifies original source as Unknown; airport aggregate records do not contain shipment delivery/SLA fields."
+    },
+    "template_compatibility": {
+      "reordered_trimmed_uppercase": {
+        "status": 201,
+        "detail": null
+      },
+      "alternative_column_names": {
+        "status": 400,
+        "detail": "Missing required columns: planned_delivery, shipment_id"
+      },
+      "missing_actual_column": {
+        "status": 400,
+        "detail": "Missing required columns: actual_delivery"
+      },
+      "semicolon_csv": {
+        "status": 400,
+        "detail": "CSV record 2 has 3 fields but the header has 1. Remove extra separators or correct CSV quoting; columns cannot be aligned safely."
+      },
+      "gbk_csv": {
+        "status": 400,
+        "detail": "The file could not be read. Use a comma-separated UTF-8 CSV or a valid .xlsx workbook with shipment headers on the first row of the first sheet."
+      },
+      "malformed_csv": {
+        "status": 400,
+        "detail": "The file could not be read. Use a comma-separated UTF-8 CSV or a valid .xlsx workbook with shipment headers on the first row of the first sheet."
+      },
+      "not_excel": {
+        "status": 400,
+        "detail": "The file could not be read. Use a comma-separated UTF-8 CSV or a valid .xlsx workbook with shipment headers on the first row of the first sheet."
+      }
+    },
+    "date_and_timezone": {
+      "offset_equivalent": {
+        "kpis": {
+          "total_shipments": 1,
+          "delivered_shipments": 1,
+          "eligible_deliveries": 1,
+          "on_time_shipments": 1,
+          "delayed_shipments": 0,
+          "on_time_delivery_rate": 1.0,
+          "average_delay_hours": 0.0,
+          "overdue_shipments": 0,
+          "total_shipping_cost": 100.0,
+          "cost_eligible_shipments": 1,
+          "cost_anomalies": 0,
+          "cost_insufficient_shipments": 1,
+          "source_rows": 1,
+          "excluded_rows": 0,
+          "quality_rows": 0
+        },
+        "issues": []
+      },
+      "ambiguous_day_month": {
+        "kpis": {
+          "total_shipments": 1,
+          "delivered_shipments": 1,
+          "eligible_deliveries": 0,
+          "on_time_shipments": 0,
+          "delayed_shipments": 0,
+          "on_time_delivery_rate": null,
+          "average_delay_hours": null,
+          "overdue_shipments": 0,
+          "total_shipping_cost": 100.0,
+          "cost_eligible_shipments": 1,
+          "cost_anomalies": 0,
+          "cost_insufficient_shipments": 1,
+          "source_rows": 1,
+          "excluded_rows": 0,
+          "quality_rows": 1
+        },
+        "issues": [
+          "invalid_planned_delivery"
+        ]
+      },
+      "date_only_deadline": {
+        "kpis": {
+          "total_shipments": 1,
+          "delivered_shipments": 1,
+          "eligible_deliveries": 1,
+          "on_time_shipments": 0,
+          "delayed_shipments": 1,
+          "on_time_delivery_rate": 0.0,
+          "average_delay_hours": 15.0,
+          "overdue_shipments": 0,
+          "total_shipping_cost": 100.0,
+          "cost_eligible_shipments": 1,
+          "cost_anomalies": 0,
+          "cost_insufficient_shipments": 1,
+          "source_rows": 1,
+          "excluded_rows": 0,
+          "quality_rows": 0
+        },
+        "issues": []
+      },
+      "invalid_actual": {
+        "kpis": {
+          "total_shipments": 1,
+          "delivered_shipments": 0,
+          "eligible_deliveries": 0,
+          "on_time_shipments": 0,
+          "delayed_shipments": 0,
+          "on_time_delivery_rate": null,
+          "average_delay_hours": null,
+          "overdue_shipments": 0,
+          "total_shipping_cost": 100.0,
+          "cost_eligible_shipments": 1,
+          "cost_anomalies": 0,
+          "cost_insufficient_shipments": 1,
+          "source_rows": 1,
+          "excluded_rows": 0,
+          "quality_rows": 1
+        },
+        "issues": [
+          "invalid_actual_delivery"
+        ]
+      }
+    },
+    "mixed_currency_and_units": {
+      "total_reported_as_usd": 200.0,
+      "issue_count": 0,
+      "currencies_retained": [
+        "USD",
+        "EUR"
+      ],
+      "units_retained": [
+        "kg",
+        "lb"
+      ],
+      "meaning": "Explicit EUR/lb metadata does not prevent summing the nominal costs as USD; no FX/unit conversion was performed."
+    },
+    "invalid_and_locale_prices": {
+      "valid_costs": 1,
+      "total": 1234.0,
+      "issues": 4,
+      "interpretation": "1,234 is interpreted as 1234, not locale decimal 1.234; other invalid price strings excluded."
+    },
+    "conflicting_duplicate_order": {
+      "transit_first": {
+        "total_shipments": 1,
+        "delivered_shipments": 0,
+        "overdue_shipments": 1
+      },
+      "delivered_first": {
+        "total_shipments": 1,
+        "delivered_shipments": 1,
+        "overdue_shipments": 0
+      }
+    },
+    "queue_cap_actionability": {
+      "exception_count": 501,
+      "returned": 500,
+      "target": "ACTIVE-0500",
+      "target_available_to_ui": false,
+      "direct_compare_status": 200
+    },
+    "oversized_selected_file": {
+      "bytes": 20971521,
+      "status": 400,
+      "detail": "The file exceeds the 20 MB limit."
+    },
+    "oversized_ignored_multipart_part": {
+      "unused_bytes": 20971521,
+      "status": 201,
+      "meaning": "The selected file limit is not a total HTTP-body or multipart spool limit."
+    },
+    "row_limit": {
+      "rows": 100001,
+      "bytes": 13500243,
+      "status": 400,
+      "detail": "Use at most 100,000 input rows for this local MVP."
+    },
+    "bounded_api_workloads": [
+      {
+        "rows": 100,
+        "csv_bytes": 13598,
+        "upload_seconds": 0.026289378001820296,
+        "workspace_seconds": 0.24665793299209327,
+        "retained": 100
+      },
+      {
+        "rows": 5000,
+        "csv_bytes": 683998,
+        "upload_seconds": 0.1903434620180633,
+        "workspace_seconds": 0.9452502339845523,
+        "retained": 5000
+      }
+    ],
+    "numeric_api_errors": {
+      "NaN": {
+        "status": 400,
+        "body_excerpt": "{\"detail\":\"Out of range float values are not JSON compliant: nan\"}"
+      },
+      "overflow_exponent": {
+        "status": 400,
+        "body_excerpt": "{\"detail\":\"Out of range float values are not JSON compliant: inf\"}"
+      },
+      "negative": {
+        "status": 422,
+        "body_excerpt": "{\"detail\":[{\"type\":\"greater_than_equal\",\"loc\":[\"body\",\"cost_weight\"],\"msg\":\"Input should be greater than or equal to 0\",\"input\":-1,\"ctx\":{\"ge\":0.0}}]}"
+      },
+      "boolean": {
+        "status": 422,
+        "body_excerpt": "{\"detail\":[{\"type\":\"value_error\",\"loc\":[\"body\",\"count\"],\"msg\":\"Value error, Booleans cannot substitute for numeric or text inputs.\",\"input\":true,\"ctx\":{\"error\":{}}}]}"
+      }
+    },
+    "cors_and_origin": {
+      "preflight_status": 405,
+      "allow_origin": null,
+      "simple_upload_status": 201,
+      "note": "No permissive CORS middleware. CORS is not authentication; a simple upload can be received without a preflight."
+    },
+    "sql_and_csv_controls": {
+      "injected_dataset_status": 404,
+      "injected_case_query_results": 0,
+      "formula_escaped": true
+    },
+    "optimization_scope": {
+      "status": 201,
+      "provenance": "Synthetic Demo Data; hypothetical capacities, prices and lognormal transit assumptions",
+      "strategies": {
+        "Lowest Cost": "OPTIMAL",
+        "Fastest Delivery": "OPTIMAL",
+        "Optimized Allocation": "OPTIMAL"
+      },
+      "other_session_latest_is_same": true,
+      "custom_order_service_payload_status": 422
+    },
+    "retention": {
+      "delete_dataset_status": 404,
+      "stored_upload_rows": 17
+    },
+    "history_export_cap": {
+      "stored_cases": 1003,
+      "exported_cases": 1000,
+      "note": "The export endpoint limits to the newest 1000 and has no cursor or full-export option."
+    },
+    "health_not_database_readiness": {
+      "health_status": 200,
+      "workspace_status": 503,
+      "readiness_route_status": 404,
+      "meaning": "Process liveness works but there is no separate database-aware readiness endpoint."
+    },
+    "database_schemas": {
+      "workspace": {
+        "web_datasets": [
+          "dataset_id",
+          "name",
+          "synthetic",
+          "as_of",
+          "raw_json",
+          "created_at"
+        ],
+        "web_settings": [
+          "setting_key",
+          "value_json"
+        ],
+        "web_runs": [
+          "run_id",
+          "payload_json",
+          "created_at"
+        ]
+      },
+      "history": {
+        "cases": [
+          "case_id",
+          "shipment_id",
+          "exception_type",
+          "selected_action",
+          "estimated_cost",
+          "actual_cost",
+          "estimated_delay",
+          "actual_delay",
+          "resolution_status",
+          "resolution_notes",
+          "origin",
+          "destination",
+          "transport_mode",
+          "carrier",
+          "assumptions_json",
+          "priority_snapshot_json",
+          "analysis_date",
+          "created_at",
+          "updated_at",
+          "version",
+          "origin_key",
+          "destination_key",
+          "mode_key",
+          "request_key",
+          "request_payload_hash"
+        ]
+      }
+    },
+    "manual_native_sqlite_backup_restore": {
+      "result": {
+        "workspace": {
+          "integrity_check": "ok",
+          "table_counts": {
+            "web_datasets": 17,
+            "web_settings": 1,
+            "web_runs": 1
+          }
+        },
+        "history": {
+          "integrity_check": "ok",
+          "table_counts": {
+            "cases": 1003
+          }
+        }
+      },
+      "scope": "Audit-only quiescent backup/restore using sqlite3.Connection.backup; no scheduled application backup or disaster recovery service implemented."
+    },
+    "deadline_business_semantics": {
+      "hard_eligible": true,
+      "assumed_late_probability": 0.45100986229674944,
+      "meaning": "Meeting an expected-time hard deadline is not a 95% on-time guarantee."
+    },
+    "cost_comparability": {
+      "equal_cost_per_kg": true,
+      "flagged_ids": [
+        "LARGE"
+      ],
+      "meaning": "Absolute cost screening does not normalize by shipment weight."
+    },
+    "tracked_secret_pattern_scan": {
+      "findings": [],
+      "scope": "Current tracked text files up to 2 MB; no environment values or git-history contents dumped. Not a comprehensive secret audit."
+    }
+  },
+  "completed": true
+}

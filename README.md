@@ -1,5 +1,9 @@
 # Logistics Insight AI
 
+Current deployment assessment: see [PRODUCTION_READINESS_AUDIT.md](PRODUCTION_READINESS_AUDIT.md).
+The connected local prototype has passing functional checks, but public real-data
+use is blocked by missing access control/isolation and the documented P1 gaps.
+
 A **Lightweight, Explainable Logistics Exception Decision Copilot for Small
 Freight Forwarders**. Identify exceptions, prioritize cases with sufficient
 information, compare hypothetical interventions and record handling outcomes.

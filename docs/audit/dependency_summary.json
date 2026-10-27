@@ -1,0 +1,127 @@
+{
+  "pip_audit_version": "2.10.1",
+  "pip_audit_scope": "Installed project venv, includes runtime, fallback and development packages; no fix applied",
+  "packages": [
+    {
+      "package": "pillow",
+      "version": "11.3.0",
+      "advisory_records": 72,
+      "unique_ids": 55,
+      "ids": [
+        "CVE-2026-112390",
+        "CVE-2026-112391",
+        "CVE-2026-112393",
+        "CVE-2026-112395",
+        "CVE-2026-112397",
+        "CVE-2026-112398",
+        "CVE-2026-112399",
+        "CVE-2026-112400",
+        "CVE-2026-112401",
+        "CVE-2026-112402",
+        "CVE-2026-112404",
+        "CVE-2026-112406",
+        "CVE-2026-112891",
+        "CVE-2026-112892",
+        "CVE-2026-112893",
+        "CVE-2026-112894",
+        "CVE-2026-112895",
+        "CVE-2026-112896",
+        "CVE-2026-112897",
+        "CVE-2026-112899",
+        "CVE-2026-112900",
+        "CVE-2026-112901",
+        "CVE-2026-114501",
+        "CVE-2026-96636",
+        "CVE-2026-96637",
+        "CVE-2026-96638",
+        "CVE-2026-96639",
+        "CVE-2026-96640",
+        "CVE-2026-96641",
+        "CVE-2026-96642",
+        "CVE-2026-96643",
+        "CVE-2026-96644",
+        "CVE-2026-96778",
+        "GHSA-78g4-xqwv-q3g8",
+        "PYSEC-2026-165",
+        "PYSEC-2026-2249",
+        "PYSEC-2026-2250",
+        "PYSEC-2026-2251",
+        "PYSEC-2026-2252",
+        "PYSEC-2026-2253",
+        "PYSEC-2026-2254",
+        "PYSEC-2026-2255",
+        "PYSEC-2026-2256",
+        "PYSEC-2026-2257",
+        "PYSEC-2026-2874",
+        "PYSEC-2026-3451",
+        "PYSEC-2026-3453",
+        "PYSEC-2026-3454",
+        "PYSEC-2026-3493",
+        "PYSEC-2026-3494",
+        "PYSEC-2026-3495",
+        "PYSEC-2026-3496",
+        "PYSEC-2026-4326",
+        "PYSEC-2026-4327",
+        "PYSEC-2026-4328"
+      ],
+      "reported_fixes": [
+        "12.1.1",
+        "12.2.0",
+        "12.3.0",
+        "13.0.0"
+      ]
+    },
+    {
+      "package": "pip",
+      "version": "25.0.1",
+      "advisory_records": 12,
+      "unique_ids": 6,
+      "ids": [
+        "PYSEC-2026-1795",
+        "PYSEC-2026-1796",
+        "PYSEC-2026-196",
+        "PYSEC-2026-2875",
+        "PYSEC-2026-2876",
+        "PYSEC-2026-3721"
+      ],
+      "reported_fixes": [
+        "25.3",
+        "26.0",
+        "26.1",
+        "26.1.2",
+        "26.2",
+        "26.2.0"
+      ]
+    },
+    {
+      "package": "pytest",
+      "version": "8.4.2",
+      "advisory_records": 2,
+      "unique_ids": 1,
+      "ids": [
+        "PYSEC-2026-1845"
+      ],
+      "reported_fixes": [
+        "9.0.3"
+      ]
+    },
+    {
+      "package": "streamlit",
+      "version": "1.50.0",
+      "advisory_records": 4,
+      "unique_ids": 2,
+      "ids": [
+        "PYSEC-2026-212",
+        "PYSEC-2026-2285"
+      ],
+      "reported_fixes": [
+        "1.53.1",
+        "1.54.0"
+      ]
+    }
+  ],
+  "total_records": 90,
+  "sum_unique_ids_per_package": 64,
+  "exploitability": "Not Verified; ID deduplication is not proof of unique root causes or remote exploit paths",
+  "npm_prod_audit_known_vulnerabilities": 0
+}
