@@ -1,3 +1,4 @@
+from pathlib import Path
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import asdict, replace
 import sqlite3
@@ -80,7 +81,7 @@ def test_legacy_bad_metadata_does_not_block_outcome_updates(tmp_path, monkeypatc
     with sqlite3.connect(path) as connection:
         connection.execute("UPDATE cases SET assumptions_json = ? WHERE case_id = ?", ("old malformed metadata", case_id))
     monkeypatch.setenv("LOGISTICS_DB_PATH", str(path))
-    app = AppTest.from_file("app.py").run(timeout=30)
+    app = AppTest.from_file(str(Path(__file__).resolve().parents[1] / "app.py")).run(timeout=30)
     assert not app.exception
     assert any("original record is preserved" in warning.value for warning in app.warning)
     next(widget for widget in app.selectbox if widget.label == "Update resolution status").set_value("Resolved")

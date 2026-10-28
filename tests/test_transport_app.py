@@ -42,6 +42,11 @@ def test_weights_applied_only_on_submit_and_selection_retained():
     app.number_input(key="v3_time_weight").set_value(100)
     app.number_input(key="v3_risk_weight").set_value(0).run(timeout=30)
     assert app.session_state["v3_experiment"].preferences == original.preferences
+    # New AppTest form gating discards its pending buffer on a forced run.
+    # Re-stage the same draft for the actual submit; numeric assertions unchanged.
+    app.number_input(key="v3_cost_weight").set_value(0)
+    app.number_input(key="v3_time_weight").set_value(100)
+    app.number_input(key="v3_risk_weight").set_value(0)
     changed = solve(app)
     assert changed.preferences.normalized() == (0, 1, 0)
     assert changed.fingerprint == original.fingerprint

@@ -1,6 +1,7 @@
 """Streamlit presentation layer. Business rules live in src/ and are testable."""
 
 from datetime import datetime, timezone
+import os
 
 import pandas as pd
 import plotly.express as px
@@ -92,6 +93,9 @@ def show_overview(view: pd.DataFrame) -> None:
 
 def main() -> None:
     st.set_page_config(page_title="Logistics Insight AI", page_icon="📦", layout="wide")
+    if os.environ.get("LOGISTICS_PILOT_MODE") == "1":
+        st.error("Streamlit fallback is disabled in pilot mode. Use the authenticated Next.js platform.")
+        st.stop()
     st.markdown("""<style>
         .stApp { font-family: 'Segoe UI', Arial, sans-serif; }
         .block-container { padding-top: 2rem; max-width: 1480px; }

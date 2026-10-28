@@ -19,4 +19,6 @@ node_modules/
 .next/
 *.tsbuildinfo
 web/next-env.d.ts
+backups/
+restored/
 npm-debug.log*

@@ -31,7 +31,7 @@ def select_shipment(page, shipment_id):
     control.click()
     control.fill(shipment_id)
     page.get_by_role("option", name=shipment_id, exact=True).click()
-    expect(page.get_by_role("combobox", name=f"Selected {shipment_id}. Shipment for decision review", exact=True)).to_be_visible()
+    expect(page.get_by_role("combobox", name=re.compile(r"Shipment for decision review$"))).to_have_value(shipment_id)
     expect(scenario_form(page, shipment_id)).to_be_visible()
 
 
@@ -80,7 +80,7 @@ def main():
                                                 "score_before": score(before, "SYN-0027"), "score_after": score(after, "SYN-0027")}
             evidence["ranking_changed"] = True
             page.get_by_role("tab", name="Decision Center", exact=True).click()
-            expect(page.get_by_role("combobox", name="Selected SYN-0159. Shipment for decision review", exact=True)).to_be_visible()
+            expect(page.get_by_role("combobox", name=re.compile(r"Shipment for decision review$"))).to_have_value("SYN-0159")
             preserved = list(csv.DictReader(StringIO(download(page, "Scenario comparison CSV", "comparison-preserved.csv"))))
             assert float(preserved[0]["estimated_additional_cost_usd"]) == 333
             evidence["selection_and_assumptions_preserved"] = True
@@ -129,6 +129,8 @@ def main():
         finally:
             browser.close()
             (OUTPUT / "evidence.json").write_text(json.dumps(evidence, indent=2))
+            if os.environ.get("BROWSER_EVIDENCE_PATH"):
+                Path(os.environ["BROWSER_EVIDENCE_PATH"]).write_text(json.dumps(evidence, indent=2))
 
 
 if __name__ == "__main__":

@@ -1,7 +1,7 @@
 """Audited behavior and explicit unmet production gates, not new business features.
 
-Strict XFAILs document release-blocking requirements currently not satisfied.
-They must not be counted as security passes. Their reason IDs map to the report.
+Former strict XFAIL gates retain their original assertions and now must pass.
+Fixtures authenticate only positive paths; anonymous and unrelated sessions remain unauthenticated.
 """
 
 import asyncio
@@ -15,6 +15,9 @@ httpx = pytest.importorskip("httpx")
 pytest.importorskip("fastapi")
 
 from backend.main import app
+from backend.access import AccessStore, COOKIE
+from backend.import_contract import confirmation
+import secrets
 from scripts.audit_readiness import sample
 from src.analysis import analyze_shipments, calculate_kpis
 from src.ingestion import DataInputError, load_shipments
@@ -28,38 +31,41 @@ def clients(tmp_path, monkeypatch):
     monkeypatch.setenv("LOGISTICS_WEB_DB_PATH", str(tmp_path / "workspace.sqlite3"))
     monkeypatch.setenv("LOGISTICS_DB_PATH", str(tmp_path / "history.sqlite3"))
 
+    monkeypatch.setenv("LOGISTICS_ALLOWED_ORIGINS", "http://audit")
+    access = AccessStore()
+    access.provision("Audit regression organization")
+    password = secrets.token_urlsafe(24)
+    access.set_user("audit", password, "admin")
+    token = access.login("audit", password)
+
     def request(method, path, *, session="A", **kwargs):
         async def send():
             async with httpx.AsyncClient(transport=httpx.ASGITransport(app=app, raise_app_exceptions=False),
-                                         base_url="http://audit", cookies={"audit_session": session}) as client:
+                                         base_url="http://audit", cookies={COOKIE: token} if session == "A" else {}, headers={"Origin": "http://audit"}) as client:
                 return await client.request(method, path, **kwargs)
         return asyncio.run(send())
     return request
 
 
 def upload(clients, frame):
-    response = clients("POST", "/api/datasets", files={"file": ("probe.csv", frame.to_csv(index=False).encode())}, data={"as_of": "2026-10-02"})
+    response = clients("POST", "/api/datasets", files={"file": ("probe.csv", frame.to_csv(index=False).encode())}, data={"as_of": "2026-10-02", "confirmed": confirmation(frame.to_csv(index=False).encode(), "2026-10-02")})
     assert response.status_code == 201
     return response.json()["dataset_id"]
 
 
-@pytest.mark.xfail(strict=True, reason="PR-01: anonymous sensitive reads are not protected")
 def test_release_gate_sensitive_dataset_list_requires_authentication(clients):
-    assert clients("GET", "/api/datasets").status_code == 401
+    assert clients("GET", "/api/datasets", session="anonymous").status_code == 401
 
 
-@pytest.mark.xfail(strict=True, reason="PR-01: anonymous configuration writes are not protected")
 def test_release_gate_configuration_write_requires_authentication(clients):
-    assert clients("PUT", "/api/settings/priority", json=PriorityConfig.load().to_dict()).status_code == 401
+    assert clients("PUT", "/api/settings/priority", session="anonymous", json=PriorityConfig.load().to_dict()).status_code == 401
 
 
-@pytest.mark.xfail(strict=True, reason="PR-02: independent anonymous sessions share every stored dataset")
 def test_release_gate_unrelated_session_cannot_read_dataset(clients):
     dataset_id = upload(clients, pd.DataFrame([sample(customer_email="ops@example.invalid")]))
     assert clients("GET", "/api/workspace", session="B", params={"dataset_id": dataset_id}).status_code in (401, 403, 404)
 
 
-@pytest.mark.xfail(strict=True, reason="PR-04: explicit EUR rows are silently included in USD cost totals")
 def test_release_gate_conflicting_currency_must_be_rejected_or_flagged(clients):
     dataset_id = upload(clients, pd.DataFrame([sample(shipment_id="A", currency="USD"), sample(shipment_id="B", currency="EUR")]))
     result = clients("GET", "/api/workspace", params={"dataset_id": dataset_id})
@@ -69,7 +75,6 @@ def test_release_gate_conflicting_currency_must_be_rejected_or_flagged(clients):
         assert result.status_code in (400, 422)
 
 
-@pytest.mark.xfail(strict=True, reason="PR-10: no database-aware readiness endpoint is implemented")
 def test_release_gate_readiness_detects_unavailable_database(clients, monkeypatch, tmp_path):
     monkeypatch.setenv("LOGISTICS_WEB_DB_PATH", str(tmp_path))
     assert clients("GET", "/api/workspace").status_code == 503

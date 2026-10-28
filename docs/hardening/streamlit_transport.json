@@ -1,0 +1,16 @@
+{
+  "completed": true,
+  "checks": [
+    "Initial solve and matching CSV/JSON exports",
+    "Draft vs applied weights, same random scenarios, changed allocation, retained shipment",
+    "What-if view retains and displays previous/current applied runs",
+    "Zero budget gives INFEASIBLE, explicit soft mode gives 12 unassigned and no fabricated benefits",
+    "Capacity and deadline controls alter hard feasibility",
+    "All-zero weights show actionable error and preserve applied result",
+    "V1 dashboard still loads after V3 navigation; no browser JavaScript errors"
+  ],
+  "weight_sensitivity": {
+    "total_expected_hours_before": 1968.0,
+    "total_expected_hours_after": 360.0
+  }
+}

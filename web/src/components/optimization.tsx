@@ -22,6 +22,7 @@ import {
 } from "@/components/ui/primitives";
 import { CapacityChart, StrategyChart } from "@/components/charts";
 import { useWorkspace } from "@/components/workspace-provider";
+import { useAccess } from "@/components/access";
 import { api, jsonBody, money, num, percent } from "@/lib/utils";
 import type { OptimizationInput, OptimizationRun } from "@/lib/types";
 
@@ -89,6 +90,7 @@ export function StrategyTable({ run }: { run: OptimizationRun }) {
   );
 }
 export function Optimization() {
+  const user = useAccess();
   const { notify } = useWorkspace();
   const [draft, setDraft] = useState<OptimizationInput>(initial),
     [run, setRun] = useState<OptimizationRun | null>(null);
@@ -299,7 +301,7 @@ export function Optimization() {
                 ? "Draft differs from the saved run below. Run again to apply it."
                 : "All three strategies share constraints and random scenarios."}
             </p>
-            <Button type="submit" disabled={busy}>
+            <Button type="submit" disabled={busy || user?.role === "viewer"}>
               <BusyLabel busy={busy}>
                 <Play size={14} />
                 Run optimization

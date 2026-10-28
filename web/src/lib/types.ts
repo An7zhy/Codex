@@ -97,6 +97,11 @@ export type Comparison = {
   key_assumptions: string;
 };
 export type DecisionResult = {
+  comparison_token: string;
+  priority_score: number | null;
+  priority_level: string;
+  explanation: string;
+  missing_information: string;
   shipment_id: string;
   comparison: Comparison[];
   cutoff: string;

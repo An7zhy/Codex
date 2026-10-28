@@ -1,0 +1,26 @@
+{
+  "completed": true,
+  "checks": [
+    "Original landing, working launch, calculated default KPIs, English report and reduced-motion fallback",
+    "Keyboard skip link and primary white-on-blue button colors (5.10:1 calculated contrast)",
+    "Every sidebar item changes to a distinct App Router URL",
+    "Server filters, scoped exports, empty state, pagination and original field-quality findings",
+    "Saved financial weight 20\u2192100 changes SYN-0027 score to 88.1481 without changing V1 KPIs",
+    "V2 cost/time arithmetic, draft vs applied saving, idempotent saves and edited outcomes survive reload",
+    "V3 hard eligibility, real OR-Tools allocation, infeasible/soft modes, exports and actual 100-order browser solve",
+    "Analytics uses saved V3 Monte Carlo results and original V2 reference evaluation",
+    "Real CSV/Excel uploads, source labeling, selection persistence and actionable malformed-file error",
+    "393px mobile landing/platform, accessible navigation drawer and no document-level horizontal overflow",
+    "API failure shows an actionable error state rather than invented or stale KPIs",
+    "A delayed real workspace request shows a loading skeleton, then calculated KPIs",
+    "A remembered dataset missing after a folder/database update can be explicitly reset to the demo"
+  ],
+  "browser": "Chromium",
+  "server_mode": "Next.js production build + FastAPI",
+  "hundred_order_statuses": {
+    "Lowest Cost": "OPTIMAL",
+    "Fastest Delivery": "FEASIBLE",
+    "Optimized Allocation": "OPTIMAL"
+  },
+  "javascript_errors": []
+}

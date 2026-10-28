@@ -87,7 +87,7 @@ def main():
             after = sum(row["expected_hours"] for row in fastest["results"]["Optimized Allocation"]["assignments"])
             assert after < before
             page.get_by_role("tab", name="Transportation Decision Center", exact=True).click()
-            expect(page.get_by_role("combobox", name="Selected PLAN-0005. Planning shipment", exact=True)).to_be_visible()
+            expect(page.get_by_role("combobox", name=re.compile(r"Planning shipment$"))).to_have_value("PLAN-0005")
             evidence["checks"].append("Draft vs applied weights, same random scenarios, changed allocation, retained shipment")
             evidence["weight_sensitivity"] = {"total_expected_hours_before": before, "total_expected_hours_after": after}
             page.get_by_role("tab", name="What-if Scenario Analysis", exact=True).click()
@@ -134,7 +134,7 @@ def main():
             evidence["completed"] = True
         finally:
             browser.close()
-            (ROOT / "docs/v3_browser_evidence.json").write_text(json.dumps(evidence, indent=2), encoding="utf-8")
+            Path(os.environ.get("BROWSER_EVIDENCE_PATH", str(ROOT / "docs/v3_browser_evidence.json"))).write_text(json.dumps(evidence, indent=2), encoding="utf-8")
     print(json.dumps(evidence, indent=2))
 
 

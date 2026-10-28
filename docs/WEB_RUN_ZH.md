@@ -1,6 +1,6 @@
 # 新官网和业务平台：中文本地运行说明
 
-新版本分支：`feature/premium-web-redesign`。旧 Streamlit 仍可使用。
+新版本分支：`fix/mvp-hardening-sprint-1`。旧 Streamlit 仍可使用。
 
 ## 你会打开什么
 
@@ -12,14 +12,14 @@
 
 ## Windows：首次安装
 
-1. 从 GitHub 下载 **feature/premium-web-redesign** 分支，解压到独立文件夹，D 盘可以。
+1. 从 GitHub 下载 **fix/mvp-hardening-sprint-1** 分支，解压到独立文件夹，D 盘可以。
    找到包含 `start-web.bat`、`requirements-web.txt`、`backend` 和 `web` 的那一层。
 2. 安装 [Node.js 24 LTS](https://nodejs.org/)，它包含 npm；建议使用 Python 3.12。
    安装后重新打开终端，让 PATH 生效。
-3. 双击 **start-web.bat**。它会创建项目 Python 环境、安装依赖、构建前端并启动两个服务。
+3. 双击 **start-web.bat**。它会创建项目 Python 环境、安装依赖；首次运行会提示组织名、管理员账号和密码（至少12位，输入密码不显示字符）。随后构建前端并启动两个服务。
    第一次需要联网，终端出现下载和构建文字属于正常过程。失败时窗口会保留错误信息。
 4. 等终端显示 `Website: http://127.0.0.1:3000`。浏览器通常自动打开；也可以手动输入地址。
-5. 使用期间保持终端打开。结束时在该终端按 **Ctrl+C**。
+5. 点击 Launch platform，用刚创建的账号登录。没有默认密码，也没有公开注册。使用期间保持终端打开。结束时在该终端按 **Ctrl+C**。
 
 脚本通过 `py` 创建环境，后续直接使用 `.venv\Scripts\python.exe`，绕开可能有问题的
 Windows `python` 应用执行别名。`app.py` 无需双击。
@@ -33,7 +33,9 @@ Windows `python` 应用执行别名。`app.py` 无需双击。
 
 ```powershell
 py -3.12 -m venv .venv
+.\.venv\Scripts\python.exe -m pip install --upgrade pip==26.2.2
 .\.venv\Scripts\python.exe -m pip install -r requirements-web.txt
+.\.venv\Scripts\python.exe -m scripts.manage_access setup
 cd web
 npm.cmd ci
 npm.cmd run build
@@ -55,7 +57,7 @@ cd ..
 
 ## 建议演示顺序
 
-1. 官网点击 **Launch platform**，默认 **Synthetic Demo Data**，分析日期 **2026-10-01**。
+1. 官网点击 **Launch platform**，登录后默认 **Synthetic Demo Data**，分析日期 **2026-10-01**。
 2. Overview 对照：158 单、47.8% 准时率、30 单运输中逾期、USD 539,830.75 有效运费。
 3. Shipments 筛选状态、翻页、打开数据质量记录，下载结果 CSV。
 4. Exceptions 查看分数、解释和缺失信息。Settings 将财务权重20改100并保存，
@@ -86,4 +88,8 @@ FEASIBLE 表示找到有效分配但未证明最优；UNKNOWN 不等于不可行
   **Use Synthetic Demo Data** 恢复演示，或重新上传文件；不会自动删除旧数据。
 - **更新保留历史**：停止服务，备份并保留原 `data/local/`；新网页和 Streamlit 共用原案例数据库。
 
-不需要 API Key，不需要注册，不会连接真实物流公司的接口。
+不需要 API Key 或商业平台注册；本地管理员必须创建受邀账号。只读账号不能上传、求解或修改记录；操作员不能改权重或删除数据。
+
+上传先点 **Preview import**，检查日期/重复订单/币种提示，确认规则后勾选再点 **Confirm import**。UTC日期零点不等于当地截止日结束；请先人工标准化。
+
+远程试点与备份/恢复步骤见 [PILOT_OPERATIONS.md](PILOT_OPERATIONS.md)。本轮不代表已验证公网HTTPS或真实业务收益。

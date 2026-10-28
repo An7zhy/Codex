@@ -1,5 +1,80 @@
 # Logistics Insight AI — Production Readiness Audit
 
+## Sprint 1 修复复验（2026-10-28，Asia/Shanghai）
+
+修复分支：`fix/mvp-hardening-sprint-1`；基线为已保留的审计分支 `audit/production-readiness`（`636d180`）。
+**本节是当前状态；后面的“原始审计”是2026-10-27历史记录，不代表问题仍全部未修复。**
+
+本轮已实际修改后端、核心币种校验、网页交互和运维工具，保留原始 OR-Tools/MC 数学实现及
+V1/V2 规则口径。**288 passed、0 failed、0 skipped、0 XFAIL**；原5个严格XFAIL的要求均以普通
+断言通过。原来225项功能测试没有删除或降低数值断言，增加认证/确认/比较令牌测试前置条件。
+Streamlit安全升级导致的测试路径和表单协议差异有明确说明，并用真实浏览器独立验证。
+
+**结论：P0代码边界和直接影响币种计算、决策保存、完整操作队列/导出的P1已在本地复验关闭。
+这不是完整生产放行。可以进入单组织受控试点的部署准备与业务验收；暂不建议直接公开接收真实数据。**
+远程HTTPS/入口限制、目标主机权限与容量、日常备份责任及获授权真实样本核对仍需完成；
+解析器OS资源隔离、自动运维调度和部分P2体验问题尚未实现。V3继续是明确标注的合成推演。
+
+### 当前逐项状态
+
+| ID / 优先级 | 原问题 | 实际修改代码 | 复验证据与结果 | 当前状态 / 受控试点判断 |
+| --- | --- | --- | --- | --- |
+| PR-01 / P0 | 匿名读写；没有服务端角色控制 | `backend/access.py`、`boundary.py`、`main.py`；`web/.../access.tsx`；`scripts/manage_access.py` | 敏感路由匿名矩阵均401；只读强行上传/改设置/保存/更新/求解/删除均403；管理员设置、操作员权限、登录/退出/过期/禁用、来源拒绝有测试；浏览器绕过按钮直接请求也被拒绝 | **Implemented / 已解决（已测代码范围）**。服务端认证，不是仅前端登录。远程须HTTPS与Secure Cookie，不能把本地测试写成公网验收 |
+| PR-02 / P0 | 全局共享数据库，没有组织边界 | `access.py` 的服务端组织实例身份及双库绑定；部署契约见 `docs/PILOT_OPERATIONS.md` | A/B独立数据库实例：A会话在B返回401；B合法会话按A数据ID读取404；B案例/实验不出现A数据；混用历史库503；伪造tenant/role不授予权限 | **Implemented / 已选择独立实例方案**。同组织成员有意共享数据；不是共享多租户SaaS。不同组织的进程/数据库/域名/备份必须独立，真实部署隔离仍待验收 |
+| PR-04 / P1 | EUR等名义金额被计入USD | `src/analysis.py` | 100USD+99999EUR+空币种：成本合计100、有效成本1；非USD/空币种质量提示，退出阈值、图表和报告；原USD演示总额539830.75保持 | **Implemented / 已解决所证实错误**。不自动FX；无币种列时需导入者确认已转换USD，不推断真实货币 |
+| PR-09 / P1 | 显示等待却提交旧加急；评分设置变化后保存不同上下文 | `backend/schemas.py`、`main.py`；`web/.../decisions.tsx` | 浏览器取消加急后DOM/请求/SQLite均为等待、201；全部不可用禁保存；变更权重后旧比较保存409；重算后显示及保存分数88.1481一致，重复保存幂等 | **Implemented / 已解决复现路径**。比较指纹固定数据/日期/假设/配置上下文；案例保留操作者和上下文，不宣称完整不可变操作账本 |
+| PR-08 / P1 | 500条异常定义了可操作集合；1003案例只导出1000 | `main.py` 的 `/api/exceptions`；`src/history.py`；`store.py`；网页队列/历史 | 501条服务端分页全部找回；浏览器搜索第501条并比较；1003案例导出1003且唯一；offset1000返回3；数据集列表移除100条静默上限（存储配额另行明确） | **Implemented / 已解决所测截断**。工作区/质量500条仍为明确预览，不再定义决策候选全集；全历史CSV为本组织完整范围 |
+| PR-05 / P1（本轮约定范围） | 日期精度/UTC/重复快照规则未经确认 | `backend/import_contract.py`、上传preview/confirm API；网页上传对话框 | 相同文件/日期预览令牌及显式确认；内容变化409；日期-only/naive计数、重复行冲突和质量预览；同日15h、偏移等价、保留首行口径原数值测试保持 | **Implemented（契约与预览）/ 部分整体接入问题仍在**。不自动猜时区/EOD或最新事件；万能列名映射/GBK/分号/自动单位转换未实现，真实客户必须先人工标准化并核对 |
+| PR-03 / P1 | 总body、解析、求解和存储缺预算 | `boundary.py`、`src/ingestion.py`、`runtime.py`、`optimizer_worker.py`、配额检查 | 无Content-Length的21MiB分块也413；多文件部分拒绝；XLSX展开/压缩比、128列限制；求解并发429、模拟预算422；真实子进程缩短超时后被终止回收、504且不保存；配额507 | **Partially Implemented / 第一层边界已实现**。完整body/接收时间、频率、展开量、45s worker、共享求解槽和JSON/案例配额已测；解析CPU/RAM进程隔离、目标主机峰值/浸泡、入口连接预算仍待，不能作为任意公网负载已通过 |
+| PR-07 / P1 | 无删除、留存和产品级恢复工具 | 管理员DELETE接口及Settings；`scripts/maintain_data.py`、`verify_recovery.py` | 管理员删除源数据及关联web案例；demo拒删；离线留存清理；实际运行双库原生backup/校验/restore CLI成功，恢复158单/539830.75、案例/设置/实验；旧会话401，新登录通过 | **Partially Implemented / 离线机制已实现**。只支持确认停写后的恢复；不声称活跃双库原子快照、定时异地备份或生产RPO/RTO。需指定负责人执行/验证日常策略 |
+| PR-12 / P1 | Python公告未经处置；回退/测试依赖混入部署 | requirements分层；Streamlit1.66.1、Pillow13、pytest9.0.3、pip26.2.2 | pip-audit2.10.1复扫0条；npm生产扫描0；干净web-only venv导入API/三策略真实求解通过且无Streamlit/Pillow/pytest；AppTest与真实Streamlit浏览器通过 | **Implemented（本次依赖快照）**。详见依赖分诊；不等于无未知漏洞，Windows相关利用未执行。复用旧venv需升级原回退依赖，不能靠web清单排除就认为已卸载 |
+| PR-10 / P2 | 无独立DB就绪和请求/操作者关联 | `/api/ready`、请求ID、写操作元数据、案例actor | 无效数据库使workspace/ready503，health仍为liveness200；匿名不取得业务数据；5个原门槛之一真实PASS | **Partially Implemented**。基础就绪/关联已实现；不是集中告警、完整变更历史或不可变审计系统 |
+| PR-11 / P2 | 草稿/筛选丢失及窄屏溢出 | 保留现有页面与设计，加入必要最小宽度约束 | 28个宽度/页面组合，Overview360溢出关闭；Exceptions360与393仍为433px整页宽；未保存路由草稿仍为组件状态 | **Partially Implemented / 尚未全部解决**。浏览器主功能通过，不将矩阵执行完成称为28项体验全通过；下一阶段修窄屏和草稿/筛选恢复 |
+| PR-06 / P1（范围限制） | 网页V3仅生成模拟输入 | 未重写求解器或伪造客户候选报价 | 12/100/500订单、真实CP-SAT状态/约束/MC回归保留；网页输入及可靠性继续明确Synthetic | **Mock Only（输入）/ 真实效用Not Verified**。试点范围先限实际模板V1/V2人工分析；V3仅演示，不承诺客户真实订舱/预测或商业节省 |
+
+### 实际执行及结果
+
+环境：Linux / Python3.12.14 / Node24.19.0；完整依赖版本和命令见
+[verification.json](docs/hardening/verification.json)。所有变更/恢复/错误输入使用临时数据库，未修改用户实际数据。
+
+| 执行项目 | 实际结果 |
+| --- | --- |
+| 安装 `requirements-dev.txt`，升级pip26.2.2 | 成功；最初Streamlit1.54/Pillow13组合解析冲突，未强制安装，改用兼容1.66.1组合 |
+| `python -m pytest -q --junitxml=artifacts/hardening/pytest.xml` | **288 passed，0 failed，0 skipped，0 XFAIL，119.52s**；[全部用例记录](docs/hardening/pytest_results.json) |
+| 原5个发布门槛 | **5 PASS**：匿名读取、匿名写设置、无关会话拒读、币种提示/拒绝、DB就绪失败；断言没有改成接受200或删质量检查 |
+| `npm run typecheck`、`npm run build` | 通过，保留官网、8个应用路由及404页面壳；不是把业务改为静态展示 |
+| `python -m scripts.verify_hardening` | 通过原网页全流程及修复路径、真实API进程冷重启；[功能](docs/hardening/premium_regression.json)、[修复路径/矩阵](docs/hardening/browser.json)、[重启](docs/hardening/restart.json)；JS错误0；矩阵仍有上述2处P2溢出 |
+| `python -m scripts.verify_streamlit_compatibility` | 两组真实浏览器通过；[V2参数](docs/hardening/streamlit_parameters.json)、[V3](docs/hardening/streamlit_transport.json)；未以改AppTest协议替代真实功能验证 |
+| `python -m scripts.verify_recovery` | 实际CLI备份/恢复、重新登录及恢复后的业务查询通过；[证据](docs/hardening/backup_restore.json)；本次CLI合计约1.016s，仅小型合成离线库 |
+| 100/500/5000订单分析；100/500订单V3 | 全套中的数值/资源回归通过；分析用例约0.099/0.198/1.272s，V3用例约3.331/11.190s；这是本轮用例耗时含测试开销，不是独立性能SLA或改进幅度 |
+| 语法/模块、`pip check` | 通过；[干净web-only运行时](docs/hardening/clean_web_runtime.json)另验证无回退/测试依赖仍能导入及求解 |
+| Python/npm依赖扫描 | 各退出0、报告0已知公告；[分诊与边界](docs/hardening/DEPENDENCY_TRIAGE.md)、[pip](docs/hardening/pip_audit.json)、[npm](docs/hardening/npm_audit.json) |
+
+升级后的首次全套为277通过/5失败：4个测试使用的相对AppTest路径被新版解释到tests/app.py；
+另1个未提交表单的测试协议变化。改用绝对路径后，仍有3个表单协议用例失败。
+现保留原数值/上下文断言，在强制rerun后重新暂存同样的客户端草稿，再显式提交；实际浏览器独立通过。
+这些中间失败不是本轮最终结果，也没有用skip/xfail/放宽断言隐藏。
+
+### 受控试点放行前的剩余最小清单
+
+1. 独立组织实例与私有目录/备份、明确账号；部署HTTPS入口，开启`LOGISTICS_PILOT_MODE=1`、
+   Secure Cookie和精确Origin；验证端口/主机/请求预算及目标OS权限，避免启动公开Streamlit。
+2. 设定进程/容器CPU与RAM、入口连接限制，在目标主机测大文件和并发峰值；本轮不是渗透/破坏性压测。
+3. 指定备份及留存负责人，停止所有写入后演练恢复并测实际耗时；约定RPO/RTO及异地副本，不能只保留一份活跃库。
+4. 使用获授权的脱敏货运样本，人工确认USD、时区/午夜或EOD、快照重复规则和V2证据；
+   只放行审阅过的模板范围。不能用本轮合成测试替代客户业务验收。
+5. 目标设备复核；当前移动端Exceptions有溢出，未保存草稿/筛选也没有完整恢复。
+
+详细启动、角色、资源预算、删除、保留及恢复步骤见 [PILOT_OPERATIONS.md](docs/PILOT_OPERATIONS.md)
+和[中文运行指南](docs/WEB_RUN_ZH.md)。不新增V4、付费AI或真实承运商接口。
+
+---
+
+## 原始审计（2026-10-27，历史基线，以下未改写原始观察）
+
+以下原始“当前/未实现/未修复”均指被审计提交`69ca7e0`。它们用于对照修复前行为；当前状态以上方Sprint 1复验为准。
+
+
 审计日期：2026-10-27（Asia/Shanghai）
 
 被审计版本：`69ca7e0`，原分支 `feature/premium-web-redesign`

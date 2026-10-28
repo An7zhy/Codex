@@ -13,7 +13,18 @@ if not exist ".venv\Scripts\python.exe" (
   if errorlevel 1 goto failed
 )
 echo Installing Python web dependencies...
+.venv\Scripts\python.exe -m pip install --upgrade pip==26.2.2
+if errorlevel 1 goto failed
 .venv\Scripts\python.exe -m pip install -r requirements-web.txt
+if errorlevel 1 goto failed
+.venv\Scripts\python.exe -c "import importlib.util,sys; sys.exit(0 if importlib.util.find_spec('streamlit') else 1)"
+if not errorlevel 1 (
+  echo Updating the existing local Streamlit fallback security dependencies...
+  .venv\Scripts\python.exe -m pip install -r requirements.txt
+  if errorlevel 1 goto failed
+)
+echo Checking protected organization setup...
+.venv\Scripts\python.exe -m scripts.manage_access setup
 if errorlevel 1 goto failed
 pushd web
 echo Installing frontend dependencies...

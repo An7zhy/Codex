@@ -57,7 +57,7 @@ function PlatformPreview() {
         </div>
         {failed ? (
           <p className="muted">
-            Start the Python API to load the computed demo preview.
+            Sign in to the protected platform to explore the computed synthetic demo. No private workspace data is public.
           </p>
         ) : (
           <>

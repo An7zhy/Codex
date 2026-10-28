@@ -6,6 +6,7 @@ import json
 from pathlib import Path
 import sqlite3
 import uuid
+from fastapi import HTTPException
 
 import pandas as pd
 
@@ -48,9 +49,12 @@ class WorkspaceStore:
 
     def save_dataset(self, frame, name, synthetic, as_of, dataset_id=None):
         dataset_id = dataset_id or uuid.uuid4().hex
+        payload = frame.to_json(orient="split", date_format="iso")
         with self.connect() as db:
+            db.execute("BEGIN IMMEDIATE")
+            self.check_quota(db, len(payload.encode()), "web_datasets", 1000)
             db.execute("INSERT OR IGNORE INTO web_datasets VALUES (?,?,?,?,?,?)",
-                       (dataset_id, name, int(synthetic), as_of, frame.to_json(orient="split", date_format="iso"),
+                       (dataset_id, name, int(synthetic), as_of, payload,
                         datetime.now(timezone.utc).isoformat()))
         return dataset_id
 
@@ -67,7 +71,7 @@ class WorkspaceStore:
     def datasets(self):
         with self.connect() as db:
             return [dict(row) for row in db.execute(
-                "SELECT dataset_id,name,synthetic,as_of,created_at FROM web_datasets ORDER BY created_at DESC LIMIT 100")]
+                "SELECT dataset_id,name,synthetic,as_of,created_at FROM web_datasets ORDER BY created_at DESC")]
 
     def setting(self, key, fallback):
         with self.connect() as db:
@@ -82,8 +86,17 @@ class WorkspaceStore:
     def save_run(self, payload):
         run_id = uuid.uuid4().hex
         with self.connect() as db:
+            db.execute("BEGIN IMMEDIATE")
+            self.check_quota(db, len(payload.encode()), "web_runs", 200)
             db.execute("INSERT INTO web_runs VALUES (?,?,?)", (run_id, payload, datetime.now(timezone.utc).isoformat()))
         return run_id
+
+    @staticmethod
+    def check_quota(db, additional, table, limit):
+        sizes = db.execute("SELECT COALESCE(SUM(length(CAST(raw_json AS BLOB))),0) FROM web_datasets").fetchone()[0]
+        sizes += db.execute("SELECT COALESCE(SUM(length(CAST(payload_json AS BLOB))),0) FROM web_runs").fetchone()[0]
+        if sizes + additional > 256 * 1024 * 1024 or db.execute(f"SELECT COUNT(*) FROM {table}").fetchone()[0] >= limit:
+            raise HTTPException(507, "Workspace retention quota reached (1000 datasets / 200 runs / 256 MiB JSON). Ask an administrator to delete or expire records.")
 
     def run(self, run_id=None):
         with self.connect() as db:

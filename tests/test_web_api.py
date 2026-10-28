@@ -16,6 +16,10 @@ httpx = pytest.importorskip("httpx")
 pytest.importorskip("fastapi")
 
 from backend.main import app
+from backend.access import AccessStore, COOKIE
+from backend.import_contract import confirmation
+import secrets
+from datetime import datetime, timezone
 from backend.store import WorkspaceStore
 from src.decisions import default_assumptions
 from src.demo import generate_demo_data, demo_xlsx_bytes
@@ -27,15 +31,33 @@ def client(tmp_path, monkeypatch):
     monkeypatch.setenv("LOGISTICS_WEB_DB_PATH", str(tmp_path / "web.sqlite3"))
     monkeypatch.setenv("LOGISTICS_DB_PATH", str(tmp_path / "cases.sqlite3"))
 
+    monkeypatch.setenv("LOGISTICS_ALLOWED_ORIGINS", "http://test")
+    access = AccessStore()
+    access.provision("Regression test organization")
+    password = secrets.token_urlsafe(24)
+    access.set_user("regression", password, "admin")
+    token = access.login("regression", password)
+
     class Client:
         def request(self, method, url, **kwargs):
             async def send():
-                async with httpx.AsyncClient(transport=httpx.ASGITransport(app=app), base_url="http://test") as session:
+                async with httpx.AsyncClient(transport=httpx.ASGITransport(app=app), base_url="http://test", cookies={COOKIE: token}, headers={"Origin": "http://test"}) as session:
                     return await session.request(method, url, **kwargs)
             return asyncio.run(send())
 
         def get(self, url, **kwargs): return self.request("GET", url, **kwargs)
-        def post(self, url, **kwargs): return self.request("POST", url, **kwargs)
+        def post(self, url, **kwargs):
+            # Existing numerical regressions now exercise the authenticated,
+            # confirmed-import and pinned-comparison contracts.
+            if url == "/api/datasets" and "files" in kwargs:
+                fields = kwargs.setdefault("data", {})
+                day = fields.get("as_of", str(datetime.now(timezone.utc).date()))
+                fields["confirmed"] = confirmation(kwargs["files"]["file"][1], day)
+            if url == "/api/cases" and "comparison_token" not in kwargs.get("json", {}):
+                payload = kwargs["json"]
+                compare = self.request("POST", "/api/decisions/compare", json={key: payload[key] for key in ("dataset_id", "as_of", "shipment_id", "assumptions")})
+                payload["comparison_token"] = compare.json()["comparison_token"]
+            return self.request("POST", url, **kwargs)
         def put(self, url, **kwargs): return self.request("PUT", url, **kwargs)
         def patch(self, url, **kwargs): return self.request("PATCH", url, **kwargs)
     return Client()

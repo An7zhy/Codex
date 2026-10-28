@@ -47,6 +47,7 @@ class DecisionRequest(StrictBody):
 
 
 class SaveCaseRequest(DecisionRequest):
+    comparison_token: str = Field(min_length=64, max_length=64)
     selected_action: str
     exception_type: str = Field(min_length=1, max_length=500)
     resolution_notes: str = Field(default="", max_length=4000)

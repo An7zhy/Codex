@@ -125,10 +125,17 @@ def analyze_shipments(raw: pd.DataFrame, as_of: date | str) -> AnalysisResult:
     cost_text = cost_text.where(~thousands, cost_text.str.replace(",", "", regex=False))
     cost = pd.to_numeric(cost_text, errors="coerce").astype("float64")
     finite = cost.map(math.isfinite).astype(bool)
-    frame["valid_cost"] = finite & cost.ge(0) & cost.le(MAX_SHIPPING_COST)
+    numeric_cost_valid = finite & cost.ge(0) & cost.le(MAX_SHIPPING_COST)
+    currency_columns = [name for name in ("currency", "shipping_currency", "cost_currency") if name in original]
+    currency_valid = pd.Series(True, index=frame.index)
+    for column in currency_columns:
+        currency_valid &= _text(original[column]).str.upper().eq("USD")
+        add(~_text(original[column]).str.upper().eq("USD"), column, "unsupported_currency",
+            "Currency must be explicitly USD. This cost is excluded; no FX conversion is performed.")
+    frame["valid_cost"] = numeric_cost_valid & currency_valid
     frame["shipping_cost"] = cost.where(frame["valid_cost"])
     add(_text(original["shipping_cost"]).eq(""), "shipping_cost", "missing_cost", "Missing cost; excluded from cost metrics.")
-    add(_text(original["shipping_cost"]).ne("") & ~frame["valid_cost"], "shipping_cost", "invalid_cost", f"Cost must be a finite USD number between 0 and {MAX_SHIPPING_COST:,} (technical safety limit).")
+    add(_text(original["shipping_cost"]).ne("") & ~numeric_cost_valid, "shipping_cost", "invalid_cost", f"Cost must be a finite USD number between 0 and {MAX_SHIPPING_COST:,} (technical safety limit).")
 
     plan_valid = frame["planned_delivery"].notna() & ~planned_before_shipping & ~invalid_shipping
     frame["is_delivered"] = (

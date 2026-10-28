@@ -11,7 +11,7 @@ import {
 } from "react";
 import { CheckCircle2, X } from "lucide-react";
 import { api } from "@/lib/utils";
-import type { Dataset, Workspace } from "@/lib/types";
+import type { Dataset, Workspace, Shipment } from "@/lib/types";
 import { ErrorState, LoadingState } from "@/components/ui/primitives";
 import { Button } from "@/components/ui/button";
 
@@ -188,6 +188,25 @@ export function useWorkspace() {
   const context = useContext(Context);
   if (!context) throw new Error("Workspace provider is required.");
   return context;
+}
+export function useExceptionQueue(page: number, actionable = false, search = "", limit = 20) {
+  const { query, data } = useWorkspace();
+  const [queue, setQueue] = useState<{ items: Shipment[]; total: number }>({ items: [], total: 0 });
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+  useEffect(() => {
+    const controller = new AbortController();
+    const params = new URLSearchParams(query);
+    params.set("offset", String(page * limit)); params.set("limit", String(limit));
+    params.set("actionable_only", String(actionable));
+    if (search) params.set("q", search);
+    setLoading(true); setError("");
+    api<typeof queue>(`/exceptions?${params}`, { signal: controller.signal }).then(setQueue)
+      .catch((err) => { if (err.name !== "AbortError") setError(err.message); })
+      .finally(() => { if (!controller.signal.aborted) setLoading(false); });
+    return () => controller.abort();
+  }, [query, page, actionable, search, limit, data]); // refreshed settings also refresh the queue
+  return { ...queue, error, loading };
 }
 export function WorkspaceBoundary({ children }: { children: ReactNode }) {
   const { loading, error, data, refresh, datasets, selectDataset } =

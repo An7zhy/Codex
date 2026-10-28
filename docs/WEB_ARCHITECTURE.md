@@ -66,7 +66,7 @@ Interactive request schemas are served by FastAPI at `/docs` on port 8000.
 The API analyzes the full input before filtering, retaining original cost thresholds.
 Metrics, charts and exports use the same selection; pagination only limits displayed
 shipment rows. The UI requests 20 rows; the API accepts at most 500 per page.
-Exception/quality previews are capped at 500; the full selection is exported.
+Workspace summary/quality previews are capped at 500. /api/exceptions provides server pagination and ID filtering for the full queue; case CSV export is complete.
 
 The upload contract is the original V1 contract, with its 20 MB/100,000-row limits
 and field-level quarantine rules. A file without required columns is rejected;
@@ -89,9 +89,9 @@ unverified and never automatically declared real or synthetic.
   the server. Repeated identical saves reuse a content-derived submission key.
 - Updates include expected_version. Conflicting updates return HTTP409.
 
-This is one trusted local workspace, not a multi-tenant authenticated service.
-The API binds loopback by default and no permissive cross-origin access is added.
-Public hosting needs separate authentication, tenancy, retention and deployment work.
+This is one authenticated organization per independent instance, not shared multi-tenant SaaS.
+`backend/access.py` hashes passwords and opaque sessions, binds both DBs to a server-side instance identity, and enforces viewer/operator/admin roles through the ASGI boundary. No client tenant field grants access. Unsafe requests require an allowlisted Origin; all business APIs/downloads require authentication.
+See [pilot operations](PILOT_OPERATIONS.md) for offline provisioning, body/solver/storage budgets, retention, backup/restore and HTTPS requirements. Streamlit is disabled when LOGISTICS_PILOT_MODE=1. Public deployment is not validated.
 
 ## V3 assumptions and limits
 

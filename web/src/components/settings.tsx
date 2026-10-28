@@ -14,6 +14,7 @@ import {
 import { useWorkspace } from "@/components/workspace-provider";
 import { api, jsonBody, percent } from "@/lib/utils";
 import type { PriorityConfig } from "@/lib/types";
+import { useAccess } from "@/components/access";
 
 type SettingsResponse = {
   priority: PriorityConfig;
@@ -27,7 +28,9 @@ const labels: Record<string, string> = {
   downstream: "Downstream disruption",
 };
 export function Settings() {
-  const { refresh, notify, data } = useWorkspace();
+  const user = useAccess();
+  const { refresh, notify, data, datasetId, datasets, selectDataset } = useWorkspace();
+  const [deleteConfirmation, setDeleteConfirmation] = useState("");
   const [settings, setSettings] = useState<SettingsResponse | null>(null),
     [draft, setDraft] = useState<PriorityConfig | null>(null);
   const [busy, setBusy] = useState(false),
@@ -180,7 +183,7 @@ export function Settings() {
                   Draft edits are applied only after saving. Settings persist in
                   local SQLite.
                 </p>
-                <Button type="submit" disabled={busy}>
+                <Button type="submit" disabled={busy || user?.role !== "admin"}>
                   <Save size={13} />
                   <BusyLabel busy={busy}>Apply priority settings</BusyLabel>
                 </Button>
@@ -229,7 +232,7 @@ export function Settings() {
                 </p>
                 <p className="muted small mt-4">
                   The built-in datasets are synthetic. Uploaded provenance is
-                  not verified. There is no authentication, real carrier
+                  not verified. This is one protected organization instance with server-enforced roles. There is no real carrier
                   connection, paid API requirement or claim of commercial
                   effectiveness.
                 </p>
@@ -242,6 +245,15 @@ export function Settings() {
               </div>
             </Panel>
           </div>
+          {user?.role === "admin" && datasetId !== "demo" && <Panel title="Delete this uploaded dataset" subtitle="Removes source rows and linked web decision cases. This action does not remove separate backups; apply the backup retention policy.">
+            <div className="panel-body"><Field label="Type DELETE to confirm dataset removal"><input className="input" value={deleteConfirmation} onChange={(e) => setDeleteConfirmation(e.target.value)} /></Field>
+              <Button variant="outline" disabled={busy || deleteConfirmation !== "DELETE"} onClick={async () => {
+                setBusy(true); setError("");
+                try { await api(`/datasets/${datasetId}`, { method: "DELETE" }); setDeleteConfirmation("");
+                  const demo = datasets.find((item) => item.dataset_id === "demo"); if (demo) selectDataset(demo); refresh(); notify("Dataset and linked web cases deleted.");
+                } catch (err) { setError((err as Error).message); } finally { setBusy(false); }
+              }}>Delete dataset and linked cases</Button>
+            </div></Panel>}
           {data && (
             <Panel
               title="KPI definitions"

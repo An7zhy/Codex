@@ -22,10 +22,12 @@ import {
 } from "@/components/ui/primitives";
 import {
   WorkspaceBoundary,
+  useExceptionQueue,
   useWorkspace,
 } from "@/components/workspace-provider";
 import { api, jsonBody, money, num } from "@/lib/utils";
 import type { Assumption, CaseRecord, DecisionResult } from "@/lib/types";
+import { useAccess } from "@/components/access";
 
 export function DecisionNav({ history = false }: { history?: boolean }) {
   return (
@@ -45,8 +47,11 @@ type ScenarioState = {
   result: DecisionResult | null;
 };
 export function Decisions() {
+  const user = useAccess();
   const { data, datasetId, asOf, notify } = useWorkspace();
   const params = useSearchParams();
+  const [queuePage, setQueuePage] = useState(0), [search, setSearch] = useState(params.get("shipment") ?? "");
+  const queue = useExceptionQueue(queuePage, true, search, 50);
   const [defaults, setDefaults] = useState<Assumption[]>([]),
     [selected, setSelected] = useState("");
   const [states, setStates] = useState<Record<string, ScenarioState>>({});
@@ -56,7 +61,7 @@ export function Decisions() {
   const [action, setAction] = useState(""),
     [exceptionType, setExceptionType] = useState(""),
     [notes, setNotes] = useState("");
-  const active = data?.exceptions.filter((row) => row.actionable) ?? [];
+  const active = queue.items;
   useEffect(() => {
     api<Assumption[]>("/decisions/defaults")
       .then(setDefaults)
@@ -64,7 +69,7 @@ export function Decisions() {
   }, []);
   useEffect(() => {
     if (!data) return;
-    const available = data.exceptions.filter((row) => row.actionable);
+    const available = queue.items;
     const requested = params.get("shipment");
     setSelected((old) =>
       available.some((row) => row.shipment_id === old)
@@ -74,7 +79,7 @@ export function Decisions() {
           available[0]?.shipment_id ??
           ""),
     );
-  }, [data, params]);
+  }, [data, params, queue.items]);
   const row = active.find((item) => item.shipment_id === selected);
   const key = `${datasetId}:${asOf}:${selected}`;
   const current: ScenarioState = states[key] ?? {
@@ -89,7 +94,7 @@ export function Decisions() {
     setAction("");
   }, [selected, datasetId, asOf]); // eslint-disable-line
   const appliedAction =
-    action ||
+    (current.result?.comparison.some((item) => item.action === action && item.assumed_available) ? action : "") ||
     current.result?.comparison.find((item) => item.assumed_available)?.action ||
     "";
   function edit(
@@ -153,6 +158,7 @@ export function Decisions() {
           as_of: asOf,
           shipment_id: selected,
           assumptions: current.applied,
+          comparison_token: current.result.comparison_token,
           selected_action: appliedAction,
           exception_type: exceptionType,
           resolution_notes: notes,
@@ -183,6 +189,13 @@ export function Decisions() {
         }
       />
       <DecisionNav />
+      <div className="filters">
+        <input aria-label="Find active exception ID" className="input" placeholder="Search all active shipment IDs" value={search} onChange={(e) => { setSearch(e.target.value); setQueuePage(0); }} />
+        <Button variant="outline" disabled={!queuePage || queue.loading} onClick={() => setQueuePage((v) => v - 1)}>Previous active page</Button>
+        <span>{queue.total} active exceptions · page {queuePage + 1}</span>
+        <Button variant="outline" disabled={(queuePage + 1) * 50 >= queue.total || queue.loading} onClick={() => setQueuePage((v) => v + 1)}>Next active page</Button>
+      </div>
+      {queue.error && <ErrorState message={queue.error} />}
       <WorkspaceBoundary>
         {data && (
           <>
@@ -218,11 +231,11 @@ export function Decisions() {
                       <div className="explanation-block">
                         <h3>
                           {row.shipment_id}{" "}
-                          <StatusBadge value={row.priority_level} />
+                          <StatusBadge value={current.result?.priority_level ?? row.priority_level} />
                         </h3>
                         <p>
-                          Priority score: {num(row.priority_score, 4)}.{" "}
-                          {row.explanation}
+                          Priority score: {num(current.result ? current.result.priority_score : row.priority_score, 4)}.{" "}
+                          {current.result?.explanation ?? row.explanation}
                         </p>
                         {row.missing_information && (
                           <p>
@@ -397,7 +410,7 @@ export function Decisions() {
                           </p>
                           <Button
                             type="submit"
-                            disabled={saving || !appliedAction}
+                            disabled={saving || !appliedAction || user?.role === "viewer"}
                           >
                             <Save size={14} />
                             <BusyLabel busy={saving}>Save decision</BusyLabel>
@@ -504,12 +517,14 @@ function HistoryTable({
   );
 }
 export function HandlingHistory() {
+  const user = useAccess();
   const { notify } = useWorkspace();
   const [rows, setRows] = useState<CaseRecord[]>([]),
     [error, setError] = useState(""),
     [busy, setBusy] = useState(false);
   const [filter, setFilter] = useState(""),
     [shipment, setShipment] = useState("");
+  const [page, setPage] = useState(0);
   const [selected, setSelected] = useState<CaseRecord | null>(null),
     [actualCost, setActualCost] = useState(""),
     [actualDelay, setActualDelay] = useState("");
@@ -521,7 +536,7 @@ export function HandlingHistory() {
     try {
       setRows(
         await api<CaseRecord[]>(
-          `/cases?${new URLSearchParams({ resolution_status: filter, shipment_id: shipment })}`,
+          `/cases?${new URLSearchParams({ resolution_status: filter, shipment_id: shipment, offset: String(page * 200), limit: "200" })}`,
         ),
       );
     } catch (err) {
@@ -532,7 +547,7 @@ export function HandlingHistory() {
   }
   useEffect(() => {
     void load();
-  }, [filter]); // exact text filter is explicitly applied below
+  }, [filter, page]); // exact text filter is explicitly applied below
   function select(row: CaseRecord) {
     setSelected(row);
     setStatus(row.resolution_status);
@@ -612,10 +627,10 @@ export function HandlingHistory() {
       {error && <ErrorState message={error} retry={load} />}
       <Panel
         title="Saved decisions"
-        subtitle="Local SQLite persists across page refreshes and service restarts. Showing up to 200 matching cases."
+        subtitle={`Persistent SQLite history. Page ${page + 1} (up to 200 records); CSV exports the complete organization history.`}
       >
         {rows.length ? (
-          <HistoryTable rows={rows} select={select} />
+          <HistoryTable rows={rows} select={user?.role === "viewer" ? undefined : select} />
         ) : (
           <EmptyState
             title={busy ? "Loading local cases" : "No saved cases match"}
@@ -623,6 +638,8 @@ export function HandlingHistory() {
           />
         )}
       </Panel>
+      <div className="form-actions"><Button variant="outline" disabled={busy || !page} onClick={() => setPage((v) => v - 1)}>Previous history page</Button>
+        <Button variant="outline" disabled={busy || rows.length < 200} onClick={() => setPage((v) => v + 1)}>Next history page</Button></div>
       {selected && (
         <Panel
           className="mt-5"

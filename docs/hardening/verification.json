@@ -1,0 +1,161 @@
+{
+  "date_asia_shanghai": "2026-10-28",
+  "branch": "fix/mvp-hardening-sprint-1",
+  "baseline_commit": "636d18041fabbf5c4d7c15f582d4ff63287cc08b",
+  "environment": {
+    "python": "3.12.14",
+    "platform": "Linux-6.18.55-x86_64-with-glibc2.41",
+    "node": "v24.19.0",
+    "packages": {
+      "streamlit": "1.66.1",
+      "pillow": "13.0.0",
+      "pytest": "9.0.3",
+      "pip": "26.2.2",
+      "fastapi": "0.162.0",
+      "ortools": "9.15.6755"
+    }
+  },
+  "commands": [
+    {
+      "command": "python -m pip install --upgrade pip==26.2.2; python -m pip install -r requirements-dev.txt",
+      "exit_code": 0
+    },
+    {
+      "command": "python -m pytest -q --junitxml=artifacts/hardening/pytest.xml",
+      "exit_code": 0,
+      "passed": 288,
+      "failed": 0,
+      "skipped": 0,
+      "xfailed": 0,
+      "elapsed_seconds": 119.52
+    },
+    {
+      "command": "npm run typecheck; npm run build (web/)",
+      "exit_code": 0
+    },
+    {
+      "command": "python -m scripts.verify_hardening",
+      "exit_code": 0,
+      "evidence": [
+        "premium_regression.json",
+        "browser.json",
+        "restart.json"
+      ]
+    },
+    {
+      "command": "python -m scripts.verify_streamlit_compatibility",
+      "exit_code": 0,
+      "evidence": [
+        "streamlit_parameters.json",
+        "streamlit_transport.json"
+      ]
+    },
+    {
+      "command": "python -m scripts.verify_recovery",
+      "exit_code": 0,
+      "evidence": [
+        "backup_restore.json"
+      ]
+    },
+    {
+      "command": "python -m compileall -q app.py src backend tests scripts",
+      "exit_code": 0
+    },
+    {
+      "command": "python -m pip check",
+      "exit_code": 0
+    },
+    {
+      "command": "pip-audit --path <project venv>/lib/python3.12/site-packages --progress-spinner off --cache-dir /tmp/logistics-hardening-pip-audit-cache --timeout 12 --format json --output docs/hardening/pip_audit.json",
+      "tool_version": "2.10.1",
+      "exit_code": 0,
+      "advisory_records": 0
+    },
+    {
+      "command": "npm audit --omit=dev --json --fetch-timeout=20000 --fetch-retries=0",
+      "exit_code": 0,
+      "known_vulnerabilities": 0
+    }
+  ],
+  "former_xfail_gates": [
+    {
+      "classname": "tests.test_production_readiness",
+      "name": "test_release_gate_sensitive_dataset_list_requires_authentication",
+      "time": "0.224",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_production_readiness",
+      "name": "test_release_gate_configuration_write_requires_authentication",
+      "time": "0.249",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_production_readiness",
+      "name": "test_release_gate_unrelated_session_cannot_read_dataset",
+      "time": "0.552",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_production_readiness",
+      "name": "test_release_gate_conflicting_currency_must_be_rejected_or_flagged",
+      "time": "0.412",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_production_readiness",
+      "name": "test_release_gate_readiness_detects_unavailable_database",
+      "time": "0.247",
+      "status": "passed"
+    }
+  ],
+  "workload_test_timings": [
+    {
+      "classname": "tests.test_audit_workloads",
+      "name": "test_requested_workload_sizes_match_independent_expected_counts[100]",
+      "time": "0.099",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_audit_workloads",
+      "name": "test_requested_workload_sizes_match_independent_expected_counts[500]",
+      "time": "0.198",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_audit_workloads",
+      "name": "test_requested_workload_sizes_match_independent_expected_counts[5000]",
+      "time": "1.272",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_transport_experiments",
+      "name": "test_required_workloads_remain_feasible_and_respect_capacities[100]",
+      "time": "3.331",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_transport_experiments",
+      "name": "test_required_workloads_remain_feasible_and_respect_capacities[500]",
+      "time": "11.190",
+      "status": "passed"
+    }
+  ],
+  "responsive_matrix_cases": 28,
+  "responsive_overflows": [
+    {
+      "route": "/app/exceptions",
+      "viewport": 360,
+      "document": 433,
+      "overflow": true
+    },
+    {
+      "route": "/app/exceptions",
+      "viewport": 393,
+      "document": 433,
+      "overflow": true
+    }
+  ],
+  "user_databases_touched": false,
+  "remaining_scope": "Remote TLS/ingress/ACL/production workload and consented real business sample acceptance are not verified. V3 is synthetic only. Parser OS CPU/RAM isolation and automatic maintenance are not implemented."
+}

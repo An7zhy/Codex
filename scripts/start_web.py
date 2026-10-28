@@ -43,6 +43,7 @@ class WebServers:
         self.port, self.dev = port, dev
         self.environment = dict(os.environ, **(environment or {}))
         self.environment["NEXT_TELEMETRY_DISABLED"] = "1"
+        self.environment.setdefault("LOGISTICS_ALLOWED_ORIGINS", f"http://127.0.0.1:{port},http://localhost:{port}")
         self.log = log
         self.api = self.frontend = None
 

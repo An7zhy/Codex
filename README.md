@@ -1,8 +1,9 @@
 # Logistics Insight AI
 
 Current deployment assessment: see [PRODUCTION_READINESS_AUDIT.md](PRODUCTION_READINESS_AUDIT.md).
-The connected local prototype has passing functional checks, but public real-data
-use is blocked by missing access control/isolation and the documented P1 gaps.
+Sprint 1 adds server-enforced authentication and roles for one organization per
+independent instance, import confirmation and decision consistency checks. Remote
+pilot deployment still needs the environment and business sign-off in the audit.
 
 A **Lightweight, Explainable Logistics Exception Decision Copilot for Small
 Freight Forwarders**. Identify exceptions, prioritize cases with sufficient
@@ -10,15 +11,25 @@ information, compare hypothetical interventions and record handling outcomes.
 Built as a transport/logistics student portfolio project with Python 3.12,
 Streamlit, pandas, Plotly and local SQLite.
 
+## MVP hardening Sprint 1
+
+On `fix/mvp-hardening-sprint-1`: **288 tests passed**, including all five former
+release gates; production web build, authenticated browser flows, real Streamlit
+forms and offline recovery checks passed. [Actual evidence](docs/hardening/verification.json)
+and [pilot operations](docs/PILOT_OPERATIONS.md) distinguish implemented controls
+from pending TLS/host/resource/real-data acceptance. This is not public production
+approval or a claim of verified optimization benefit.
+
 ## Premium website and application
 
-The **`feature/premium-web-redesign`** branch adds an original dark enterprise
+The **`fix/mvp-hardening-sprint-1`** branch hardens the premium web implementation on
+`feature/premium-web-redesign`. The latter branch originally added an original dark enterprise
 website and a connected Next.js application. The stable V3 source is preserved
 at Git tag **`stable/v3-before-premium-web`** (`35ba988`); Streamlit remains a
 working fallback. Download this feature branch to obtain the new `web/` folder.
 
 - **`/`**: original marketing site with an SVG routing lens, locally bundled
-  typography, reduced-motion behavior and an API-computed synthetic demo preview.
+  typography, reduced-motion behavior and a protected API-computed synthetic preview after sign-in.
 - **`/app`**: operational dashboard using the existing V1 Python calculations.
 - **`/app/shipments`**: persisted CSV/Excel uploads, server filters, pagination,
   source-quality review and full-selection CSV export.
@@ -41,12 +52,12 @@ Python API. No KPI growth rates, customer logos or live carrier claims are inven
 ### Start the new website
 
 Prerequisites: **Node.js 24 LTS** (includes npm), **Python 3.12 recommended**, and
-internet for the first dependency installation. No paid API, key or account is needed.
+internet for the first dependency installation. No paid API or commercial account is needed. Create an invited local account below.
 After installation the demo works locally without third-party data services.
 
 On Windows, install Node.js, reopen your terminal, and double-click **`start-web.bat`**.
 This intentionally runs the launcher: it creates `.venv` if needed, installs
-`requirements-web.txt`, runs `npm ci`/`npm run build` and opens the homepage. It
+`requirements-web.txt`, prompts for first-run organization/admin setup, runs `npm ci`/`npm run build` and opens the homepage. It
 uses the `py` launcher rather than relying on Windows' potentially ambiguous
 `python` alias. Review errors in the terminal if installation fails.
 
@@ -54,7 +65,9 @@ Alternatively, Windows PowerShell, from the folder containing this README:
 
 ```powershell
 py -3.12 -m venv .venv
+.\.venv\Scripts\python.exe -m pip install --upgrade pip==26.2.2
 .\.venv\Scripts\python.exe -m pip install -r requirements-web.txt
+.\.venv\Scripts\python.exe -m scripts.manage_access setup
 cd web
 npm.cmd ci
 npm.cmd run build
@@ -67,7 +80,9 @@ macOS/Linux:
 ```bash
 python3.12 -m venv .venv
 source .venv/bin/activate
+python -m pip install --upgrade pip==26.2.2
 python -m pip install -r requirements-web.txt
+python -m scripts.manage_access setup
 cd web
 npm ci
 npm run build
@@ -75,7 +90,7 @@ cd ..
 python -m scripts.start_web
 ```
 
-Open **http://127.0.0.1:3000** for the website, then click **Launch platform**.
+Open **http://127.0.0.1:3000** for the website, then click **Launch platform** and sign in with the account you created.
 The launcher starts FastAPI at `127.0.0.1:8000` and Next at `127.0.0.1:3000`.
 Keep its terminal open; **Ctrl+C** stops both child process trees. If 3000 is
 occupied, stop your old server or use `python -m scripts.start_web --port 3100`.
@@ -83,8 +98,8 @@ Port 8000 must remain available. Do not mistake Streamlit's port 8501 for this w
 
 For development, use `python -m scripts.start_web --dev` after dependency
 installation. For separate terminals, run `python -m uvicorn backend.main:app
---host 127.0.0.1 --port 8000`, then `npm run dev` from `web/`. Interactive API
-documentation is at `http://127.0.0.1:8000/docs`.
+--host 127.0.0.1 --port 8000`, then `npm run dev` from `web/`. Public OpenAPI/docs routes are disabled. Business endpoints enforce the same
+server session and roles even when called directly on port 8000.
 
 The original interface still starts with **`python -m streamlit run app.py`**.
 It only needs `requirements.txt`; the new web dependencies are isolated in
@@ -108,10 +123,15 @@ explicitly synthetic planning scenario; it never treats V1 uploads as complete
 candidate/capacity inputs. No uploaded real data is silently invented or enriched.
 
 Exports include the complete filtered selection even when a table is paginated
-or capped. The exception/quality view displays up to 500 records; batch assignments
+or capped. The workspace summary/quality preview shows up to 500 records. Exception handling
+uses a separate server-paginated queue and ID search; history CSV exports all cases; batch assignments
 and simulation details display up to 100, with full outputs available via CSV/JSON.
 Unchanged decision saves reuse an existing case, and updates require the current
-version. Saving uses **applied assumptions**, not unapplied draft edits.
+version. Saving uses **applied assumptions** and a comparison context token;
+changed scoring/dataset context returns 409 until recomparison. New uploads first
+preview the exact UTC/midnight, first-occurrence duplicate and USD rules and require
+explicit confirmation. Non-USD/blank currency metadata excludes that row from cost
+metrics; no exchange rates are guessed. See [pilot operations](docs/PILOT_OPERATIONS.md).
 
 See [the Chinese startup guide](docs/WEB_RUN_ZH.md),
 [web validation report](WEB_TEST_REPORT.md),
@@ -489,8 +509,9 @@ The generator intentionally overwrites those named demo files, not uploads.
   beyond case and whitespace may form different groups.
 - Streamlit analyzes uploads in memory; the premium web workspace also persists
   uploads, settings and experiments in a separate local SQLite database.
-  Both interfaces use the original saved case history. There is no authentication,
-  scheduling, live tracking or production deployment configuration.
+  Both interfaces use the original saved case history. The web API enforces
+  authentication/roles; Streamlit remains local-only and is disabled in pilot mode.
+  Scheduled maintenance, live tracking and validated public deployment are not provided.
 - Only the first Excel worksheet and UTF-8 comma-separated CSVs are read. Badly
   structured CSV records, password-protected/corrupt workbooks or a missing schema
   need correction before upload; ordinary invalid field values are reviewable.

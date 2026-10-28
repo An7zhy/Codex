@@ -10,8 +10,9 @@ import re
 from playwright.sync_api import expect, sync_playwright
 
 ROOT = Path(__file__).resolve().parents[1]
-OUTPUT = ROOT / "artifacts/premium-browser"
-SCREENSHOTS = ROOT / "docs/images/premium"
+OUTPUT = Path(os.environ.get("BROWSER_OUTPUT_DIR", str(ROOT / "artifacts/premium-browser")))
+SCREENSHOTS = Path(os.environ.get("BROWSER_SCREENSHOT_DIR", str(ROOT / "docs/images/premium")))
+EVIDENCE = Path(os.environ.get("BROWSER_EVIDENCE_PATH", str(ROOT / "docs/premium_browser_evidence.json")))
 BASE = os.environ.get("APP_BASE_URL", "http://127.0.0.1:3000")
 
 
@@ -27,7 +28,7 @@ def download(page, name, filename):
 def navigate(page, label, path):
     page.get_by_role("navigation", name="Platform navigation", exact=True).locator(f'a[href="{path}"]').click()
     expect(page).to_have_url(BASE + path)
-    expect(page.locator("h1")).to_be_visible()
+    expect(page.locator("h1").first).to_be_visible()
 
 
 def solve(page):
@@ -64,9 +65,14 @@ def main():
             expect(page.get_by_role("link", name="Skip to content", exact=True)).to_be_focused()
             page.get_by_role("link", name="Launch platform", exact=True).first.click()
             expect(page).to_have_url(BASE + "/app")
+            expect(page.get_by_role("heading", name="Organization sign in")).to_be_visible()
+            page.get_by_label("Account name").fill(os.environ["BROWSER_TEST_USERNAME"])
+            page.get_by_label("Password", exact=True).fill(os.environ["BROWSER_TEST_PASSWORD"])
+            page.get_by_role("button", name="Sign in", exact=True).click()
             expect(page.get_by_text("47.8%", exact=True)).to_be_visible()
             expect(page.locator(".kpi").first).to_contain_text("158")
             page.screenshot(path=str(SCREENSHOTS / "overview-desktop.png"))
+            cookies = page.context.cookies()
             report = download(page, "English report", "operations-report.md")
             assert "Executive Summary" in report and "Synthetic Demo Data" in report
             evidence["checks"].append("Original landing, working launch, calculated default KPIs, English report and reduced-motion fallback")
@@ -184,8 +190,11 @@ def main():
                 dialog = page.get_by_role("dialog")
                 dialog.locator('input[type=file]').set_input_files(str(ROOT / "data" / filename))
                 dialog.get_by_label("Analysis date (UTC)").fill("2026-10-01")
+                dialog.get_by_role("button", name="Preview import", exact=True).click()
+                expect(dialog.get_by_label("Import preview")).to_be_visible()
+                dialog.get_by_role("checkbox").check()
                 with page.expect_response(lambda response: response.url.endswith("/api/datasets") and response.request.method == "POST") as uploaded:
-                    dialog.get_by_role("button", name="Upload and analyze", exact=True).click()
+                    dialog.get_by_role("button", name="Confirm import", exact=True).click()
                 dataset_id = uploaded.value.json()["dataset_id"]
                 expect(dialog).not_to_be_visible()
                 navigate(page, "Overview", "/app")
@@ -196,7 +205,7 @@ def main():
             page.get_by_role("button", name="Upload data", exact=True).click()
             dialog = page.get_by_role("dialog")
             dialog.locator('input[type=file]').set_input_files({"name": "bad.csv", "mimeType": "text/csv", "buffer": b"wrong,columns\n1,2\n"})
-            dialog.get_by_role("button", name="Upload and analyze", exact=True).click()
+            dialog.get_by_role("button", name="Preview import", exact=True).click()
             expect(dialog.get_by_role("alert")).to_contain_text("Missing required columns")
             dialog.get_by_role("button", name="Close upload").click()
             page.get_by_label("Active dataset").select_option("demo")
@@ -211,6 +220,7 @@ def main():
             assert not errors, errors
 
             mobile = browser.new_page(viewport={"width": 393, "height": 852}, reduced_motion="reduce", is_mobile=True, has_touch=True)
+            mobile.context.add_cookies(cookies)
             mobile.on("pageerror", lambda error: errors.append(str(error)))
             mobile.goto(BASE, wait_until="networkidle")
             assert mobile.evaluate("document.documentElement.scrollWidth <= innerWidth")
@@ -232,6 +242,7 @@ def main():
 
             # Loading and API-error states are exercised without taking the real API down.
             isolated = browser.new_page(viewport={"width": 1200, "height": 850})
+            isolated.context.add_cookies(cookies)
             isolated.on("pageerror", lambda error: errors.append(str(error)))
             isolated.route("**/api/workspace?*", lambda route: route.fulfill(status=503, content_type="application/json", body='{"detail":"Test API temporarily unavailable"}'))
             isolated.goto(BASE + "/app", wait_until="networkidle")
@@ -239,6 +250,7 @@ def main():
             expect(isolated.get_by_role("button", name="Try again", exact=True)).to_be_visible()
             evidence["checks"].append("API failure shows an actionable error state rather than invented or stale KPIs")
             loading_page = browser.new_page()
+            loading_page.context.add_cookies(cookies)
             loading_page.on("pageerror", lambda error: errors.append(str(error)))
             paused = []
             loading_page.route("**/api/workspace?*", lambda route: paused.append(route))
@@ -254,6 +266,7 @@ def main():
             expect(loading_page.get_by_text("47.8%", exact=True)).to_be_visible()
             evidence["checks"].append("A delayed real workspace request shows a loading skeleton, then calculated KPIs")
             stale = browser.new_page()
+            stale.context.add_cookies(cookies)
             stale.on("pageerror", lambda error: errors.append(str(error)))
             stale.add_init_script("localStorage.setItem('logistics-workspace-v1',JSON.stringify({datasetId:'missing-after-folder-update',asOf:'2026-10-01'}))")
             stale.goto(BASE + "/app", wait_until="networkidle")
@@ -265,7 +278,7 @@ def main():
             evidence["completed"] = True
         finally:
             browser.close()
-            (ROOT / "docs/premium_browser_evidence.json").write_text(json.dumps(evidence, indent=2), encoding="utf-8")
+            EVIDENCE.write_text(json.dumps(evidence, indent=2), encoding="utf-8")
     print(json.dumps(evidence, indent=2), flush=True)
 
 

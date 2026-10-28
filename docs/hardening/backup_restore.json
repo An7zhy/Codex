@@ -1,0 +1,58 @@
+{
+  "passed": true,
+  "data": "Synthetic recovery rehearsal only",
+  "commands": [
+    {
+      "command": "python -m scripts.maintain_data --offline-confirmed backup <temporary paths>",
+      "exit_code": 0
+    },
+    {
+      "command": "python -m scripts.maintain_data --offline-confirmed restore <temporary paths>",
+      "exit_code": 0
+    }
+  ],
+  "native_snapshot_counts": {
+    "workspace.sqlite3": {
+      "sha256": "6c85e46f363a50ee717a5e29ab9cf928c563fd383a70e3c0ea34c6f08ad08d2f",
+      "counts": {
+        "instance_identity": 1,
+        "access_users": 1,
+        "access_sessions": 1,
+        "access_rates": 2,
+        "access_events": 0,
+        "web_datasets": 1,
+        "web_settings": 1,
+        "web_runs": 1
+      }
+    },
+    "history.sqlite3": {
+      "sha256": "a3e4bc01b720b6d4933135fe5e92bcfc5d7d9348cd31a8d96048bb776ac9a2fc",
+      "counts": {
+        "instance_binding": 1,
+        "cases": 1
+      }
+    }
+  },
+  "backup_and_restore_cli_seconds": 1.0156112729964661,
+  "restored_kpis": {
+    "total_shipments": 158,
+    "delivered_shipments": 91,
+    "eligible_deliveries": 90,
+    "on_time_shipments": 43,
+    "delayed_shipments": 47,
+    "on_time_delivery_rate": 0.4777777777777778,
+    "average_delay_hours": 36.51063829787234,
+    "overdue_shipments": 30,
+    "total_shipping_cost": 539830.75,
+    "cost_eligible_shipments": 155,
+    "cost_anomalies": 4,
+    "cost_insufficient_shipments": 2,
+    "source_rows": 160,
+    "excluded_rows": 2,
+    "quality_rows": 17
+  },
+  "old_sessions_rejected": true,
+  "fresh_login_verified": true,
+  "case_settings_run_preserved": true,
+  "scope": "Stopped synthetic instance; not live cross-database recovery or a production RPO/RTO guarantee"
+}

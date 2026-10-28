@@ -28,6 +28,7 @@ import { CarrierChart, CostChart, StatusChart } from "@/components/charts";
 import {
   useWorkspace,
   WorkspaceBoundary,
+  useExceptionQueue,
 } from "@/components/workspace-provider";
 import { money, num, percent } from "@/lib/utils";
 import type { Shipment, Workspace } from "@/lib/types";
@@ -598,7 +599,8 @@ export function Exceptions() {
   useEffect(() => {
     setPage(0);
   }, [data]);
-  const selectedRow = data?.exceptions.find(
+  const queue = useExceptionQueue(page);
+  const selectedRow = queue.items.find(
     (row) => `${row.source_row}` === selected,
   );
   return (
@@ -616,6 +618,7 @@ export function Exceptions() {
         }
       />
       <Filters />
+      {queue.error && <p role="alert">{queue.error}</p>}
       <WorkspaceBoundary>
         {data && (
           <>
@@ -623,22 +626,22 @@ export function Exceptions() {
               {[
                 [
                   "Active transport exceptions",
-                  data.exceptions.filter((row) => row.actionable).length,
+                  queue.items.filter((row) => row.actionable).length,
                 ],
                 [
                   "High priority",
-                  data.exceptions.filter((row) => row.priority_level === "High")
+                  queue.items.filter((row) => row.priority_level === "High")
                     .length,
                 ],
                 [
                   "Information needed",
-                  data.exceptions.filter(
+                  queue.items.filter(
                     (row) => row.priority_level === "Insufficient information",
                   ).length,
                 ],
                 [
                   "Review only",
-                  data.exceptions.filter(
+                  queue.items.filter(
                     (row) => row.priority_level === "Review only",
                   ).length,
                 ],
@@ -655,7 +658,7 @@ export function Exceptions() {
             </div>
             <Panel
               title="Prioritized exception queue"
-              subtitle={`Showing up to 500 of ${data.exception_count} findings. Completed delays remain separate from active overdue shipments.`}
+              subtitle={`Showing page ${page + 1} of ${queue.total} findings. Completed delays remain separate from active overdue shipments.`}
               action={
                 <Button asChild size="sm" variant="ghost">
                   <Link href="/app/settings">
@@ -665,16 +668,16 @@ export function Exceptions() {
                 </Button>
               }
             >
-              {data.exceptions.length ? (
+              {queue.items.length ? (
                 <>
                   <ExceptionRows
-                    rows={data.exceptions.slice(page * 20, page * 20 + 20)}
+                    rows={queue.items}
                   />
                   <div className="table-footer">
                     <span>
                       {page * 20 + 1}–
-                      {Math.min(page * 20 + 20, data.exceptions.length)} of{" "}
-                      {data.exceptions.length}
+                      {Math.min(page * 20 + 20, queue.total)} of{" "}
+                      {queue.total}
                     </span>
                     <div>
                       <Button
@@ -689,7 +692,7 @@ export function Exceptions() {
                       <Button
                         variant="ghost"
                         size="icon"
-                        disabled={(page + 1) * 20 >= data.exceptions.length}
+                        disabled={(page + 1) * 20 >= queue.total}
                         aria-label="Next exception page"
                         onClick={() => setPage((v) => v + 1)}
                       >
@@ -716,7 +719,7 @@ export function Exceptions() {
                 <option value="">
                   Select a shipment to inspect its evidence
                 </option>
-                {data.exceptions.map((row) => (
+                {queue.items.map((row) => (
                   <option key={row.source_row} value={row.source_row}>
                     {row.shipment_id || "Missing ID"} — {row.priority_level}
                   </option>

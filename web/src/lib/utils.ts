@@ -25,6 +25,9 @@ export function num(value: number | null | undefined, digits = 1) {
 export async function api<T>(path: string, init?: RequestInit): Promise<T> {
   const response = await fetch(`/api${path}`, { cache: "no-store", ...init });
   if (!response.ok) {
+    if (response.status === 401 && path !== "/auth/login" && path !== "/auth/session") {
+      window.dispatchEvent(new Event("logistics-auth-expired"));
+    }
     let message = `Request failed (${response.status}). Check that the Python API is running.`;
     try {
       const body = await response.json();

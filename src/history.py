@@ -105,7 +105,7 @@ class HistoryStore:
         finally:
             connection.close()
 
-    def create_case(self, case: CaseInput, *, idempotency_key: str | None = None) -> str:
+    def create_case(self, case: CaseInput, *, idempotency_key: str | None = None, max_records: int | None = None) -> str:
         case.validate()
         if idempotency_key is not None and (not isinstance(idempotency_key, str) or not idempotency_key.strip() or len(idempotency_key) > 200):
             raise ValueError("Idempotency key must be nonblank text with at most 200 characters.")
@@ -125,6 +125,17 @@ class HistoryStore:
                       request_key=idempotency_key, request_payload_hash=payload_hash)
         columns = list(record)
         with self._connect() as connection:
+            # Quota and insertion share one write transaction across API workers.
+            # Identical retries still succeed when the quota has been reached.
+            if max_records is not None:
+                if not isinstance(max_records, int) or isinstance(max_records, bool) or max_records < 1:
+                    raise ValueError("max_records must be a positive integer.")
+                connection.execute("BEGIN IMMEDIATE")
+                existing = connection.execute("SELECT case_id,request_payload_hash FROM cases WHERE request_key=?", (idempotency_key,)).fetchone() if idempotency_key else None
+                if existing and existing[1] == payload_hash:
+                    return existing[0]
+                if connection.execute("SELECT COUNT(*) FROM cases").fetchone()[0] >= max_records:
+                    raise ValueError("Case retention quota reached. Ask an administrator to run retention maintenance.")
             cursor = connection.execute(
                 f"INSERT INTO cases ({','.join(columns)}) VALUES ({','.join('?' for _ in columns)}) "
                 "ON CONFLICT(request_key) WHERE request_key IS NOT NULL DO NOTHING", [record[key] for key in columns])
@@ -136,9 +147,11 @@ class HistoryStore:
         return record["case_id"]
 
     def list_cases(self, shipment_id: str | None = None, resolution_status: str | None = None,
-                   exception_type: str | None = None, limit: int = 200) -> pd.DataFrame:
+                   exception_type: str | None = None, limit: int = 200, offset: int = 0) -> pd.DataFrame:
         if not isinstance(limit, int) or isinstance(limit, bool) or not 1 <= limit <= 1000:
             raise ValueError("Limit must be an integer from 1 to 1,000.")
+        if not isinstance(offset, int) or isinstance(offset, bool) or offset < 0:
+            raise ValueError("Offset must be a nonnegative integer.")
         conditions, values = [], []
         for column, value in (("shipment_id", shipment_id), ("resolution_status", resolution_status), ("exception_type", exception_type)):
             if value:
@@ -146,7 +159,12 @@ class HistoryStore:
                 values.append(value.strip())
         query = "SELECT * FROM cases" + (" WHERE " + " AND ".join(conditions) if conditions else "")
         with self._connect() as connection:
-            return pd.read_sql_query(query + " ORDER BY created_at DESC, case_id DESC LIMIT ?", connection, params=values + [limit])
+            return pd.read_sql_query(query + " ORDER BY created_at DESC, case_id DESC LIMIT ? OFFSET ?", connection, params=values + [limit, offset])
+
+    def export_cases(self) -> pd.DataFrame:
+        """Full authorized single-organization history, never a preview limit."""
+        with self._connect() as connection:
+            return pd.read_sql_query("SELECT * FROM cases ORDER BY created_at DESC, case_id DESC", connection)
 
     def get_case(self, case_id: str) -> dict:
         with self._connect() as connection:

@@ -3,7 +3,7 @@
 import csv
 from io import BytesIO, TextIOWrapper
 from pathlib import Path
-from zipfile import BadZipFile
+from zipfile import BadZipFile, ZipFile
 from openpyxl.utils.exceptions import InvalidFileException
 
 import pandas as pd
@@ -12,6 +12,8 @@ from src.schema import DataInputError, REQUIRED_COLUMNS
 
 MAX_FILE_BYTES = 20 * 1024 * 1024
 MAX_ROWS = 100_000
+MAX_COLUMNS = 128
+MAX_EXPANDED_BYTES = 64 * 1024 * 1024
 # Match the file-size guard rather than csv's much smaller default cell limit.
 csv.field_size_limit(MAX_FILE_BYTES)
 
@@ -19,6 +21,8 @@ csv.field_size_limit(MAX_FILE_BYTES)
 def _validate_named_headers(columns) -> None:
     """Inspect raw names before pandas can hide duplicates as column.1."""
     names = [str(column).strip().lower() for column in columns if column is not None and str(column).strip()]
+    if len(columns) > MAX_COLUMNS:
+        raise DataInputError("Use at most 128 columns per shipment file.")
     if len(names) != len(set(names)):
         raise DataInputError("Column names must be unique after trimming and lowercasing.")
 
@@ -64,6 +68,13 @@ def load_shipments(content: bytes, filename: str) -> pd.DataFrame:
                 keep_default_na=False, nrows=MAX_ROWS + 1,
             )
         elif suffix == ".xlsx":
+            # Bound archive expansion BEFORE openpyxl reads shared strings/styles.
+            with ZipFile(BytesIO(content)) as archive:
+                parts = archive.infolist()
+                if len(parts) > 1000 or sum(part.file_size for part in parts) > MAX_EXPANDED_BYTES:
+                    raise DataInputError("Workbook exceeds the 64 MiB expanded / 1000-part parsing budget.")
+                if any(part.file_size > max(1024 * 1024, part.compress_size * 200) for part in parts):
+                    raise DataInputError("Workbook compression ratio exceeds the parsing budget.")
             with pd.ExcelFile(BytesIO(content), engine="openpyxl") as workbook:
                 if not workbook.book.worksheets:
                     raise DataInputError("The workbook has no tabular worksheets.")

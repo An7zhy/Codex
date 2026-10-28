@@ -1,0 +1,22 @@
+{
+  "completed": true,
+  "same_shipment_score": {
+    "shipment_id": "SYN-0027",
+    "financial_weight_before": 20,
+    "financial_weight_after": 100,
+    "score_before": 78.6667,
+    "score_after": 88.1481
+  },
+  "ranking_changed": true,
+  "selection_and_assumptions_preserved": true,
+  "scenario_before_after": {
+    "shipment_id": "SYN-0027",
+    "remaining_before": 96,
+    "remaining_after": 48,
+    "delay_before": 71.99999999999972,
+    "delay_after": 23.999999999999723,
+    "cost_after": 450
+  },
+  "cost_is_not_implicitly_a_time_model": true,
+  "evaluation_refreshed_without_rerun_button": true
+}
