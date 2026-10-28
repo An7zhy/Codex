@@ -32,4 +32,10 @@ def calculate(body):
 
 
 if __name__ == "__main__":
-    print(json.dumps(calculate(OptimizationRequest.model_validate_json(sys.stdin.buffer.read())), allow_nan=False))
+    raw = json.loads(sys.stdin.buffer.read())
+    if raw.get("mode") == "uploaded":
+        from src.transport.uploaded import run_uploaded
+        result = run_uploaded(raw["planning"])
+    else:
+        result = calculate(OptimizationRequest.model_validate(raw))
+    print(json.dumps(result, allow_nan=False))

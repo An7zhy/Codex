@@ -38,6 +38,16 @@ def validate_columns(frame: pd.DataFrame) -> pd.DataFrame:
     return frame
 
 
+def validate_xlsx_archive(content: bytes) -> None:
+    """Shared archive guard for both shipment and planning importers."""
+    with ZipFile(BytesIO(content)) as archive:
+        parts = archive.infolist()
+        if len(parts) > 1000 or sum(part.file_size for part in parts) > MAX_EXPANDED_BYTES:
+            raise DataInputError("Workbook exceeds the 64 MiB expanded / 1000-part parsing budget.")
+        if any(part.file_size > max(1024 * 1024, part.compress_size * 200) for part in parts):
+            raise DataInputError("Workbook compression ratio exceeds the parsing budget.")
+
+
 def load_shipments(content: bytes, filename: str) -> pd.DataFrame:
     """Load UTF-8 CSV or the first Excel worksheet; preserve IDs as text."""
     if not content or not content.strip():
@@ -69,12 +79,7 @@ def load_shipments(content: bytes, filename: str) -> pd.DataFrame:
             )
         elif suffix == ".xlsx":
             # Bound archive expansion BEFORE openpyxl reads shared strings/styles.
-            with ZipFile(BytesIO(content)) as archive:
-                parts = archive.infolist()
-                if len(parts) > 1000 or sum(part.file_size for part in parts) > MAX_EXPANDED_BYTES:
-                    raise DataInputError("Workbook exceeds the 64 MiB expanded / 1000-part parsing budget.")
-                if any(part.file_size > max(1024 * 1024, part.compress_size * 200) for part in parts):
-                    raise DataInputError("Workbook compression ratio exceeds the parsing budget.")
+            validate_xlsx_archive(content)
             with pd.ExcelFile(BytesIO(content), engine="openpyxl") as workbook:
                 if not workbook.book.worksheets:
                     raise DataInputError("The workbook has no tabular worksheets.")

@@ -15,7 +15,7 @@ export function AccessGate({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true), [busy, setBusy] = useState(false), [error, setError] = useState("");
   useEffect(() => {
     api<Principal>("/auth/session").then(setUser).catch(() => {}).finally(() => setLoading(false));
-    const expired = () => { setUser(null); setError("Your session ended. Sign in again."); };
+    const expired = () => { try { Object.keys(sessionStorage).filter((key) => key.startsWith("logistics-draft:")).forEach((key) => sessionStorage.removeItem(key)); } catch {} setUser(null); setError("Your session ended. Sign in again."); };
     window.addEventListener("logistics-auth-expired", expired);
     return () => window.removeEventListener("logistics-auth-expired", expired);
   }, []);

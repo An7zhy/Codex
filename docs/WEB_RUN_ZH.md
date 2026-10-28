@@ -1,6 +1,6 @@
 # 新官网和业务平台：中文本地运行说明
 
-新版本分支：`fix/mvp-hardening-sprint-1`。旧 Streamlit 仍可使用。
+新版本分支：`feature/sprint-2-real-input`。旧 Streamlit 仍可使用。
 
 ## 你会打开什么
 
@@ -12,7 +12,7 @@
 
 ## Windows：首次安装
 
-1. 从 GitHub 下载 **fix/mvp-hardening-sprint-1** 分支，解压到独立文件夹，D 盘可以。
+1. 从 GitHub 下载 **feature/sprint-2-real-input** 分支，解压到独立文件夹，D 盘可以。
    找到包含 `start-web.bat`、`requirements-web.txt`、`backend` 和 `web` 的那一层。
 2. 安装 [Node.js 24 LTS](https://nodejs.org/)，它包含 npm；建议使用 Python 3.12。
    安装后重新打开终端，让 PATH 生效。
@@ -93,3 +93,37 @@ FEASIBLE 表示找到有效分配但未证明最优；UNKNOWN 不等于不可行
 上传先点 **Preview import**，检查日期/重复订单/币种提示，确认规则后勾选再点 **Confirm import**。UTC日期零点不等于当地截止日结束；请先人工标准化。
 
 远程试点与备份/恢复步骤见 [PILOT_OPERATIONS.md](PILOT_OPERATIONS.md)。本轮不代表已验证公网HTTPS或真实业务收益。
+
+
+## Sprint 2：使用自己的运输规划输入
+
+本轮先查看修复与检查报告，不需要制作或下载新的ZIP。运行方式保持不变。
+
+1. 管理员或操作员登录后，进入 **Optimization**，将 **Optimization input mode** 选为 **Uploaded Data Mode**。
+   **Synthetic Demo Mode** 仍是独立模拟沙盘；顶部V1/V2数据集不会被自动补成报价和运力。
+2. 下载 **Excel template · 2 synthetic orders** 或 **100-order synthetic workbook**。
+   也可以分别下载 shipments、transport_options、capacity、constraints 四个CSV。Excel标题的批注与
+   **Field definitions and rules JSON** 解释字段；完整说明见 [PLANNING_INPUT_CONTRACT.md](PLANNING_INPUT_CONTRACT.md)。
+3. 同时提供订单、每单候选报价、共享运力、单行约束。只接受 **USD / kg / m3 / h**，不猜汇率、
+   磅/吨或体积换算。时间必须含明确时区，例如 `2026-10-03T00:00:00Z`，不能只写日期。
+   所有订单共用 planning_start；同一service_id只写一份总运力，并必须有一致的预计运输小时。
+4. 选择一个含四张指定表的Excel，或四个CSV，点 **Preview planning inputs**。查看错误表、单项约束排除、
+   来源引用、数量、预算和单位。错误记录会留痕；修正源文件后重新预览，不能直接确认无效数据。
+5. 检查无误后，勾选确认声明，点 **Confirm planning inputs**。服务器冻结输入并记录确认人和文件哈希。
+   刷新或离开页面后可从 **Stored planning import** 找回，不需要把原文件缓存在浏览器里。
+6. 点 **Solve uploaded plan**。查看三策略、共享容量和原始不可行诊断。成本/期限/容量互相影响，不能
+   仅因每条候选单独通过就认定批量可行。FEASIBLE不等于已证明最优，UNKNOWN不等于不可行。
+7. 下载 **Allocation CSV**、**Strategy CSV** 和 **Input & results JSON**。完整JSON保留输入和假设；
+   上传结果不是旧模拟版CLI的Monte Carlo重放文件。无可行分配时CSV只有标题，不会虚构订单结果。
+8. `estimate` 是估计；`user_verified` 仅表示上传者声明核对过相应引用，程序没有向承运商核实。
+   **Not estimated** 表示没有可靠性估计，不是0%延误或100%准时。上传模式本轮不运行Monte Carlo。
+
+先验证两单模板：最低成本和默认综合策略 **USD120**，最快策略 **USD180**。
+100单模板对应 **USD6000 / USD9000 / USD6000**。这些都是可手算的合成样例，不能当作真实经营收益。
+
+已增加：筛选刷新恢复；当前标签页中的决策草稿/已应用比较/备注、未保存权重、优化参数及历史结果编辑恢复。
+未点击保存的草稿不会悄悄写入数据库。退出登录或会话过期会清除标签页草稿，避免账号混用；正式记录保留在SQLite。
+保存恢复的旧比较时，若服务端配置已变化，会要求重新比较。浏览器禁用存储或标签页关闭后不保证恢复临时草稿。
+
+管理员可删除规划导入及关联运行；离线保留清理和双库备份包含新导入表。公网HTTPS、目标电脑权限、
+大负载和真实脱敏业务样本仍需单独验收；本轮不宣称已经具备承运商实时数据或预测能力。

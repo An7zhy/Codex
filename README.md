@@ -11,6 +11,29 @@ information, compare hypothetical interventions and record handling outcomes.
 Built as a transport/logistics student portfolio project with Python 3.12,
 Streamlit, pandas, Plotly and local SQLite.
 
+## Sprint 2: uploaded transportation optimization
+
+Branch `feature/sprint-2-real-input` adds **Uploaded Data Mode** alongside the
+existing **Synthetic Demo Mode**. Upload one four-sheet XLSX or four CSVs containing
+shipments, per-order quotes, shared capacity and constraints; inspect/confirm an
+immutable source record, solve with the original V3 CP-SAT implementation and
+export full results. Templates and field definitions are downloadable after login.
+
+Only explicit USD/kg/m3/h and offset-aware ISO instants are accepted. The uploaded
+mode optimizes expected time and quoted cost, with **no Monte Carlo or inferred
+real reliability**. `user_verified` is an uploader declaration with a reference,
+not verification by this app. The top-bar V1/V2 shipment dataset is separate.
+
+See [input contract and hand-calculated fixtures](docs/PLANNING_INPUT_CONTRACT.md),
+[Chinese operations guide](docs/WEB_RUN_ZH.md) and [Sprint 2 execution report](SPRINT_2_REPORT.md).
+The source path supports user inputs; this sprint's tests still use synthetic data,
+so no real business effectiveness or public deployment approval is implied.
+
+Shipments filters persist per account/instance. Decision/Settings/optimization and
+case-outcome drafts persist within the authenticated browser tab and clear on
+logout/session expiry. Saved records remain server-side. No passwords/tokens are
+stored in draft caches; browser storage availability/limits still apply.
+
 ## MVP hardening Sprint 1
 
 On `fix/mvp-hardening-sprint-1`: **288 tests passed**, including all five former
@@ -118,8 +141,8 @@ The browser remembers the active dataset/date, while the server retains uploads.
 
 The built-in shipment demo has 160 deliberately imperfect source rows and 158
 retained unique IDs at 2026-10-01. Uploaded files are labeled **provenance
-unverified**, even when a user uploads a synthetic example. V3 uses a separate,
-explicitly synthetic planning scenario; it never treats V1 uploads as complete
+unverified**, even when a user uploads a synthetic example. V3 Synthetic Mode uses a separate,
+explicitly synthetic planning scenario; Uploaded Mode requires its four planning tables and it never treats V1 uploads as complete
 candidate/capacity inputs. No uploaded real data is silently invented or enriched.
 
 Exports include the complete filtered selection even when a table is paginated
@@ -504,7 +527,7 @@ The generator intentionally overwrites those named demo files, not uploads.
   Reports recommend verification rather than inventing explanations.
 - All prices must use USD. V1 cost screening has no weight/volume normalization,
   service-level adjustment or seasonal cost model. V3 uses synthetic weight/volume
-  capacity constraints; neither workspace converts currencies or obtains real quotes.
+  capacity constraints; neither mode converts currencies or obtains live quotes; Uploaded Mode accepts explicit user-provided per-order quotes and shared capacities.
 - Exact location labels are not geocoded or mapped to UN/LOCODE. Equivalent spellings
   beyond case and whitespace may form different groups.
 - Streamlit analyzes uploads in memory; the premium web workspace also persists

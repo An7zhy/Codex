@@ -34,15 +34,16 @@ def solver_slot():
             db.execute("DELETE FROM solver_lease WHERE token=?", (token,))
 
 
-def run_bounded(body):
-    if body.count * body.scenario_count > 1_000_000:
+def run_bounded(body, *, uploaded_payload=None):
+    if uploaded_payload is None and body.count * body.scenario_count > 1_000_000:
         raise HTTPException(422, "Simulation budget exceeded: orders × scenarios must be at most 1,000,000.")
     store = AccessStore()
     store.rate("solver-global", 6)
     with solver_slot(), tempfile.TemporaryFile() as output, tempfile.TemporaryFile() as errors:
         command = [sys.executable, "-m", "backend.optimizer_worker"]
         try:
-            result = subprocess.run(command, input=body.model_dump_json().encode(), stdout=output, stderr=errors,
+            worker_input = json.dumps({"mode": "uploaded", "planning": uploaded_payload}, allow_nan=False) if uploaded_payload is not None else body.model_dump_json()
+            result = subprocess.run(command, input=worker_input.encode(), stdout=output, stderr=errors,
                                     cwd=ROOT, env=dict(os.environ, OMP_NUM_THREADS="1", OPENBLAS_NUM_THREADS="1"), timeout=SOLVER_WALL_SECONDS)
         except subprocess.TimeoutExpired as exc:
             # subprocess.run kills AND waits for this worker on timeout.

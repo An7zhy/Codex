@@ -2205,3 +2205,16 @@ td strong {
 .import-preview { margin: 20px 0; padding: 16px; border: 1px solid var(--border); border-radius: 12px; }
 .import-preview p { font-size: 12px; margin-bottom: 12px; }
 .import-preview pre { max-height: 200px; overflow: auto; font-size: 11px; }
+.optimization-mode { max-width: 360px; margin-bottom: 12px; }
+.planning-preview-json { max-height: 320px; overflow: auto; font-size: 11px; white-space: pre-wrap; overflow-wrap: anywhere; }
+.page-heading > div, .panel-head > div, .heading-actions { min-width: 0; }
+@media (max-width: 600px) {
+  .page-heading, .panel-head { flex-wrap: wrap; }
+  .heading-actions { justify-content: flex-start; }
+  .kpi-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .explanation-block select { width: 100%; }
+  .toolbar-actions { flex-wrap: wrap; }
+  .toast { max-width: calc(100vw - 32px); right: 16px; }
+}
+.table-scroll { position: relative; } /* Contain absolute sr-only table labels in the scroller. */
+.notice p { overflow-wrap: anywhere; }

@@ -20,6 +20,7 @@ from backend.store import WorkspaceStore
 from backend.access import AccessStore, COOKIE
 from backend.boundary import SecurityBoundary
 from backend.import_contract import preview, confirmation
+from backend.planning_routes import router as planning_router
 from pydantic import BaseModel, Field, ConfigDict
 from src.analysis import analyze_shipments, calculate_kpis, carrier_performance, exception_shipments
 from src.decisions import ActionAssumption, compare_actions, default_assumptions
@@ -35,6 +36,7 @@ from src.schema import KPI_DEFINITIONS
 ROOT = Path(__file__).resolve().parents[1]
 app = FastAPI(title="Logistics Insight AI", version="1.1.0", docs_url=None, redoc_url=None, openapi_url=None)
 app.add_middleware(SecurityBoundary)
+app.include_router(planning_router)
 
 
 class LoginRequest(BaseModel):
@@ -366,8 +368,8 @@ def optimization(body: OptimizationRequest):
 
 
 @app.get("/api/optimization/runs/latest")
-def latest_optimization():
-    return workspace_store().run()
+def latest_optimization(input_mode: Literal["synthetic", "uploaded"] | None = None):
+    return workspace_store().run(input_mode=input_mode)
 
 
 @app.delete("/api/optimization/runs/{run_id}")
@@ -388,9 +390,19 @@ def optimization_run(run_id: str):
 def optimization_export(run_id: str, kind: Literal["json", "comparison", "allocation", "candidates"]):
     run = workspace_store().run(run_id)
     if kind == "json":
-        # The original V3 CLI ignores additional web metadata and recomputes inputs.
+        # Synthetic exports retain the original CLI schema. Uploaded exports
+        # carry a distinct schema and source tables; re-import those to re-solve.
         return Response(json.dumps(run, indent=2, allow_nan=False), media_type="application/json",
                         headers={"Content-Disposition": 'attachment; filename="v3_experiment.json"'})
     table = run["summary"] if kind == "comparison" else run["candidate_checks"] if kind == "candidates" else run["results"]["Optimized Allocation"]["assignments"]
-    return Response(csv_bytes(pd.DataFrame(table)), media_type="text/csv",
-                    headers={"Content-Disposition": f'attachment; filename="v3_{kind}.csv"'})
+    frame = pd.DataFrame(table)
+    if frame.empty:
+        from src.transport.engine import ASSIGNMENT_COLUMNS, CANDIDATE_COLUMNS
+        frame = pd.DataFrame(columns=ASSIGNMENT_COLUMNS if kind == "allocation" else CANDIDATE_COLUMNS)
+    import_id = run.get("planning_import", {}).get("import_id")
+    filename = f"v3_{kind}_{import_id}.csv" if import_id else f"v3_{kind}.csv"
+    headers = {"Content-Disposition": f'attachment; filename="{filename}"'}
+    if import_id:
+        headers["X-Planning-Import"] = import_id
+        headers["X-Input-Mode"] = "uploaded"
+    return Response(csv_bytes(frame), media_type="text/csv", headers=headers)

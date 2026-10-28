@@ -28,6 +28,7 @@ import {
 import { api, jsonBody, money, num } from "@/lib/utils";
 import type { Assumption, CaseRecord, DecisionResult } from "@/lib/types";
 import { useAccess } from "@/components/access";
+import { useSessionDraft } from "@/lib/session-draft";
 
 export function DecisionNav({ history = false }: { history?: boolean }) {
   return (
@@ -45,22 +46,24 @@ type ScenarioState = {
   draft: Assumption[];
   applied: Assumption[] | null;
   result: DecisionResult | null;
+  action?: string;
+  exceptionType?: string;
+  notes?: string;
 };
 export function Decisions() {
   const user = useAccess();
   const { data, datasetId, asOf, notify } = useWorkspace();
   const params = useSearchParams();
-  const [queuePage, setQueuePage] = useState(0), [search, setSearch] = useState(params.get("shipment") ?? "");
+  const [queuePage, setQueuePage] = useSessionDraft("decision-page", 0), [search, setSearch] = useSessionDraft("decision-search", params.get("shipment") ?? "");
   const queue = useExceptionQueue(queuePage, true, search, 50);
   const [defaults, setDefaults] = useState<Assumption[]>([]),
-    [selected, setSelected] = useState("");
-  const [states, setStates] = useState<Record<string, ScenarioState>>({});
+    [selected, setSelected] = useSessionDraft("decision-selected", "");
+  const [states, setStates] = useSessionDraft<Record<string, ScenarioState>>("decision-scenarios", {}, (value) => Object.values(value as Record<string, ScenarioState>).every((state) =>
+    Array.isArray(state?.draft) && state.draft.length === 3 && state.draft.every((item) => typeof item?.action === "string" && typeof item?.remaining_hours === "number" && typeof item?.additional_cost === "number") &&
+    (state.result === null || (Array.isArray(state.result?.comparison) && typeof state.result?.comparison_token === "string"))));
   const [busy, setBusy] = useState(false),
     [saving, setSaving] = useState(false),
     [error, setError] = useState("");
-  const [action, setAction] = useState(""),
-    [exceptionType, setExceptionType] = useState(""),
-    [notes, setNotes] = useState("");
   const active = queue.items;
   useEffect(() => {
     api<Assumption[]>("/decisions/defaults")
@@ -68,7 +71,7 @@ export function Decisions() {
       .catch((err) => setError(err.message));
   }, []);
   useEffect(() => {
-    if (!data) return;
+    if (!data || !queue.items.length) return;
     const available = queue.items;
     const requested = params.get("shipment");
     setSelected((old) =>
@@ -87,12 +90,15 @@ export function Decisions() {
     applied: null,
     result: null,
   };
-  useEffect(() => {
-    setError("");
-    setNotes("");
-    setExceptionType(row?.exception_types.split("; ")[0] ?? "");
-    setAction("");
-  }, [selected, datasetId, asOf]); // eslint-disable-line
+  const action = current.action ?? "", notes = current.notes ?? "";
+  const exceptionType = current.exceptionType ?? row?.exception_types.split("; ")[0] ?? "";
+  function updateChoice(field: "action" | "notes" | "exceptionType", value: string) {
+    setStates((old) => ({ ...old, [key]: { ...(old[key] ?? current), [field]: value } }));
+  }
+  const setAction = (value: string) => updateChoice("action", value);
+  const setNotes = (value: string) => updateChoice("notes", value);
+  const setExceptionType = (value: string) => updateChoice("exceptionType", value);
+  useEffect(() => { setError(""); }, [key]);
   const appliedAction =
     (current.result?.comparison.some((item) => item.action === action && item.assumed_available) ? action : "") ||
     current.result?.comparison.find((item) => item.assumed_available)?.action ||
@@ -189,6 +195,7 @@ export function Decisions() {
         }
       />
       <DecisionNav />
+      <p className="muted small">Drafts and applied comparisons are restored in this browser tab for your account. A changed server context still requires recomparison before saving.</p>
       <div className="filters">
         <input aria-label="Find active exception ID" className="input" placeholder="Search all active shipment IDs" value={search} onChange={(e) => { setSearch(e.target.value); setQueuePage(0); }} />
         <Button variant="outline" disabled={!queuePage || queue.loading} onClick={() => setQueuePage((v) => v - 1)}>Previous active page</Button>
@@ -237,10 +244,10 @@ export function Decisions() {
                           Priority score: {num(current.result ? current.result.priority_score : row.priority_score, 4)}.{" "}
                           {current.result?.explanation ?? row.explanation}
                         </p>
-                        {row.missing_information && (
+                        {(current.result?.missing_information ?? row.missing_information) && (
                           <p>
                             <strong>Missing information:</strong>{" "}
-                            {row.missing_information}
+                            {current.result?.missing_information ?? row.missing_information}
                           </p>
                         )}
                       </div>
@@ -522,14 +529,14 @@ export function HandlingHistory() {
   const [rows, setRows] = useState<CaseRecord[]>([]),
     [error, setError] = useState(""),
     [busy, setBusy] = useState(false);
-  const [filter, setFilter] = useState(""),
-    [shipment, setShipment] = useState("");
-  const [page, setPage] = useState(0);
-  const [selected, setSelected] = useState<CaseRecord | null>(null),
-    [actualCost, setActualCost] = useState(""),
-    [actualDelay, setActualDelay] = useState("");
-  const [status, setStatus] = useState("Open"),
-    [notes, setNotes] = useState("");
+  const [filter, setFilter] = useSessionDraft("history-status-filter", ""),
+    [shipment, setShipment, filterReady] = useSessionDraft("history-shipment-filter", "");
+  const [page, setPage] = useSessionDraft("history-page", 0);
+  const [selected, setSelected] = useSessionDraft<CaseRecord | null>("history-selected", null, (value) => !!(value as CaseRecord)?.case_id && Number.isInteger((value as CaseRecord)?.version)),
+    [actualCost, setActualCost] = useSessionDraft("history-actual-cost", ""),
+    [actualDelay, setActualDelay] = useSessionDraft("history-actual-delay", "");
+  const [status, setStatus] = useSessionDraft("history-edit-status", "Open"),
+    [notes, setNotes] = useSessionDraft("history-edit-notes", "");
   async function load() {
     setBusy(true);
     setError("");
@@ -546,8 +553,8 @@ export function HandlingHistory() {
     }
   }
   useEffect(() => {
-    void load();
-  }, [filter, page]); // exact text filter is explicitly applied below
+    if (filterReady) void load();
+  }, [filter, page, filterReady]); // exact text filter is explicitly applied below
   function select(row: CaseRecord) {
     setSelected(row);
     setStatus(row.resolution_status);
@@ -599,7 +606,7 @@ export function HandlingHistory() {
         className="filters"
         onSubmit={(e) => {
           e.preventDefault();
-          void load();
+          if (page) setPage(0); else void load();
         }}
       >
         <input
@@ -613,7 +620,7 @@ export function HandlingHistory() {
           className="input"
           aria-label="History status filter"
           value={filter}
-          onChange={(e) => setFilter(e.target.value)}
+          onChange={(e) => { setFilter(e.target.value); setPage(0); }}
         >
           <option value="">All statuses</option>
           {["Open", "In Progress", "Resolved", "Cancelled"].map((value) => (
@@ -640,7 +647,7 @@ export function HandlingHistory() {
       </Panel>
       <div className="form-actions"><Button variant="outline" disabled={busy || !page} onClick={() => setPage((v) => v - 1)}>Previous history page</Button>
         <Button variant="outline" disabled={busy || rows.length < 200} onClick={() => setPage((v) => v + 1)}>Next history page</Button></div>
-      {selected && (
+      {selected && user?.role !== "viewer" && (
         <Panel
           className="mt-5"
           title={`Update ${selected.shipment_id}`}

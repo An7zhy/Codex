@@ -185,3 +185,25 @@ verification command for this branch. See the updated audit for actual results.
 Before remote pilot: verify TLS/ingress, ACLs/backups/restore, account separation,
 the intended Windows/Linux environment and a consented customer sample with a
 human reviewer. Synthetic numerical tests do not establish commercial benefit.
+
+
+## Sprint 2 additions
+
+`planning_imports` is in the same protected workspace DB and bound organization
+instance. Preview/invalid/confirmed records share the existing256MiB JSON budget
+and have a100-record cap. The same20MiB full-body/10 upload requests per minute
+applies to planning preview; four CSV file parts or one XLSX are permitted.
+New row budgets are500 orders,100 services,5000 options and1 constraints row.
+Both uploaded and synthetic solves share the same instance-wide lease,6/min rate
+and45-second child-process wall cap. No risk simulations are added to user inputs.
+
+Admin deletion removes a planning import and linked runs. A deleted source cannot
+be saved back by an in-flight solve. Offline retention expires imports using the
+dataset-day policy and removes linked runs. Native snapshot/restore includes the
+new table automatically; no extra database or user-owned cloud storage is added.
+An instance with no exception cases yet is now a valid retention input.
+
+Per-account/per-instance tab draft storage is not an authorization mechanism.
+Logout clears drafts; selection/filter settings contain IDs/filters in scoped
+localStorage. Review local workstation access and avoid unnecessary sensitive
+notes. See PLANNING_INPUT_CONTRACT.md and SPRINT_2_REPORT.md for verified scope.

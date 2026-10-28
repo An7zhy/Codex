@@ -1,5 +1,7 @@
 # Logistics Insight AI — Production Readiness Audit
 
+当前开发分支的Sprint 2复验见 [SPRINT_2_REPORT.md](SPRINT_2_REPORT.md)。已新增受保护的规划输入上传闭环；下文保留Sprint 1及原始审计的历史结论，不能将其中“V3仅模拟输入”当作当前代码状态。真实企业业务有效性和公网部署验收仍未完成。
+
 ## Sprint 1 修复复验（2026-10-28，Asia/Shanghai）
 
 修复分支：`fix/mvp-hardening-sprint-1`；基线为已保留的审计分支 `audit/production-readiness`（`636d180`）。

@@ -15,6 +15,7 @@ import { useWorkspace } from "@/components/workspace-provider";
 import { api, jsonBody, percent } from "@/lib/utils";
 import type { PriorityConfig } from "@/lib/types";
 import { useAccess } from "@/components/access";
+import { useSessionDraft } from "@/lib/session-draft";
 
 type SettingsResponse = {
   priority: PriorityConfig;
@@ -31,18 +32,22 @@ export function Settings() {
   const user = useAccess();
   const { refresh, notify, data, datasetId, datasets, selectDataset } = useWorkspace();
   const [deleteConfirmation, setDeleteConfirmation] = useState("");
-  const [settings, setSettings] = useState<SettingsResponse | null>(null),
-    [draft, setDraft] = useState<PriorityConfig | null>(null);
+  const [settings, setSettings] = useState<SettingsResponse | null>(null);
+  const [draft, setDraft, draftReady, restored] = useSessionDraft<PriorityConfig | null>("priority-settings", null, (value) => {
+    const candidate = value as PriorityConfig;
+    return !!candidate?.weights && Object.keys(labels).every((key) => typeof candidate.weights[key] === "number");
+  });
   const [busy, setBusy] = useState(false),
     [error, setError] = useState("");
   useEffect(() => {
+    if (!draftReady) return;
     api<SettingsResponse>("/settings")
       .then((value) => {
         setSettings(value);
-        setDraft(value.priority);
+        if (!restored) setDraft(value.priority);
       })
       .catch((err) => setError(err.message));
-  }, []);
+  }, [draftReady]);
   async function save(event: React.FormEvent) {
     event.preventDefault();
     if (!draft) return;

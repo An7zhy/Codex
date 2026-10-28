@@ -14,6 +14,7 @@ import { api } from "@/lib/utils";
 import type { Dataset, Workspace, Shipment } from "@/lib/types";
 import { ErrorState, LoadingState } from "@/components/ui/primitives";
 import { Button } from "@/components/ui/button";
+import { useAccess } from "@/components/access";
 
 type Filters = {
   q: string;
@@ -48,6 +49,8 @@ type ContextValue = {
 const Context = createContext<ContextValue | null>(null);
 
 export function WorkspaceProvider({ children }: { children: ReactNode }) {
+  const user = useAccess();
+  const storageKey = `logistics-workspace-v2:${user?.instance_id}:${user?.username}`;
   const [datasetId, setDatasetId] = useState("demo");
   const [asOf, setAsOf] = useState("2026-10-01");
   const [filters, setFilters] = useState<Filters>(emptyFilters);
@@ -61,11 +64,15 @@ export function WorkspaceProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     try {
       const saved = JSON.parse(
-        localStorage.getItem("logistics-workspace-v1") || "null",
+        localStorage.getItem(storageKey) || localStorage.getItem("logistics-workspace-v1") || "null",
       );
       if (saved?.datasetId && saved?.asOf) {
         setDatasetId(saved.datasetId);
         setAsOf(saved.asOf);
+        if (saved.filters && typeof saved.filters === "object") {
+          setFilters({ ...emptyFilters, ...Object.fromEntries(Object.entries(saved.filters).filter(([key, value]) => key in emptyFilters &&
+            (key === "offset" ? Number.isInteger(value) && Number(value) >= 0 : typeof value === "string"))) });
+        }
       }
     } catch {
       /* Private browsing can disable storage; the demo still works. */
@@ -76,14 +83,14 @@ export function WorkspaceProvider({ children }: { children: ReactNode }) {
     if (ready) {
       try {
         localStorage.setItem(
-          "logistics-workspace-v1",
-          JSON.stringify({ datasetId, asOf }),
+          storageKey,
+          JSON.stringify({ datasetId, asOf, filters }),
         );
       } catch {
         /* session-only fallback */
       }
     }
-  }, [datasetId, asOf, ready]);
+  }, [datasetId, asOf, filters, ready, storageKey]);
   const query = useMemo(
     () =>
       new URLSearchParams({

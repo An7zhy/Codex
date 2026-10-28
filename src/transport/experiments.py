@@ -1,6 +1,7 @@
 """Comparable constrained strategy experiments and reproducible JSON exports."""
 
 from dataclasses import asdict, dataclass
+import hashlib
 import json
 import time
 
@@ -26,13 +27,25 @@ class Experiment:
 
 
 def compare_strategies(data: PlanningData, constraints: Constraints, preferences=Preferences(),
-                       *, scenario_count=2000, seed=2026) -> Experiment:
+                       *, scenario_count=2000, seed=2026, simulate=True) -> Experiment:
     started = time.perf_counter()
-    bank = generate_scenarios(data, scenario_count, seed)
+    if not simulate and preferences.risk:
+        raise ValueError("Reliability weight must be zero when no transit distribution is supplied.")
+    bank = generate_scenarios(data, scenario_count, seed) if simulate else None
+    fingerprint = bank.fingerprint if bank else hashlib.sha256(json.dumps(asdict(data), sort_keys=True).encode()).hexdigest()
     rows, results, details = [], {}, {}
     for strategy in STRATEGIES:
         result = solve_allocation(data, constraints, preferences, strategy)
-        metrics, detail = simulate_allocation(data, result, bank)
+        if bank:
+            metrics, detail = simulate_allocation(data, result, bank)
+        else:
+            # No MC draws, no inferred reliability, no pretend zero-variance facts.
+            metrics = dict(simulated_on_time_rate_all_orders=None, simulated_on_time_rate_assigned=None,
+                           simulated_late_probability_assigned=None, on_time_rate_monte_carlo_se=None,
+                           expected_on_time_rate_all_orders=None, mean_simulated_delay_hours_assigned=None,
+                           p95_total_delay_hours=None, analytic_late_probability_assigned=None,
+                           scenario_count=0, scenario_fingerprint=fingerprint, simulation_seconds=0)
+            detail = pd.DataFrame()
         results[strategy], details[strategy] = result, detail
         usage = result.capacity
         record = dict(strategy=strategy, status=result.status, has_feasible_solution=result.has_solution,
@@ -56,7 +69,7 @@ def compare_strategies(data: PlanningData, constraints: Constraints, preferences
     all_full = bool(summary.fully_assigned.all())
     summary["same_full_fulfillment_comparison"] = all_full
     return Experiment(data, constraints, preferences, summary, results, details, seed,
-                      scenario_count, bank.fingerprint, time.perf_counter() - started)
+                      scenario_count if bank else 0, fingerprint, time.perf_counter() - started)
 
 
 def experiment_json(experiment: Experiment) -> str:

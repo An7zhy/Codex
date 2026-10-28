@@ -60,10 +60,10 @@ class SecurityBoundary:
             if method not in SAFE:
                 if request.headers.get("origin") not in origins() or request.headers.get("sec-fetch-site") == "cross-site":
                     raise HTTPException(403, "Write origin rejected. Use the configured organization website.")
-                if store and path in {"/api/datasets", "/api/datasets/preview"}:
+                if store and path in {"/api/datasets", "/api/datasets/preview", "/api/planning/imports/preview"}:
                     store.rate("uploads:" + actor, 10)
             # No trust in Content-Length: also count chunked bodies as received.
-            limit = MAX_BODY if path.startswith("/api/datasets") else 256 * 1024
+            limit = MAX_BODY if path.startswith("/api/datasets") or path == "/api/planning/imports/preview" else 256 * 1024
             declared = request.headers.get("content-length")
             if declared and (not declared.isdecimal() or int(declared) > limit):
                 raise HTTPException(413, "Total request body exceeds the allowed budget.")

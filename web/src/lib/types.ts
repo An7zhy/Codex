@@ -146,7 +146,7 @@ export type Allocation = {
   cost_usd: number;
   expected_hours: number;
   deadline_hours: number;
-  assumed_late_probability: number;
+  assumed_late_probability: number | null;
   weight_kg: number;
   volume_m3: number;
 };
@@ -169,6 +169,9 @@ export type StrategySummary = {
   on_time_rate_monte_carlo_se: number | null;
 };
 export type OptimizationRun = {
+  input_mode?: "synthetic" | "uploaded";
+  source_info?: { source_label: string; planning_start: string; data_kind: string; declarations: Record<string, Record<string, number>>; policy: string[]; reliability: string };
+  planning_import?: { import_id: string; created_by: string; confirmed_by: string; files: { filename: string; sha256: string }[] };
   run_id: string;
   created_at: string;
   request: OptimizationInput;
@@ -194,7 +197,7 @@ export type OptimizationRun = {
     rejection_reasons: string;
     cost_usd: number;
     expected_hours: number;
-    assumed_late_probability: number;
+  assumed_late_probability: number | null;
     balanced_score: number | null;
   }[];
   results: Record<

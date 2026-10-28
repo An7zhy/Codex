@@ -1,0 +1,16 @@
+{
+  "passed": true,
+  "xlsx_contract_mapping": true,
+  "original_v3_solver": true,
+  "costs": [
+    120.0,
+    180.0,
+    120.0
+  ],
+  "scenario_count": 0,
+  "runtime_excludes": [
+    "streamlit",
+    "Pillow",
+    "pytest"
+  ]
+}

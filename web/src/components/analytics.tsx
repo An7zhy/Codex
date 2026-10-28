@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { Download, FlaskConical } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -35,6 +36,7 @@ type Evaluation = {
   }[];
 };
 export function Analytics() {
+  const requestedRun = useSearchParams().get("run_id");
   const { data } = useWorkspace();
   const [run, setRun] = useState<OptimizationRun | null>(null),
     [error, setError] = useState("");
@@ -42,19 +44,20 @@ export function Analytics() {
     [evaluating, setEvaluating] = useState(false);
   useEffect(() => {
     const controller = new AbortController();
-    api<OptimizationRun>("/optimization/runs/latest", {
+    setRun(null); setError("");
+    api<OptimizationRun>(requestedRun ? `/optimization/runs/${encodeURIComponent(requestedRun)}` : "/optimization/runs/latest", {
       signal: controller.signal,
     })
       .then(setRun)
       .catch((err) => {
         if (
           err.name !== "AbortError" &&
-          !err.message.startsWith("No optimization run")
+          (requestedRun || !err.message.startsWith("No optimization run"))
         )
           setError(err.message);
       });
     return () => controller.abort();
-  }, []);
+  }, [requestedRun]);
   async function evaluate() {
     setEvaluating(true);
     setError("");
@@ -140,15 +143,17 @@ export function Analytics() {
         <>
           <PageHeading
             title="Transportation scenario evaluation"
-            description={`Latest locally saved run · ${run.request.count} planning orders · ${run.scenario_count} scenarios · seed ${run.seed}`}
+            description={run.input_mode === "uploaded" ? `Uploaded plan · ${run.request.count} orders · ${run.source_info?.source_label}` : `Latest locally saved run · ${run.request.count} planning orders · ${run.scenario_count} scenarios · seed ${run.seed}`}
           />
           <div className="notice">
             <FlaskConical size={17} />
             <p>
+              {run.input_mode === "uploaded" ? <>Uploaded estimates, quotes and capacity are user declarations, not independently verified by this app. Reliability is not estimated and no Monte Carlo is run. Import: {run.planning_import?.import_id}.</> : <>
               All strategies reuse the same lognormal Monte Carlo draws.
               Shipments on a shared service share its delay in a scenario.
               Simulated probabilities depend on invented parameters, not real
               carrier performance.
+              </>}
             </p>
           </div>
           <div className="dashboard-grid dashboard-grid-equal">
@@ -166,12 +171,12 @@ export function Analytics() {
             </Panel>
           </div>
           <Panel
-            title="Common-scenario comparison"
-            subtitle="All requested orders remain in the all-order on-time denominator."
+            title={run.input_mode === "uploaded" ? "Uploaded-input strategy comparison" : "Common-scenario comparison"}
+            subtitle={run.input_mode === "uploaded" ? "Same user-provided expected-time constraints; reliability not estimated." : "All requested orders remain in the all-order on-time denominator."}
           >
             <StrategyTable run={run} />
           </Panel>
-          <Panel
+          {run.input_mode !== "uploaded" ? <><Panel
             className="mt-5"
             title="Expected versus simulated transit"
             subtitle="Optimized Allocation · first 100 assigned orders · scenario 0 is a simulated realization, never a historical actual delivery."
@@ -234,7 +239,7 @@ export function Analytics() {
               Total experiment time: {num(run.elapsed_seconds, 3)} s. Timings
               and time-limited solver incumbents may vary by machine.
             </p>
-          </details>
+          </details></> : <Panel className="mt-5" title="Input sources and limitations"><div className="panel-body"><p>{run.provenance}</p><p>{run.source_info?.reliability}</p><p>Planning start: {run.source_info?.planning_start}</p><p>Source input fingerprint: {run.scenario_fingerprint}</p><pre className="planning-preview-json">{JSON.stringify(run.source_info?.declarations, null, 2)}</pre><p>User-verified flags are declarations with source references, not independent audit. All results retain their import ID and assumptions.</p></div></Panel>}
         </>
       ) : (
         <Panel title="Transportation scenario evaluation">

@@ -96,14 +96,20 @@ def retain(dataset_days=30, run_days=30, case_days=180):
     cutoffs = [(now - timedelta(days=days)).isoformat() for days in (dataset_days, run_days, case_days)]
     with sqlite3.connect(workspace) as db:
         db.execute("ATTACH DATABASE ? AS history", (str(history),))
-        cases = db.execute("DELETE FROM history.cases WHERE created_at<? OR (json_valid(priority_snapshot_json) AND json_extract(priority_snapshot_json,'$.dataset.dataset_id') IN (SELECT dataset_id FROM web_datasets WHERE dataset_id!='demo' AND created_at<?))", (cutoffs[2], cutoffs[0])).rowcount
+        linked_runs, expired_imports = 0, 0
+        if db.execute("SELECT 1 FROM sqlite_master WHERE name='planning_imports' AND type='table'").fetchone():
+            linked_runs = db.execute("DELETE FROM web_runs WHERE json_extract(payload_json,'$.planning_import.import_id') IN (SELECT import_id FROM planning_imports WHERE created_at<?)", (cutoffs[0],)).rowcount
+            expired_imports = db.execute("DELETE FROM planning_imports WHERE created_at<?", (cutoffs[0],)).rowcount
+        cases = 0
+        if db.execute("SELECT 1 FROM history.sqlite_master WHERE name='cases' AND type='table'").fetchone():
+            cases = db.execute("DELETE FROM history.cases WHERE created_at<? OR (json_valid(priority_snapshot_json) AND json_extract(priority_snapshot_json,'$.dataset.dataset_id') IN (SELECT dataset_id FROM web_datasets WHERE dataset_id!='demo' AND created_at<?))", (cutoffs[2], cutoffs[0])).rowcount
         datasets = db.execute("DELETE FROM web_datasets WHERE dataset_id!='demo' AND created_at<?", (cutoffs[0],)).rowcount
         runs = db.execute("DELETE FROM web_runs WHERE created_at<?", (cutoffs[1],)).rowcount
     # Reclaim deleted pages; logical deletion does not expire external backups.
     for path in (workspace, history):
         with sqlite3.connect(path) as db:
             db.execute("VACUUM")
-    return {"datasets_deleted": datasets, "runs_deleted": runs, "cases_deleted": cases}
+    return {"datasets_deleted": datasets, "runs_deleted": runs + linked_runs, "cases_deleted": cases, "planning_imports_deleted": expired_imports}
 
 
 def main():

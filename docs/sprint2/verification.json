@@ -1,0 +1,74 @@
+{
+  "date_asia_shanghai": "2026-10-28",
+  "branch": "feature/sprint-2-real-input",
+  "baseline_commit": "3489ddf17b3bd7c1a07a3a417a20dc16799fca2a",
+  "environment": {
+    "python": "3.12.14",
+    "platform": "Linux-6.18.55-x86_64-with-glibc2.41",
+    "node": "v24.19.0",
+    "packages": {
+      "fastapi": "0.162.0",
+      "pandas": "2.3.3",
+      "plotly": "6.3.1",
+      "ortools": "9.15.6755",
+      "openpyxl": "3.1.5",
+      "pytest": "9.0.3",
+      "streamlit": "1.66.1",
+      "defusedxml": "0.7.1"
+    }
+  },
+  "regression_identity_check": {
+    "baseline_test_count": 288,
+    "all_present_and_passed": true,
+    "missing_or_not_passed": []
+  },
+  "commands": [
+    {
+      "command": "python -m pytest -q --junitxml=artifacts/sprint2/pytest.xml",
+      "exit_code": 0,
+      "passed": 358,
+      "failed": 0,
+      "skipped": 0,
+      "xfailed": 0,
+      "new_tests": 70,
+      "elapsed_seconds": 184.1
+    },
+    {
+      "command": "npm run typecheck; npm run build (web/)",
+      "exit_code": 0
+    },
+    {
+      "command": "python -m scripts.verify_sprint2",
+      "exit_code": 0,
+      "scope": "Production Next + FastAPI + real Chromium; isolated databases, preserved original premium flow and uploaded flow"
+    },
+    {
+      "command": "python -m compileall -q app.py src backend tests scripts",
+      "exit_code": 0
+    },
+    {
+      "command": "python -m pip check",
+      "exit_code": 0,
+      "note": "No dependency conflict; not a vulnerability scan"
+    }
+  ],
+  "core_solver_files_unchanged": [
+    "src/transport/engine.py",
+    "src/transport/models.py",
+    "src/transport/simulation.py"
+  ],
+  "evidence": [
+    "premium_regression.json",
+    "uploaded_flow.json",
+    "web_runtime.json"
+  ],
+  "user_databases_touched": false,
+  "data_scope": "Synthetic authored fixtures only; uploaded data path is functional, real customer business efficacy is not verified",
+  "not_verified": [
+    "Windows/Python3.14 native execution",
+    "Remote TLS/ingress/host ACL",
+    "Production load/soak and parser OS CPU/RAM limits",
+    "Actual freight quotes/capacity/effectiveness",
+    "Production RPO/RTO"
+  ]
+}
