@@ -1,0 +1,110 @@
+{
+  "audit_date_asia_shanghai": "2026-10-29T19:50:15.137677+08:00",
+  "audited_source_commit": "f66ed1f801d7060c6cbf4e2eb4c42c5e89f15222",
+  "audit_branch": "audit/remaining-issues-sprint-2",
+  "environment": {
+    "python": "3.12.14",
+    "platform": "Linux-6.18.55-x86_64-with-glibc2.41",
+    "node": "v24.19.0",
+    "packages": {
+      "fastapi": "0.162.0",
+      "pandas": "2.3.3",
+      "ortools": "9.15.6755",
+      "openpyxl": "3.1.5",
+      "streamlit": "1.66.1",
+      "Pillow": "13.0.0",
+      "pytest": "9.0.3",
+      "pip": "26.2.2"
+    }
+  },
+  "existing_tests": {
+    "baseline": 358,
+    "present": 358,
+    "passed": 358,
+    "failed": 0,
+    "skipped": 0,
+    "xfailed": 0,
+    "control_count_unchanged": true,
+    "console_elapsed_seconds": 141.97,
+    "junit_suite_seconds": 141.957
+  },
+  "source_integrity": {
+    "baseline_tracked_product_test_and_existing_python_script_files_checked": 124,
+    "changed_files": [],
+    "new_files_are_audit_script_report_and_evidence_only": true
+  },
+  "commands": [
+    {
+      "command": "python -m pytest -q --junitxml=artifacts/remaining-issues/pytest.xml",
+      "exit_code": 0
+    },
+    {
+      "command": "npm run typecheck",
+      "cwd": "web",
+      "exit_code": 0
+    },
+    {
+      "command": "npm run build",
+      "cwd": "web",
+      "exit_code": 0
+    },
+    {
+      "command": "python -m scripts.reverify_remaining_issues",
+      "exit_code": 0
+    },
+    {
+      "command": "python -m scripts.reverify_remaining_issues --browser",
+      "exit_code": 1,
+      "note": "Premium and hardening flows passed. Uploaded flow and its restart check passed, but orchestration then read a missing evidence destination because original test hardcoded the old path; no product assertion failed."
+    },
+    {
+      "command": "python -m scripts.reverify_remaining_issues --browser-flow uploaded",
+      "exit_code": 0,
+      "note": "Wrapper redirects module output constants only; every original assertion and real API process restart retained."
+    },
+    {
+      "command": "python -m scripts.reverify_remaining_issues --offline-cli",
+      "exit_code": 0
+    },
+    {
+      "command": "python -m compileall -q app.py src backend tests scripts",
+      "exit_code": 0
+    },
+    {
+      "command": "python -m pip check",
+      "exit_code": 0
+    },
+    {
+      "command": "pip-audit --path /workspace/Codex/.venv/lib/python3.12/site-packages --progress-spinner off --cache-dir /tmp/logistics-hardening-pip-audit-cache --timeout 12 --format json --output docs/remaining-issues/pip_audit.json",
+      "tool_version": "2.10.1",
+      "exit_code": 0,
+      "packages": 68,
+      "vulnerability_records": 0
+    },
+    {
+      "command": "npm audit --omit=dev --json --fetch-timeout=20000 --fetch-retries=0",
+      "cwd": "web",
+      "exit_code": 0,
+      "vulnerabilities": 0
+    }
+  ],
+  "residual_issue_reproduced": {
+    "description": "Distinct administrators save stale settings snapshots with 200, silently overwriting an intervening weight update",
+    "evidence": "api_probes.json#remaining_settings_lost_update"
+  },
+  "browser_outputs": [
+    "premium_browser.json",
+    "hardening_browser.json",
+    "uploaded_browser.json"
+  ],
+  "user_business_databases_accessed": false,
+  "data_scope": "Authored synthetic fixtures only; public airport fixture in original suite remains an incompatible-schema test, not real freight SLA validation",
+  "not_verified": [
+    "Public HTTPS/ingress/Host/OS and backup ACL enforcement",
+    "Production CPU/RAM/disk/concurrency/soak",
+    "Authorized enterprise data/SLA/quotes/capacity/reliability/business benefit",
+    "Production backup schedule/off-host copy/RPO/RTO",
+    "Windows/Python3.14/Safari/Firefox/native Excel execution",
+    "Complete penetration/adversarial archive coverage and full Git-history/host secrets scanning"
+  ]
+}

@@ -1,0 +1,194 @@
+{
+  "completed": true,
+  "checked_at_utc": "2026-10-29T11:48:59.896563+00:00",
+  "source_commit": "f66ed1f801d7060c6cbf4e2eb4c42c5e89f15222",
+  "data_scope": "Authored synthetic fixtures; no actual customer databases or freight records",
+  "observations": {
+    "PR-01_anonymous": {
+      "GET /api/workspace": 401,
+      "GET /api/datasets": 401,
+      "GET /api/exceptions": 401,
+      "GET /api/settings": 401,
+      "GET /api/cases": 401,
+      "GET /api/cases/export": 401,
+      "GET /api/exports/report": 401,
+      "GET /api/optimization/runs/latest": 401,
+      "GET /api/planning/templates/xlsx": 401,
+      "GET /api/planning/imports": 401,
+      "POST /api/datasets": 401,
+      "POST /api/cases": 401,
+      "POST /api/planning/imports/preview": 401,
+      "POST /api/planning/runs": 401,
+      "PUT /api/settings/priority": 401,
+      "DELETE /api/planning/imports/id": 401
+    },
+    "PR-01_viewer": {
+      "POST /api/datasets": 403,
+      "POST /api/planning/runs": 403,
+      "POST /api/cases": 403,
+      "PATCH /api/cases/id": 403,
+      "PUT /api/settings/priority": 403,
+      "DELETE /api/datasets/id": 403
+    },
+    "PR-04": {
+      "cost_usd": 100,
+      "eligible_costs": 1,
+      "currency_issues": 2
+    },
+    "PR-05": {
+      "date_only_is_midnight_delay_hours": 15,
+      "duplicate_source_rows": 2,
+      "excluded_rows": 1,
+      "rules": {
+        "version": "utc-snapshot-usd-v1",
+        "columns": "Canonical English headers, UTF-8 comma-separated CSV or first XLSX worksheet; header order/case ignored.",
+        "dates": "ISO only. Naive timestamps are UTC; offsets convert to UTC. Date-only means 00:00 UTC, NOT end of day. Convert local time / end-of-day promises explicitly before upload.",
+        "duplicates": "Snapshot table, not an event feed. First occurrence wins; later duplicate IDs excluded. Review conflicts before confirming; no latest-event inference.",
+        "currency": "USD only, no FX. If currency/shipping_currency/cost_currency is supplied, every supplied column must say USD on that row. Blank/non-USD costs excluded. Without currency metadata you confirm costs have already been converted to USD.",
+        "numbers": "US number convention: 1,234 = 1234, decimal point is '.'. No automatic unit/FX conversion.",
+        "context": "V2 needs additional delay/financial/dependency evidence; absent evidence remains insufficient information. V3 remains a separate synthetic scenario."
+      }
+    },
+    "PR-06": {
+      "independent_costs_usd": [
+        120.0,
+        180.0,
+        120.0
+      ],
+      "all_statuses": [
+        "OPTIMAL",
+        "OPTIMAL",
+        "OPTIMAL"
+      ],
+      "scenario_count": 0,
+      "fake_probabilities_absent": true,
+      "source_declarations": {
+        "source_label": "Synthetic template example: 2 shipments (not real business data)",
+        "data_kind": "synthetic_test",
+        "planning_start": "2026-10-01T00:00:00+00:00",
+        "declarations": {
+          "capacity": {
+            "estimate": 2,
+            "user_verified": 0
+          },
+          "quote": {
+            "estimate": 4,
+            "user_verified": 0
+          },
+          "time": {
+            "estimate": 4,
+            "user_verified": 0
+          }
+        },
+        "policy": [
+          "USD / kg / m3 / h only. No FX or unit inference/conversion. Decimal point numbers only.",
+          "Offset-aware ISO timestamps required; date-only/naive dates rejected. Every order starts at the common planning_start.",
+          "Shared service IDs share weight, volume and slots, with one common expected transit duration. Capacity is not repeated per order.",
+          "Capacity without any quoted option is retained in source records but omitted from the model; utilization denominators cover modeled services only.",
+          "Expected-time deadlines are hard eligibility constraints, not arrival guarantees. Demands/costs round up, capacities/budget/deadlines down to the existing solver units.",
+          "estimate and user_verified are uploader declarations with references, not independent verification by this app.",
+          "No historical distribution is imported: no Monte Carlo, real on-time probability or risk preference in Uploaded Data Mode.",
+          "Imports are immutable snapshots. Correct the source and create a new import to change inputs."
+        ],
+        "reliability": "Not estimated. No historical distribution provided; internal zero std is a deterministic solver placeholder, not measured reliability.",
+        "input_warnings": []
+      },
+      "request_seconds": 1.0300927699718159
+    },
+    "PR-09_stale_comparison": {
+      "status": 409,
+      "no_case_saved": true
+    },
+    "remaining_settings_lost_update": {
+      "first_status": 200,
+      "stale_second_status": 200,
+      "distinct_administrators": [
+        "admin",
+        "second-admin"
+      ],
+      "first_urgency": 81,
+      "final_urgency": 30.0,
+      "original_urgency": 30,
+      "lost_update_reproduced": true
+    },
+    "PR-10_metadata": {
+      "request_id_header": true,
+      "events": [
+        {
+          "actor": "viewer",
+          "operation": "PUT",
+          "target": "/api/settings/priority request:fd19e9fd45884e549a0a9fb1af7ce24f",
+          "status": 403
+        },
+        {
+          "actor": "admin",
+          "operation": "PUT",
+          "target": "/api/settings/priority request:0856f8c3d5584ea18af510d1a66f267d",
+          "status": 200
+        },
+        {
+          "actor": "admin",
+          "operation": "PUT",
+          "target": "/api/settings/priority request:fa06024b901641d983c928e176888c07",
+          "status": 200
+        },
+        {
+          "actor": "second-admin",
+          "operation": "PUT",
+          "target": "/api/settings/priority request:75b4b1ae067c43faaf824e2dc3304d66",
+          "status": 200
+        }
+      ],
+      "old_new_config_in_event": false,
+      "ready_status": 200
+    },
+    "PR-02": {
+      "foreign_cookie_status": 401,
+      "foreign_ids": {
+        "dataset": 404,
+        "import": 404,
+        "run": 404
+      },
+      "mixed_db_pair_status": 503
+    },
+    "PR-07": {
+      "native_backup_table_counts": {
+        "workspace.sqlite3": {
+          "instance_identity": 1,
+          "access_users": 4,
+          "access_sessions": 4,
+          "access_rates": 9,
+          "access_events": 21,
+          "web_datasets": 3,
+          "web_settings": 1,
+          "web_runs": 1,
+          "planning_imports": 1,
+          "solver_lease": 0
+        },
+        "history.sqlite3": {
+          "instance_binding": 1,
+          "cases": 1
+        }
+      },
+      "integrity_checked": true,
+      "sessions_revoked": true,
+      "confirmed_import_and_run_restored": true,
+      "case_preserved": true,
+      "cli_commands": [
+        {
+          "operation": "backup",
+          "exit_code": 0
+        },
+        {
+          "operation": "restore",
+          "exit_code": 0
+        }
+      ],
+      "scope": "Stopped synthetic DB pair; not live multi-writer backup, scheduler or production RPO/RTO"
+    },
+    "PR-10_invalid_database": {
+      "health": 200,
+      "ready": 503
+    }
+  }
+}

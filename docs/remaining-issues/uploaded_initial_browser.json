@@ -1,0 +1,174 @@
+{
+  "completed": true,
+  "checks": [
+    "Four-CSV upload persists field errors; EUR is rejected with no confirmation/solve path",
+    "100-template-order Excel preview/confirmation/real worker solve/full CSV+JSON exports match independent 6000/9000/6000 calculation",
+    "Explore analytics pins the selected allocation run ID in the URL instead of silently switching to another latest run",
+    "Uploaded results survive refresh; Analytics shows source declarations and no invented Monte Carlo/reliability",
+    "Shipment filter survives refresh; decision selection/draft/notes/applied result survive navigation+reload; saving still uses333 applied not444 draft",
+    "Unsaved historical outcome inputs survive route changes and refresh without silently updating SQLite",
+    "Unsaved Settings and synthetic optimization parameters retained without changing server settings; modes restore their own context",
+    "Infeasible shared-capacity/budget combination displays original diagnostics with no fabricated allocation or savings",
+    "Anonymous template access401; authenticated viewer exports allowed but direct upload/confirm/solve/delete403",
+    "28 populated page/width combinations have no document overflow, including Exceptions360/393 and uploaded planning",
+    "Logout clears tab draft caches and revokes server access; actor/instance-scoped storage never supplies API authorization"
+  ],
+  "javascript_errors": [],
+  "responsive_matrix": [
+    {
+      "route": "/app",
+      "width": 360,
+      "document": 360
+    },
+    {
+      "route": "/app/shipments",
+      "width": 360,
+      "document": 360
+    },
+    {
+      "route": "/app/exceptions",
+      "width": 360,
+      "document": 360
+    },
+    {
+      "route": "/app/decisions",
+      "width": 360,
+      "document": 360
+    },
+    {
+      "route": "/app/optimization",
+      "width": 360,
+      "document": 360
+    },
+    {
+      "route": "/app/analytics",
+      "width": 360,
+      "document": 360
+    },
+    {
+      "route": "/app/settings",
+      "width": 360,
+      "document": 360
+    },
+    {
+      "route": "/app",
+      "width": 393,
+      "document": 393
+    },
+    {
+      "route": "/app/shipments",
+      "width": 393,
+      "document": 393
+    },
+    {
+      "route": "/app/exceptions",
+      "width": 393,
+      "document": 393
+    },
+    {
+      "route": "/app/decisions",
+      "width": 393,
+      "document": 393
+    },
+    {
+      "route": "/app/optimization",
+      "width": 393,
+      "document": 393
+    },
+    {
+      "route": "/app/analytics",
+      "width": 393,
+      "document": 393
+    },
+    {
+      "route": "/app/settings",
+      "width": 393,
+      "document": 393
+    },
+    {
+      "route": "/app",
+      "width": 768,
+      "document": 768
+    },
+    {
+      "route": "/app/shipments",
+      "width": 768,
+      "document": 768
+    },
+    {
+      "route": "/app/exceptions",
+      "width": 768,
+      "document": 768
+    },
+    {
+      "route": "/app/decisions",
+      "width": 768,
+      "document": 768
+    },
+    {
+      "route": "/app/optimization",
+      "width": 768,
+      "document": 768
+    },
+    {
+      "route": "/app/analytics",
+      "width": 768,
+      "document": 768
+    },
+    {
+      "route": "/app/settings",
+      "width": 768,
+      "document": 768
+    },
+    {
+      "route": "/app",
+      "width": 1440,
+      "document": 1440
+    },
+    {
+      "route": "/app/shipments",
+      "width": 1440,
+      "document": 1440
+    },
+    {
+      "route": "/app/exceptions",
+      "width": 1440,
+      "document": 1440
+    },
+    {
+      "route": "/app/decisions",
+      "width": 1440,
+      "document": 1440
+    },
+    {
+      "route": "/app/optimization",
+      "width": 1440,
+      "document": 1440
+    },
+    {
+      "route": "/app/analytics",
+      "width": 1440,
+      "document": 1440
+    },
+    {
+      "route": "/app/settings",
+      "width": 1440,
+      "document": 1440
+    }
+  ],
+  "hundred_order_import": "d1d2eea9d730452eac183d834a66f724",
+  "hundred_order_run": "bcb17c38544949b1a290c7b3b1c3c010",
+  "hundred_order_costs": {
+    "Lowest Cost": 6000.0,
+    "Fastest Delivery": 9000.0,
+    "Optimized Allocation": 6000.0
+  },
+  "hundred_order_statuses": {
+    "Lowest Cost": "OPTIMAL",
+    "Fastest Delivery": "OPTIMAL",
+    "Optimized Allocation": "OPTIMAL"
+  },
+  "confirmation_and_solve_browser_seconds": 2.190112609998323,
+  "solver_experiment_seconds": 0.09401977801462635,
+  "restart_source_and_results_preserved": true
+}
