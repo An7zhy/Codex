@@ -54,6 +54,7 @@ def main():
             evidence["checks"].append("PR-09: removing selected expedite resets visible/submitted/saved action consistently")
 
             cfg = PriorityConfig.load().to_dict(); cfg["weights"]["financial"] = 100
+            cfg["expected_version"] = page.request.get(BASE + "/api/settings").json()["version"]
             changed = page.request.put(BASE + "/api/settings/priority", data=cfg, headers=HEADERS)
             assert changed.status == 200
             with page.expect_response(lambda r: r.url.endswith("/api/cases") and r.request.method == "POST") as rejected:

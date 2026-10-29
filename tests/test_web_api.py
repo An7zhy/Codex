@@ -150,6 +150,7 @@ def test_settings_change_score_not_v1_kpis_and_persist(client, tmp_path):
     assert score(before) == 78.6667
     config = PriorityConfig.load().to_dict()
     config["weights"]["financial"] = 100
+    config["expected_version"] = client.get("/api/settings").json()["version"]
     assert client.put("/api/settings/priority", json=config).status_code == 200
     after = client.get("/api/workspace").json()
     assert score(after) == 88.1481

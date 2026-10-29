@@ -1,0 +1,90 @@
+{
+  "completed": true,
+  "checks": [
+    "Account-free synthetic viewer loads original calculated KPIs/report and precomputed real CP-SAT result; every direct mutation attempt is denied403",
+    "All eight application routes render read-only demo data at360/1440px without page overflow, blank pages or error states"
+  ],
+  "javascript_errors": [],
+  "responsive_matrix": [
+    {
+      "route": "/app",
+      "width": 360,
+      "document": 360
+    },
+    {
+      "route": "/app/shipments",
+      "width": 360,
+      "document": 360
+    },
+    {
+      "route": "/app/exceptions",
+      "width": 360,
+      "document": 360
+    },
+    {
+      "route": "/app/decisions",
+      "width": 360,
+      "document": 360
+    },
+    {
+      "route": "/app/decisions/history",
+      "width": 360,
+      "document": 360
+    },
+    {
+      "route": "/app/optimization",
+      "width": 360,
+      "document": 360
+    },
+    {
+      "route": "/app/analytics",
+      "width": 360,
+      "document": 360
+    },
+    {
+      "route": "/app/settings",
+      "width": 360,
+      "document": 360
+    },
+    {
+      "route": "/app",
+      "width": 1440,
+      "document": 1440
+    },
+    {
+      "route": "/app/shipments",
+      "width": 1440,
+      "document": 1440
+    },
+    {
+      "route": "/app/exceptions",
+      "width": 1440,
+      "document": 1440
+    },
+    {
+      "route": "/app/decisions",
+      "width": 1440,
+      "document": 1440
+    },
+    {
+      "route": "/app/decisions/history",
+      "width": 1440,
+      "document": 1440
+    },
+    {
+      "route": "/app/optimization",
+      "width": 1440,
+      "document": 1440
+    },
+    {
+      "route": "/app/analytics",
+      "width": 1440,
+      "document": 1440
+    },
+    {
+      "route": "/app/settings",
+      "width": 1440,
+      "document": 1440
+    }
+  ]
+}

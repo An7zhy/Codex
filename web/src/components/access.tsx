@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { BusyLabel, Field, LoadingState } from "@/components/ui/primitives";
 import { Brand } from "@/components/brand";
 
-type Principal = { username: string; role: "viewer" | "operator" | "admin"; organization: string; instance_id: string };
+type Principal = { username: string; role: "viewer" | "operator" | "admin"; organization: string; instance_id: string; read_only_demo?: boolean };
 const Access = createContext<Principal | null>(null);
 export function useAccess() { return useContext(Access); }
 
@@ -45,6 +45,7 @@ export function AccessGate({ children }: { children: ReactNode }) {
 export function AccountControl() {
   const user = useAccess();
   const [error, setError] = useState("");
+  if (user?.read_only_demo) return <div className="account-control"><span>Synthetic demo · Read only</span></div>;
   return <div className="account-control"><span>{user?.organization} · {user?.username} ({user?.role})</span>
     <Button variant="ghost" size="sm" onClick={async () => {
       try { await api("/auth/logout", jsonBody({})); window.dispatchEvent(new Event("logistics-auth-expired")); }

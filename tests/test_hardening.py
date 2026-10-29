@@ -195,6 +195,7 @@ def test_comparison_context_pinning_and_unavailable_actions(secured):
     compared = secured("POST", "/api/decisions/compare", json=body).json()
     save = dict(**body, selected_action="Request expedited handling", exception_type="Overdue in transit", comparison_token=compared["comparison_token"])
     cfg = PriorityConfig.load().to_dict(); cfg["weights"]["financial"] = 100
+    cfg["expected_version"] = secured("GET", "/api/settings").json()["version"]
     assert secured("PUT", "/api/settings/priority", json=cfg).status_code == 200
     assert secured("POST", "/api/cases", json=save).status_code == 409
     assert secured("GET", "/api/cases").json() == []

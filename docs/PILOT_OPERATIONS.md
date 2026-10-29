@@ -1,4 +1,8 @@
-# Single-organization pilot operations — Sprint 1
+# Single-organization pilot operations
+
+Current Sprint 2.5 deployment, read-only demo and versioned-settings instructions:
+[DEPLOYMENT_READINESS.md](DEPLOYMENT_READINESS.md). The original local operating
+procedures below remain applicable; remote acceptance is still a separate gate.
 
 This is an invited, **single organization per independently deployed instance**.
 It is not shared multi-tenant SaaS. Each organization's process, writable directory,
@@ -106,8 +110,10 @@ discloses samples, issues, duplicate source rows and date precision counts.
 - Compare first, then save an available applied action. Changed scoring/data
   context returns 409 until recomparison. The saved score/context and actor are
   recorded; this is not a complete immutable business audit ledger.
-- V3 remains a separate synthetic planning sandbox with assumed distributions,
-  not optimization of uploaded customer orders or a validated carrier prediction.
+- V3 has two distinct modes. Synthetic Demo Mode uses assumed distributions;
+  Uploaded Data Mode imports confirmed orders/options/shared capacity/constraints
+  for deterministic cost/time planning, with no inferred real reliability. V1
+  snapshots alone are not complete V3 inputs and do not become transport quotes.
 
 ## Runtime and storage budgets
 

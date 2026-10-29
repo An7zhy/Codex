@@ -1,5 +1,7 @@
 # Logistics Insight AI — Production Readiness Audit
 
+后续Sprint 2.5的版本并发修复、只读合成实例和本地部署验证见 [SPRINT_2_5_REPORT.md](SPRINT_2_5_REPORT.md)。以下审计与Sprint记录保留各自基线，不代表已完成公网或真实业务验收。
+
 当前开发分支的Sprint 2复验见 [SPRINT_2_REPORT.md](SPRINT_2_REPORT.md)。已新增受保护的规划输入上传闭环；下文保留Sprint 1及原始审计的历史结论，不能将其中“V3仅模拟输入”当作当前代码状态。真实企业业务有效性和公网部署验收仍未完成。
 
 ## Sprint 1 修复复验（2026-10-28，Asia/Shanghai）

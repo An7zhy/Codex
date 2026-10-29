@@ -11,6 +11,7 @@ from starlette.requests import Request
 from starlette.responses import JSONResponse
 
 from backend.access import AccessStore, COOKIE, ROLES, required_role
+from backend.demo_policy import demo_enabled, validate_demo, allow_demo_read, DemoBudget
 
 MAX_BODY = 20 * 1024 * 1024
 SAFE = {"GET", "HEAD", "OPTIONS"}
@@ -23,6 +24,7 @@ def origins():
 class SecurityBoundary:
     def __init__(self, app):
         self.app = app
+        self.demo_budget = DemoBudget()
 
     async def __call__(self, scope, receive, send):
         if scope["type"] != "http":
@@ -46,6 +48,30 @@ class SecurityBoundary:
             if os.environ.get("LOGISTICS_PILOT_MODE") == "1" and path != "/api/health":
                 if os.environ.get("LOGISTICS_COOKIE_SECURE") != "1" or any(not item.startswith("https://") for item in origins()):
                     raise HTTPException(503, "Pilot mode requires Secure cookies and explicit HTTPS website origins.")
+            if demo_enabled():
+                if method != "GET":
+                    raise HTTPException(403, "Read-only synthetic demo: uploads, comparisons, solving, account login and all writes are disabled on the server.")
+                allow_demo_read(path, scope.get("query_string", b""))
+                # Liveness remains available for restart checks; ready validates sealed data.
+                if path == "/api/health":
+                    return await self.app(scope, receive, secured_send)
+                with self.demo_budget.slot():
+                    scope["state"]["principal"] = validate_demo()
+                    started = time.monotonic()
+                    while True:
+                        remaining = 5 - (time.monotonic() - started)
+                        if remaining <= 0:
+                            raise HTTPException(408, "Demo request timed out.")
+                        event = await asyncio.wait_for(receive(), remaining)
+                        if event["type"] == "http.disconnect":
+                            return
+                        if event.get("body"):
+                            raise HTTPException(413, "Synthetic demo GET requests cannot contain a body.")
+                        if not event.get("more_body", False):
+                            break
+                    async def empty_receive():
+                        return {"type": "http.request", "body": b""}
+                    return await self.app(scope, empty_receive, secured_send)
             public = (method == "GET" and path in {"/api/health", "/api/ready"}) or (method == "POST" and path == "/api/auth/login")
             if not public:
                 if not request.cookies.get(COOKIE):

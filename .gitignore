@@ -22,3 +22,9 @@ web/next-env.d.ts
 backups/
 restored/
 npm-debug.log*
+deploy/build-deps/**
+!deploy/build-deps/python/
+!deploy/build-deps/python/.gitkeep
+!deploy/build-deps/npm-cache/
+!deploy/build-deps/npm-cache/.gitkeep
+data/demo*/

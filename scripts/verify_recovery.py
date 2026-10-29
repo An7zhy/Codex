@@ -37,7 +37,7 @@ def main():
             old_token = access.login("recovery-admin", password)
             workspace = WorkspaceStore(access.path)
             cfg = PriorityConfig.load().to_dict(); cfg["weights"]["financial"] = 100
-            workspace.save_setting("priority", cfg)
+            workspace.save_setting("priority", cfg, expected_version=workspace.setting_snapshot("priority")["version"], actor="recovery-admin")
             history = HistoryStore(access.history_path)
             case_id = history.create_case(CaseInput("SYN-0027", "Overdue in transit", "Wait and monitor", estimated_cost=0, estimated_delay=72))
             run_id = workspace.save_run(json.dumps(calculate(OptimizationRequest(scenario_count=100)), allow_nan=False))

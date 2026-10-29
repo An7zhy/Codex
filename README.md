@@ -1,5 +1,24 @@
 # Logistics Insight AI
 
+## Sprint 2.5 — Readiness hardening
+
+The protected full application retains V1–V3, including **Synthetic Demo Mode**
+and **Uploaded Data Mode**. Scoring settings now use persisted SQLite versions,
+atomic compare-and-set updates, conflict409 responses and actor/time/version/diff
+history. The frontend keeps the draft's base version and offers explicit reload.
+
+A separate **read-only synthetic demonstration instance** is available: sealed
+offline-generated databases, no business accounts or customer uploads, server-side
+GET allowlist and request/storage budgets. It does not expose privileged accounts
+or online optimization; visitors inspect precomputed synthetic results.
+
+See [deployment/operations guide](docs/DEPLOYMENT_READINESS.md),
+[Chinese steps](docs/WEB_RUN_ZH.md) and [Sprint 2.5 verification report](SPRINT_2_5_REPORT.md).
+Docker/Compose configs include CPU/RAM/PID limits, bounded writable storage,
+private API networks, local HTTPS proxy and local alert/recovery logs.
+These are preparation and locally tested boundaries, **not public deployment
+acceptance or proof of real logistics efficacy**. No public deployment is performed.
+
 Current deployment assessment: see [PRODUCTION_READINESS_AUDIT.md](PRODUCTION_READINESS_AUDIT.md).
 Sprint 1 adds server-enforced authentication and roles for one organization per
 independent instance, import confirmation and decision consistency checks. Remote
@@ -163,12 +182,13 @@ See [the Chinese startup guide](docs/WEB_RUN_ZH.md),
 [`docs/images/premium/`](docs/images/premium/).
 
 Windows launcher/runtime behavior and a complete Windows/Python 3.14 matrix are
-**Not Tested** in the Linux execution environment. This is a trusted local
-single-workspace prototype without authentication, public-deployment hardening
-or commercial validation.
+**Not Tested** in the Linux execution environment. The full web application is a protected single-organization instance with server-side
+authentication/roles; the separate read-only demo has only sealed synthetic data.
+Public deployment acceptance and commercial validation remain incomplete.
 
-**V3 adds a synthetic, capacity-constrained transportation planning sandbox to the
-working V1 dashboard and V2 exception copilot. No LLM,
+**V3 adds capacity-constrained transportation planning to the working V1 dashboard
+and V2 exception copilot. The web application has separate synthetic and confirmed
+uploaded-input modes; the original Streamlit V3 sandbox remains synthetic. No LLM,
 API key, paid service or logistics company API is required.** This is an engineering
 prototype evaluated on **Synthetic Demo Data**, not a live carrier network or a
 validated forecasting system. It is not DHL, Maersk or any company's operating data.
@@ -526,8 +546,9 @@ The generator intentionally overwrites those named demo files, not uploads.
 - Order snapshots do not explain customs, port, weather or operational root causes.
   Reports recommend verification rather than inventing explanations.
 - All prices must use USD. V1 cost screening has no weight/volume normalization,
-  service-level adjustment or seasonal cost model. V3 uses synthetic weight/volume
-  capacity constraints; neither mode converts currencies or obtains live quotes; Uploaded Mode accepts explicit user-provided per-order quotes and shared capacities.
+  service-level adjustment or seasonal cost model. V3 enforces weight/volume/shared-slot
+  constraints in both modes. Neither mode converts currencies or obtains live
+  quotes; Uploaded Mode accepts explicit user-provided per-order quotes and shared capacities.
 - Exact location labels are not geocoded or mapped to UN/LOCODE. Equivalent spellings
   beyond case and whitespace may form different groups.
 - Streamlit analyzes uploads in memory; the premium web workspace also persists
@@ -535,11 +556,12 @@ The generator intentionally overwrites those named demo files, not uploads.
   Both interfaces use the original saved case history. The web API enforces
   authentication/roles; Streamlit remains local-only and is disabled in pilot mode.
   Scheduled maintenance, live tracking and validated public deployment are not provided.
-- Only the first Excel worksheet and UTF-8 comma-separated CSVs are read. Badly
+- V1 snapshot imports read the first Excel worksheet or UTF-8 comma-separated CSV.
+  V3 Uploaded Mode instead requires its four planning tables. Badly
   structured CSV records, password-protected/corrupt workbooks or a missing schema
   need correction before upload; ordinary invalid field values are reviewable.
-- Date-only fields lose within-day precision. UTC is a documented assumption,
-  not an automatic conversion from an unknown local timezone.
+- V1 date-only fields lose within-day precision; naive values mean UTC, not an
+  inferred local timezone. Uploaded planning requires explicit offset-aware instants.
 - Requirements pin direct packages; transitive dependencies remain resolver-managed.
   Browser automation is optional and separate from the core install.
 

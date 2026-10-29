@@ -43,10 +43,12 @@ const initial: OptimizationInput = {
 
 export { StrategyTable } from "@/components/optimization-results";
 export function Optimization() {
+  const user = useAccess();
   const [mode, setMode] = useSessionDraft("optimization-mode", "synthetic");
-  return <><Field label="Optimization input mode"><select className="input optimization-mode" value={mode} onChange={(event) => setMode(event.target.value)}>
+  return <>{user?.read_only_demo && <div className="notice">Read-only synthetic demo. The allocation below was computed from built-in synthetic inputs. Uploads and online solving are disabled on the server.</div>}
+    <Field label="Optimization input mode"><select className="input optimization-mode" disabled={user?.read_only_demo} value={user?.read_only_demo ? "synthetic" : mode} onChange={(event) => setMode(event.target.value)}>
     <option value="synthetic">Synthetic Demo Mode</option><option value="uploaded">Uploaded Data Mode</option>
-  </select></Field>{mode === "uploaded" ? <UploadedOptimization /> : <SyntheticOptimization />}</>;
+  </select></Field>{mode === "uploaded" && !user?.read_only_demo ? <UploadedOptimization /> : <SyntheticOptimization />}</>;
 }
 
 function SyntheticOptimization() {

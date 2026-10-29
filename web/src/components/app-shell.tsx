@@ -219,6 +219,7 @@ function UploadDialog() {
 }
 
 function Shell({ children }: { children: ReactNode }) {
+  const user = useAccess();
   const path = usePathname();
   const title =
     [...navigation].reverse().find((item) => path.startsWith(item.href))
@@ -295,6 +296,7 @@ function Shell({ children }: { children: ReactNode }) {
           </div>
         </header>
         <main id="main-content" className="app-content">
+          {user?.read_only_demo && <div className="notice" role="status">Read-only synthetic demo. No real customer data or accounts. Uploads, scenario comparison, settings changes, history edits and online optimization are disabled by the server. The full protected application retains these operations.</div>}
           <div className="dataset-bar">
             <select
               aria-label="Active dataset"

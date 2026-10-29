@@ -1,0 +1,6 @@
+{
+  "passed": true,
+  "existing_disposable_container_preserved": true,
+  "verifier_exit_code": 1,
+  "scope": "Purpose-created sleeping synthetic container only; preflight refused before cleanup"
+}

@@ -1,0 +1,8 @@
+{
+  "completed": true,
+  "checks": [
+    "Original audit81/82 scenario: stale second admin409, urgency81 preserved; navigation preserves draft base1; explicit reload then save succeeds as version3 with both edits",
+    "SQLite audit retains actual actors, times, versions and differences; page refresh retains version3 configuration"
+  ],
+  "javascript_errors": []
+}

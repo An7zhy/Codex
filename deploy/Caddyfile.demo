@@ -1,0 +1,38 @@
+{
+    admin off
+    skip_install_trust
+    auto_https disable_redirects
+    servers {
+        timeouts {
+            read_header 5s
+            read_body 20s
+            write 60s
+            idle 30s
+        }
+    }
+}
+
+http://:8080 {
+    respond /health "ok" 200
+}
+
+{$SITE_HOST:localhost}:8443 {
+    tls internal
+    request_body {
+        max_size 20MB
+    }
+    header {
+        Strict-Transport-Security "max-age=31536000"
+        X-Content-Type-Options nosniff
+        X-Frame-Options DENY
+        Referrer-Policy same-origin
+        Content-Security-Policy "frame-ancestors 'none'; object-src 'none'; base-uri 'self'"
+        -Server
+    }
+    reverse_proxy web:3000 {
+        transport http {
+            dial_timeout 5s
+            response_header_timeout 55s
+        }
+    }
+}

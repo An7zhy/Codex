@@ -12,7 +12,7 @@ RULES = {
     "duplicates": "Snapshot table, not an event feed. First occurrence wins; later duplicate IDs excluded. Review conflicts before confirming; no latest-event inference.",
     "currency": "USD only, no FX. If currency/shipping_currency/cost_currency is supplied, every supplied column must say USD on that row. Blank/non-USD costs excluded. Without currency metadata you confirm costs have already been converted to USD.",
     "numbers": "US number convention: 1,234 = 1234, decimal point is '.'. No automatic unit/FX conversion.",
-    "context": "V2 needs additional delay/financial/dependency evidence; absent evidence remains insufficient information. V3 remains a separate synthetic scenario.",
+    "context": "V2 needs additional delay/financial/dependency evidence; absent evidence remains insufficient information. V3 has separate Synthetic Demo and Uploaded Data planning modes; V1 snapshots are not complete planning inputs.",
 }
 
 

@@ -22,6 +22,9 @@ export function num(value: number | null | undefined, digits = 1) {
     : value.toLocaleString("en-US", { maximumFractionDigits: digits });
 }
 
+export class ApiError extends Error {
+  constructor(message: string, public status: number) { super(message); }
+}
 export async function api<T>(path: string, init?: RequestInit): Promise<T> {
   const response = await fetch(`/api${path}`, { cache: "no-store", ...init });
   if (!response.ok) {
@@ -40,7 +43,7 @@ export async function api<T>(path: string, init?: RequestInit): Promise<T> {
     } catch {
       /* A stopped backend can return an HTML proxy error. */
     }
-    throw new Error(message);
+    throw new ApiError(message, response.status);
   }
   return response.json();
 }

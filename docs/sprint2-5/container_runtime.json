@@ -1,0 +1,18 @@
+{
+  "web_runtime_only": true,
+  "excluded": [
+    "streamlit",
+    "PIL",
+    "pytest"
+  ],
+  "packages": {
+    "fastapi": "0.162.0",
+    "uvicorn": "0.54.0",
+    "pandas": "2.3.3",
+    "ortools": "9.15.6755",
+    "openpyxl": "3.1.5",
+    "numpy": "2.5.4",
+    "pydantic": "2.14.1",
+    "pip": "26.2.2"
+  }
+}

@@ -1,0 +1,8 @@
+FROM caddy:2.10.2-alpine@sha256:4c6e91c6ed0e2fa03efd5b44747b625fec79bc9cd06ac5235a779726618e530d
+# The upstream binary carries net_bind_service file capabilities. This service
+# binds unprivileged8443; drop the file xattr so cap_drop ALL does not cause EPERM.
+RUN cp /usr/bin/caddy /usr/bin/caddy.unprivileged && mv /usr/bin/caddy.unprivileged /usr/bin/caddy
+COPY --chmod=0444 deploy/Caddyfile.demo /etc/caddy/Caddyfile.demo
+COPY --chmod=0444 deploy/Caddyfile.pilot /etc/caddy/Caddyfile.pilot
+USER 10001:10001
+HEALTHCHECK --interval=15s --timeout=5s --start-period=10s --retries=3 CMD wget -q -O /dev/null http://127.0.0.1:8080/health || exit 1

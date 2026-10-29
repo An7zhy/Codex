@@ -1,0 +1,61 @@
+name: logistics-synthetic-demo
+x-log: &logging
+  driver: json-file
+  options: {max-size: "10m", max-file: "2"}
+x-safe: &safe
+  restart: unless-stopped
+  read_only: true
+  cap_drop: [ALL]
+  security_opt: [no-new-privileges:true]
+  logging: *logging
+services:
+  api:
+    <<: *safe
+    build: {context: .., dockerfile: deploy/Dockerfile.api, target: demo, args: {OFFLINE_DEPS: "${OFFLINE_DEPS:-0}"}}
+    environment:
+      LOGISTICS_INSTANCE_MODE: demo
+      LOGISTICS_DEMO_ROOT: /app/demo-seed
+      LOGISTICS_PILOT_MODE: "1"
+      LOGISTICS_COOKIE_SECURE: "1"
+      LOGISTICS_ALLOWED_ORIGINS: ${PUBLIC_ORIGIN:-https://localhost:8443}
+    cpus: 1.0
+    mem_limit: 1g
+    pids_limit: 96
+    tmpfs: ["/tmp:size=32m,mode=1777"]
+    networks: [private]
+  web:
+    <<: *safe
+    build: {context: .., dockerfile: deploy/Dockerfile.web, args: {OFFLINE_DEPS: "${OFFLINE_DEPS:-0}"}}
+    cpus: 1.0
+    mem_limit: 768m
+    pids_limit: 128
+    tmpfs: ["/tmp:size=32m,mode=1777", "/app/.next/cache:size=32m,uid=10001,gid=10001"]
+    depends_on: {api: {condition: service_healthy}}
+    networks: [private]
+  proxy:
+    <<: *safe
+    build: {context: .., dockerfile: deploy/Dockerfile.proxy}
+    user: "10001:10001"
+    environment: {SITE_HOST: "${SITE_HOST:-localhost}", XDG_DATA_HOME: /data, XDG_CONFIG_HOME: /config}
+    command: [caddy, run, --config, /etc/caddy/Caddyfile.demo, --adapter, caddyfile]
+    ports: ["127.0.0.1:${HTTPS_PORT:-8443}:8443"]
+    tmpfs: ["/tmp:size=8m,mode=1777", "/data:size=32m,uid=10001,gid=10001", "/config:size=8m,uid=10001,gid=10001"]
+    cpus: 0.5
+    mem_limit: 256m
+    pids_limit: 64
+    depends_on: {web: {condition: service_healthy}}
+    networks: [private, ingress]
+  monitor:
+    <<: *safe
+    build: {context: .., dockerfile: deploy/Dockerfile.api, target: business, args: {OFFLINE_DEPS: "${OFFLINE_DEPS:-0}"}}
+    command: [python, -m, scripts.monitor_health, http://api:8000/api/ready, http://web:3000/, http://proxy:8080/health]
+    healthcheck: {disable: true}
+    cpus: 0.25
+    mem_limit: 128m
+    pids_limit: 32
+    tmpfs: ["/tmp:size=8m,mode=1777"]
+    depends_on: {api: {condition: service_healthy}, web: {condition: service_healthy}}
+    networks: [private]
+networks:
+  private: {internal: true}
+  ingress: {}

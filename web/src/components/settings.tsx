@@ -12,13 +12,14 @@ import {
   Panel,
 } from "@/components/ui/primitives";
 import { useWorkspace } from "@/components/workspace-provider";
-import { api, jsonBody, percent } from "@/lib/utils";
+import { api, ApiError, jsonBody, percent } from "@/lib/utils";
 import type { PriorityConfig } from "@/lib/types";
 import { useAccess } from "@/components/access";
 import { useSessionDraft } from "@/lib/session-draft";
 
 type SettingsResponse = {
   priority: PriorityConfig;
+  version: number;
   capabilities: Record<string, string | boolean>;
 };
 const labels: Record<string, string> = {
@@ -33,10 +34,15 @@ export function Settings() {
   const { refresh, notify, data, datasetId, datasets, selectDataset } = useWorkspace();
   const [deleteConfirmation, setDeleteConfirmation] = useState("");
   const [settings, setSettings] = useState<SettingsResponse | null>(null);
-  const [draft, setDraft, draftReady, restored] = useSessionDraft<PriorityConfig | null>("priority-settings", null, (value) => {
-    const candidate = value as PriorityConfig;
-    return !!candidate?.weights && Object.keys(labels).every((key) => typeof candidate.weights[key] === "number");
+  const [draftState, setDraftState, draftReady, restored] = useSessionDraft<{ config: PriorityConfig; expectedVersion: number } | null>("priority-settings-v2", null, (value) => {
+    const candidate = value as { config: PriorityConfig; expectedVersion: number };
+    return Number.isInteger(candidate?.expectedVersion) && candidate.expectedVersion > 0 && !!candidate?.config?.weights && Object.keys(labels).every((key) => typeof candidate.config.weights[key] === "number");
   });
+  const draft = draftState?.config ?? null;
+  function setDraft(value: React.SetStateAction<PriorityConfig | null>) {
+    setDraftState((old) => old ? { ...old, config: (typeof value === "function" ? value(old.config) : value) ?? old.config } : old);
+  }
+  const [conflict, setConflict] = useState(false);
   const [busy, setBusy] = useState(false),
     [error, setError] = useState("");
   useEffect(() => {
@@ -44,31 +50,44 @@ export function Settings() {
     api<SettingsResponse>("/settings")
       .then((value) => {
         setSettings(value);
-        if (!restored) setDraft(value.priority);
+        if (!restored) setDraftState({ config: value.priority, expectedVersion: value.version });
       })
       .catch((err) => setError(err.message));
   }, [draftReady]);
   async function save(event: React.FormEvent) {
     event.preventDefault();
-    if (!draft) return;
+    if (!draft || !draftState) return;
     setBusy(true);
     setError("");
     try {
-      const saved = await api<PriorityConfig>("/settings/priority", {
-        ...jsonBody(draft),
+      const saved = await api<{ priority: PriorityConfig; version: number }>("/settings/priority", {
+        ...jsonBody({ ...draft, expected_version: draftState.expectedVersion }),
         method: "PUT",
       });
-      setSettings((old) => (old ? { ...old, priority: saved } : null));
-      setDraft(saved);
+      setSettings((old) => (old ? { ...old, ...saved } : null));
+      setDraftState({ config: saved.priority, expectedVersion: saved.version });
+      setConflict(false);
       refresh();
       notify(
         "Priority settings saved. Exceptions now use the applied weights.",
       );
     } catch (err) {
+      setConflict(err instanceof ApiError && err.status === 409);
       setError((err as Error).message);
     } finally {
       setBusy(false);
     }
+  }
+  async function reloadLatest() {
+    setBusy(true);
+    try {
+      const latest = await api<SettingsResponse>("/settings");
+      setSettings(latest);
+      setDraftState({ config: latest.priority, expectedVersion: latest.version });
+      setConflict(false); setError("");
+      notify("Latest settings loaded. The previous draft was discarded; review before saving.");
+    } catch (err) { setError((err as Error).message); }
+    finally { setBusy(false); }
   }
   function exportSettings() {
     if (!settings) return;
@@ -104,6 +123,9 @@ export function Settings() {
         }
       />
       {error && <ErrorState message={error} />}
+      {settings && <div className="notice"><p>Applied version {settings.version}. Draft based on version {draftState?.expectedVersion ?? "—"}.
+        {conflict && " Conflict: your draft has not been saved."} Reload discards your unsaved draft.</p>
+        <Button variant="outline" size="sm" disabled={busy} onClick={reloadLatest}>Reload latest settings</Button></div>}
       {!draft || !settings ? (
         !error && <LoadingState />
       ) : (
@@ -188,7 +210,7 @@ export function Settings() {
                   Draft edits are applied only after saving. Settings persist in
                   local SQLite.
                 </p>
-                <Button type="submit" disabled={busy || user?.role !== "admin"}>
+                <Button type="submit" disabled={busy || conflict || user?.role !== "admin"}>
                   <Save size={13} />
                   <BusyLabel busy={busy}>Apply priority settings</BusyLabel>
                 </Button>

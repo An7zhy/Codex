@@ -1,0 +1,64 @@
+name: logistics-private-pilot
+x-log: &logging
+  driver: json-file
+  options: {max-size: "10m", max-file: "3"}
+x-safe: &safe
+  restart: unless-stopped
+  read_only: true
+  cap_drop: [ALL]
+  security_opt: [no-new-privileges:true]
+  logging: *logging
+services:
+  api:
+    <<: *safe
+    build: {context: .., dockerfile: deploy/Dockerfile.api, target: business, args: {OFFLINE_DEPS: "${OFFLINE_DEPS:-0}"}}
+    environment:
+      LOGISTICS_INSTANCE_MODE: business
+      LOGISTICS_WEB_DB_PATH: /var/lib/logistics/workspace.sqlite3
+      LOGISTICS_DB_PATH: /var/lib/logistics/history.sqlite3
+      LOGISTICS_REQUIRE_BOUNDED_STORAGE: "1"
+      LOGISTICS_PILOT_MODE: "1"
+      LOGISTICS_COOKIE_SECURE: "1"
+      LOGISTICS_ALLOWED_ORIGINS: ${PUBLIC_ORIGIN:?Set the exact HTTPS organization origin}
+    volumes: ["${PILOT_DATA_ROOT:?Provision a private dedicated filesystem at most 1 GiB}:/var/lib/logistics"]
+    cpus: 2.0
+    mem_limit: 1536m
+    pids_limit: 128
+    tmpfs: ["/tmp:size=128m,mode=1777"]
+    networks: [private]
+  web:
+    <<: *safe
+    build: {context: .., dockerfile: deploy/Dockerfile.web, args: {OFFLINE_DEPS: "${OFFLINE_DEPS:-0}"}}
+    cpus: 1.0
+    mem_limit: 768m
+    pids_limit: 128
+    tmpfs: ["/tmp:size=32m,mode=1777", "/app/.next/cache:size=32m,uid=10001,gid=10001"]
+    depends_on: {api: {condition: service_healthy}}
+    networks: [private]
+  proxy:
+    <<: *safe
+    build: {context: .., dockerfile: deploy/Dockerfile.proxy}
+    user: "10001:10001"
+    environment: {SITE_HOST: "${SITE_HOST:?Set the organization hostname}", TLS_EMAIL: "${TLS_EMAIL:?Set the certificate contact}", XDG_DATA_HOME: /data, XDG_CONFIG_HOME: /config}
+    ports: ["127.0.0.1:${HTTPS_PORT:-8443}:8443"]
+    command: [caddy, run, --config, /etc/caddy/Caddyfile.pilot, --adapter, caddyfile]
+    volumes: ["${PILOT_TLS_ROOT:?Create a private TLS state directory}:/data"]
+    tmpfs: ["/tmp:size=8m,mode=1777", "/config:size=8m,uid=10001,gid=10001"]
+    cpus: 0.5
+    mem_limit: 256m
+    pids_limit: 64
+    depends_on: {web: {condition: service_healthy}}
+    networks: [private, ingress]
+  monitor:
+    <<: *safe
+    build: {context: .., dockerfile: deploy/Dockerfile.api, target: business, args: {OFFLINE_DEPS: "${OFFLINE_DEPS:-0}"}}
+    command: [python, -m, scripts.monitor_health, http://api:8000/api/ready, http://web:3000/, http://proxy:8080/health]
+    healthcheck: {disable: true}
+    cpus: 0.25
+    mem_limit: 128m
+    pids_limit: 32
+    tmpfs: ["/tmp:size=8m,mode=1777"]
+    networks: [private]
+networks:
+  private: {internal: true}
+  ingress: {}

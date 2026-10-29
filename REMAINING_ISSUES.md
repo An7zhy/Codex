@@ -1,5 +1,7 @@
 # Logistics Insight AI — PR-01 至 PR-12 剩余问题复验
 
+本文件保留审计基线的观察。后续代码修复与部署验证见 [SPRINT_2_5_REPORT.md](SPRINT_2_5_REPORT.md)，不能把下文PR-09旧复现当作修复后的现状。
+
 审计日期：2026-10-29（Asia/Shanghai）。
 
 审计基线：`feature/sprint-2-real-input`，`f66ed1f801d7060c6cbf4e2eb4c42c5e89f15222`。

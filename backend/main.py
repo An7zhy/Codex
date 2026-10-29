@@ -17,7 +17,8 @@ import pandas as pd
 from backend.schemas import (DecisionRequest, OptimizationRequest, PrioritySettings,
                              SaveCaseRequest, UpdateCaseRequest)
 from backend.store import WorkspaceStore
-from backend.access import AccessStore, COOKIE
+from backend.access import AccessStore, COOKIE, paths
+from backend.demo_policy import demo_enabled, validate_demo
 from backend.boundary import SecurityBoundary
 from backend.import_contract import preview, confirmation
 from backend.planning_routes import router as planning_router
@@ -71,6 +72,11 @@ def logout(request: Request, response: Response):
 
 @app.get("/api/ready")
 def ready():
+    if demo_enabled():
+        validate_demo()
+        return {"status": "ready", "read_only_demo": True}
+    from backend.deployment import check_storage_bound
+    check_storage_bound()
     AccessStore().check_binding()
     for store in (workspace_store(), history_store()):
         path = store.path
@@ -80,11 +86,11 @@ def ready():
 
 
 def workspace_store():
-    return WorkspaceStore(os.environ.get("LOGISTICS_WEB_DB_PATH", str(ROOT / "data/local/web_workspace.sqlite3")))
+    return WorkspaceStore(paths()[0])
 
 
 def history_store():
-    return HistoryStore(os.environ.get("LOGISTICS_DB_PATH", str(ROOT / "data/local/exception_history.sqlite3")))
+    return HistoryStore(paths()[1], read_only=demo_enabled())
 
 
 def records(frame):
@@ -244,24 +250,30 @@ def demo_download(kind: Literal["csv", "xlsx"]):
 
 @app.get("/api/settings")
 def settings():
-    return {"priority": workspace_store().setting("priority", PriorityConfig.load().to_dict()),
+    return {**workspace_store().setting_snapshot("priority"),
             "capabilities": {"analysis": "Existing deterministic V1 rules", "triage": "Existing explainable V2 rules",
                              "optimizer": "Existing Google OR-Tools CP-SAT V3 model", "storage": "Local SQLite",
                              "live_tracking": False, "paid_api_required": False}}
 
 
 @app.put("/api/settings/priority")
-def update_priority(body: PrioritySettings):
-    config = PriorityConfig(**body.model_dump())
-    workspace_store().save_setting("priority", config.to_dict())
-    return config.to_dict()
+def update_priority(body: PrioritySettings, request: Request):
+    config = PriorityConfig(**body.model_dump(exclude={"expected_version"}))
+    return workspace_store().save_setting("priority", config.to_dict(), expected_version=body.expected_version,
+                                         actor=request.state.principal["username"])
+
+
+@app.get("/api/settings/priority/history")
+def priority_history(limit: int = Query(default=50, ge=1, le=100), offset: int = Query(default=0, ge=0)):
+    return workspace_store().setting_history(limit, offset)
 
 
 def decision_comparison(body):
     store = workspace_store()
     metadata, raw = store.dataset(body.dataset_id)
     analysis = analyze_shipments(raw, body.as_of)
-    config = store.setting("priority", PriorityConfig.load().to_dict())
+    snapshot = store.setting_snapshot("priority")
+    config = snapshot["priority"]
     priorities = prioritize_shipments(analysis.shipments, analysis.cutoff, PriorityConfig(**config))
     rows = priorities.loc[priorities.shipment_id.eq(body.shipment_id) & priorities.included_in_analysis]
     if rows.empty:
@@ -271,10 +283,10 @@ def decision_comparison(body):
         raise ValueError("Decision scenarios require an active In Transit exception with no actual delivery.")
     deadline, source = delivery_deadline(row)
     comparison = compare_actions(analysis.cutoff, deadline, [ActionAssumption(**item.model_dump()) for item in body.assumptions])
-    token = hashlib.sha256(json.dumps({"dataset": metadata, "config": config,
+    token = hashlib.sha256(json.dumps({"dataset": metadata, "config": config, "config_version": snapshot["version"],
         "as_of": str(body.as_of), "shipment": body.shipment_id,
         "assumptions": [item.model_dump() for item in body.assumptions]}, sort_keys=True).encode()).hexdigest()
-    return row, comparison, analysis, metadata, deadline, source, token
+    return row, comparison, analysis, metadata, deadline, source, token, snapshot["version"]
 
 
 @app.get("/api/decisions/defaults")
@@ -284,10 +296,10 @@ def decision_defaults():
 
 @app.post("/api/decisions/compare")
 def compare_decisions(body: DecisionRequest):
-    row, comparison, analysis, metadata, deadline, source, token = decision_comparison(body)
+    row, comparison, analysis, metadata, deadline, source, token, config_version = decision_comparison(body)
     similar = history_store().similar_cases(row.origin, row.destination, row.transport_mode,
                                             row.exception_types.split("; ")[0], row.shipment_id)
-    return {"shipment_id": row.shipment_id, "comparison": records(comparison), "comparison_token": token,
+    return {"shipment_id": row.shipment_id, "comparison": records(comparison), "comparison_token": token, "config_version": config_version,
             "priority_score": None if pd.isna(row.priority_score) else float(row.priority_score),
             "priority_level": row.priority_level, "explanation": row.explanation,
             "missing_information": row.missing_information,
@@ -298,7 +310,7 @@ def compare_decisions(body: DecisionRequest):
 
 @app.post("/api/cases", status_code=201)
 def create_case(body: SaveCaseRequest, request: Request):
-    row, comparison, analysis, metadata, deadline, _, token = decision_comparison(body)
+    row, comparison, analysis, metadata, deadline, _, token, config_version = decision_comparison(body)
     if body.comparison_token != token:
         raise HTTPException(409, "The dataset or scoring configuration changed. Compare scenarios again before saving.")
     if body.exception_type not in row.exception_types.split("; "):
@@ -309,7 +321,7 @@ def create_case(body: SaveCaseRequest, request: Request):
     chosen = selected.iloc[0]
     snapshot = {"priority_score": None if pd.isna(row.priority_score) else float(row.priority_score),
                 "priority_level": row.priority_level, "details": json.loads(row.priority_details_json), "dataset": metadata,
-                "comparison_token": token, "actor": request.state.principal["username"]}
+                "comparison_token": token, "config_version": config_version, "actor": request.state.principal["username"]}
     case = CaseInput(row.shipment_id, body.exception_type, body.selected_action,
                      estimated_cost=float(chosen.estimated_additional_cost_usd),
                      estimated_delay=None if pd.isna(chosen.estimated_delay_hours) else float(chosen.estimated_delay_hours),

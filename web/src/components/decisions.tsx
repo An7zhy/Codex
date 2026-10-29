@@ -354,7 +354,7 @@ export function Decisions() {
                         ? "Draft edits are not applied. Displayed results and saved cases use the last comparison."
                         : "Recalculate to apply all three scenario assumptions together."}
                     </p>
-                    <Button type="submit" disabled={busy || !defaults.length}>
+                    <Button type="submit" disabled={busy || !defaults.length || user?.read_only_demo}>
                       <BusyLabel busy={busy}>Compare scenarios</BusyLabel>
                     </Button>
                   </div>

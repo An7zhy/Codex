@@ -31,18 +31,20 @@ from scripts.start_web import ROOT, WebServers
 from src.decisions import default_assumptions
 from src.transport.templates import template_tables, workbook_bytes
 
-DOCS = ROOT / "docs/remaining-issues"
+DOCS = ROOT / "artifacts/readiness-recheck"
 ARTIFACTS = ROOT / "artifacts/remaining-issues"
 
 
 def probes(offline_cli=False):
     evidence = {"completed": False, "checked_at_utc": datetime.now(timezone.utc).isoformat(),
                 "source_commit": subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip(),
+                "source_branch": subprocess.check_output(["git", "branch", "--show-current"], cwd=ROOT, text=True).strip(),
+                "working_tree_modified": bool(subprocess.check_output(["git", "diff", "--name-only"], cwd=ROOT, text=True).strip()),
                 "data_scope": "Authored synthetic fixtures; no actual customer databases or freight records", "observations": {}}
     observations = evidence["observations"]
     with tempfile.TemporaryDirectory(prefix="logistics-remaining-") as folder:
         root = Path(folder)
-        environment = dict(LOGISTICS_WEB_DB_PATH=str(root / "a/workspace.sqlite3"), LOGISTICS_DB_PATH=str(root / "a/history.sqlite3"),
+        environment = dict(LOGISTICS_INSTANCE_MODE="business", LOGISTICS_REQUIRE_BOUNDED_STORAGE="0", LOGISTICS_WEB_DB_PATH=str(root / "a/workspace.sqlite3"), LOGISTICS_DB_PATH=str(root / "a/history.sqlite3"),
                            LOGISTICS_ALLOWED_ORIGINS="http://audit", LOGISTICS_COOKIE_SECURE="0", LOGISTICS_PILOT_MODE="0")
         password = secrets.token_urlsafe(24)
         with patch.dict(os.environ, environment):
@@ -122,7 +124,7 @@ def probes(offline_cli=False):
             save = dict(**body, selected_action="Wait and monitor", exception_type="Overdue in transit", comparison_token=compared["comparison_token"])
             settings = request("GET", "/api/settings").json()["priority"]
             changed = deepcopy(settings); changed["weights"]["financial"] = 100
-            assert request("PUT", "/api/settings/priority", json=changed).status_code == 200
+            assert request("PUT", "/api/settings/priority", json={**changed,"expected_version":request("GET","/api/settings").json()["version"]}).status_code == 200
             assert request("POST", "/api/cases", json=save).status_code == 409
             observations["PR-09_stale_comparison"] = {"status": 409, "no_case_saved": request("GET", "/api/cases").json() == []}
 
@@ -130,14 +132,16 @@ def probes(offline_cli=False):
             a, b = deepcopy(changed), deepcopy(changed)
             a["weights"]["urgency"] = 81
             b["weights"]["financial"] = 82
-            first = request("PUT", "/api/settings/priority", json=a)
-            second = request("PUT", "/api/settings/priority", role="second-admin", json=b)
+            base_version = request("GET","/api/settings").json()["version"]
+            first = request("PUT", "/api/settings/priority", json={**a,"expected_version":base_version})
+            second = request("PUT", "/api/settings/priority", role="second-admin", json={**b,"expected_version":base_version})
             final = request("GET", "/api/settings").json()["priority"]
             observations["remaining_settings_lost_update"] = {"first_status": first.status_code, "stale_second_status": second.status_code,
                 "distinct_administrators": ["admin", "second-admin"],
                 "first_urgency": 81, "final_urgency": final["weights"]["urgency"], "original_urgency": changed["weights"]["urgency"],
                 "lost_update_reproduced": final["weights"]["urgency"] != 81}
-            assert first.status_code == second.status_code == 200 and final["weights"]["urgency"] != 81
+            # Sprint 2.5: the former audit reproduction now MUST reject the stale write.
+            assert first.status_code == 200 and second.status_code == 409 and final["weights"]["urgency"] == 81
 
             save["comparison_token"] = request("POST", "/api/decisions/compare", json=body).json()["comparison_token"]
             saved_case = request("POST", "/api/cases", json=save)
@@ -190,6 +194,10 @@ def probes(offline_cli=False):
                     "integrity_checked": True, "sessions_revoked": True, "confirmed_import_and_run_restored": True,
                     "case_preserved": True, "cli_commands": cli_commands,
                     "scope": "Stopped synthetic DB pair; not live multi-writer backup, scheduler or production RPO/RTO"}
+                restored_settings=request("GET","/api/settings").json()
+                restored_changes=request("GET","/api/settings/priority/history").json()
+                assert restored_settings["version"] == base_version+1 and len(restored_changes)==2
+                observations["PR-07"]["settings_version_and_changes_preserved"]=True
 
             with patch.dict(os.environ, {"LOGISTICS_WEB_DB_PATH": str(root)}):
                 observations["PR-10_invalid_database"] = {"health": request("GET", "/api/health", role=None).status_code,
@@ -197,7 +205,7 @@ def probes(offline_cli=False):
                 assert observations["PR-10_invalid_database"] == {"health": 200, "ready": 503}
         evidence["completed"] = True
     (DOCS / ("offline_cli_probes.json" if offline_cli else "api_probes.json")).write_text(json.dumps(evidence, indent=2), encoding="utf-8")
-    print("PASS: isolated API probes, including documented residual settings lost update", flush=True)
+    print("PASS: isolated API probes, including stale settings409 and restored version/change history", flush=True)
 
 
 def browsers(flow=None):
@@ -223,7 +231,7 @@ def browsers(flow=None):
                             f"spec=importlib.util.spec_from_file_location('audit_browser', 'tests/{script}'); "
                             "m=importlib.util.module_from_spec(spec); spec.loader.exec_module(m); ")
                     code += ("m.DOCS=Path('artifacts/remaining-issues/hardening'); " if label == "hardening" else
-                             "m.OUTPUT=Path('artifacts/remaining-issues/uploaded'); m.EVIDENCE=Path('docs/remaining-issues/uploaded_browser.json'); ")
+                             "m.OUTPUT=Path('artifacts/remaining-issues/uploaded'); m.EVIDENCE=Path('artifacts/readiness-recheck/uploaded_browser.json'); ")
                     code += "m.main()"
                     command = [sys.executable, "-c", code]
                 else:

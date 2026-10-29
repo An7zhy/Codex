@@ -1,0 +1,195 @@
+{
+  "date_asia_shanghai": "2026-10-29T21:46:00.371333+08:00",
+  "branch": "feature/sprint-2-5-readiness",
+  "baseline_commit": "e2a106b25f845b9212720b0f09012ab5d161af75",
+  "environment": {
+    "python": "3.12.14",
+    "os": "Linux-6.18.55-x86_64-with-glibc2.41",
+    "node": "v24.19.0",
+    "packages": {
+      "fastapi": "0.162.0",
+      "uvicorn": "0.54.0",
+      "pandas": "2.3.3",
+      "numpy": "2.5.4",
+      "pydantic": "2.14.1",
+      "ortools": "9.15.6755",
+      "pytest": "9.0.3",
+      "streamlit": "1.66.1",
+      "pip": "26.2.2"
+    }
+  },
+  "tests": {
+    "passed": 395,
+    "failed": 0,
+    "skipped": 0,
+    "xfailed": 0,
+    "original_test_count": 358,
+    "all_original_identities_present_and_passed": true,
+    "new_tests": 37,
+    "console_seconds": 172.94,
+    "junit_suite_seconds": 172.922,
+    "original_assertions_checked": 691,
+    "original_pytest_files_checked": 18,
+    "original_assert_ast_unchanged": true,
+    "existing_pytest_files_with_version_precondition_only": [
+      "tests/test_hardening.py",
+      "tests/test_web_api.py"
+    ]
+  },
+  "unchanged_core_algorithms": [
+    "src/analysis.py",
+    "src/priority.py",
+    "src/decisions.py",
+    "src/transport/models.py",
+    "src/transport/engine.py",
+    "src/transport/experiments.py",
+    "src/transport/simulation.py"
+  ],
+  "intermediate_results": [
+    {
+      "stage": "new demo tests first run",
+      "passed": 31,
+      "failed": 3,
+      "cause": "legitimate empty multipart-style ASGI GET chunks rejected; fixed bounded empty-body reading"
+    },
+    {
+      "stage": "first full suite while images building",
+      "passed": 391,
+      "failed": 1,
+      "seconds": 247.88,
+      "case": "test_required_workloads_remain_feasible_and_respect_capacities[500]",
+      "note": "Fastest Delivery has_feasible_solution was false; initial exact solver status not logged. Original assertion and3-second limit retained."
+    },
+    {
+      "stage": "original500 workload rerun",
+      "passed": 1,
+      "seconds": 4.0,
+      "note": "Then final full395 passed without changing solver algorithm, status assertions or time limits."
+    },
+    {
+      "stage": "container online install",
+      "result": "failed DNS in build namespace; used full offline pip/npm install and actual Next build instead"
+    },
+    {
+      "stage": "nonroot proxy startup",
+      "result": "file capability and config permission failures fixed without granting capabilities/root"
+    },
+    {
+      "stage": "initial CA extraction",
+      "result": "failed destination availability; waited and read public CA via exec, then verified real TLS chain/hostname"
+    },
+    {
+      "stage": "recovery compatibility script edit",
+      "result": "indentation caught by compileall, corrected and CLI recheck passed"
+    }
+  ],
+  "commands": [
+    {
+      "command": "python -m pytest -q --junitxml=artifacts/sprint2-5/pytest.xml",
+      "exit_code": 0
+    },
+    {
+      "command": "npm run typecheck; npm run build",
+      "cwd": "web",
+      "exit_code": 0
+    },
+    {
+      "command": "python -m scripts.verify_sprint_2_5",
+      "exit_code": 0,
+      "browser_flows": 5
+    },
+    {
+      "command": "OFFLINE_DEPS=1 docker compose -f deploy/compose.demo.yml build",
+      "exit_code": 0,
+      "note": "All runtime images, offline dependency installation and actual Next standalone build"
+    },
+    {
+      "command": "python -m scripts.verify_deployment",
+      "exit_code": 0,
+      "additional_browser_flows": 1,
+      "no_public_deployment": true
+    },
+    {
+      "command": "docker compose -f deploy/compose.pilot.yml config --quiet (placeholder env)",
+      "exit_code": 0,
+      "note": "No pilot started with fictitious hostname"
+    },
+    {
+      "command": "caddy validate --config /etc/caddy/Caddyfile.pilot --adapter caddyfile",
+      "exit_code": 0,
+      "scope": "isolated network-none disposable container; no public certificate issuance"
+    },
+    {
+      "command": "python -m scripts.reverify_remaining_issues --offline-cli",
+      "exit_code": 0,
+      "output": "recovery_probes.json"
+    },
+    {
+      "command": "python -m compileall -q app.py src backend tests scripts",
+      "exit_code": 0
+    },
+    {
+      "command": "python -m pip check",
+      "exit_code": 0
+    },
+    {
+      "command": "sh -n deploy/prepare-pilot-storage.sh",
+      "exit_code": 0,
+      "not_executed": "privileged persistent host mount preparation"
+    },
+    {
+      "command": "pip-audit --path /workspace/Codex/.venv/lib/python3.12/site-packages --progress-spinner off --cache-dir /tmp/logistics-hardening-pip-audit-cache --timeout 12 --format json",
+      "exit_code": 0,
+      "scanned_packages": 68,
+      "known_vulnerability_records": 0
+    },
+    {
+      "command": "npm audit --omit=dev --json --fetch-timeout=20000 --fetch-retries=0",
+      "exit_code": 0,
+      "known_vulnerabilities": 0
+    },
+    {
+      "command": "occupied-project preflight using a purpose-created temporary sleeping container",
+      "expected_verifier_exit_code": 1,
+      "passed": true,
+      "evidence": "preflight_guard.json"
+    }
+  ],
+  "accepted_local_images": [
+    {
+      "service": "api",
+      "image_id": "sha256:df0f09baae9c31fc47cbd6b978dacb139e46bb0f3141dcba7311a4f8472514f6",
+      "architecture": "amd64",
+      "os": "linux"
+    },
+    {
+      "service": "web",
+      "image_id": "sha256:9869f2b537f8d08af64f23185981db185fe1879cc37ae2143d0ef5b05975b376",
+      "architecture": "amd64",
+      "os": "linux"
+    },
+    {
+      "service": "proxy",
+      "image_id": "sha256:83f272ac70abe2347f0cd6b81178555ae815a6f73dc06f94af91bb04938d7a97",
+      "architecture": "amd64",
+      "os": "linux"
+    },
+    {
+      "service": "monitor",
+      "image_id": "sha256:2b6b475802e1fd0e65cee957d119788ca032e5e69dee10535b8dab844340cce4",
+      "architecture": "amd64",
+      "os": "linux"
+    }
+  ],
+  "temporary_test_containers_and_networks_cleaned": true,
+  "user_business_databases_accessed": false,
+  "not_verified": [
+    "Real domain public TLS/DNS/ingress/Host/firewall and external acceptance",
+    "Production host ACL/encryption/persistent bounded volumes and Linux privileged mount setup",
+    "Target peak/soak/per-parser isolation and production SLA",
+    "External notification delivery and scheduled/off-host backups/RPO/RTO",
+    "Authorized real freight data/SLA/quotes/capacity/real reliability or business benefit",
+    "Windows native Python3.14/Docker Desktop/other browsers",
+    "OS-image full CVE scan, full penetration/adversarial coverage"
+  ]
+}

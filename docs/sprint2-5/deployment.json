@@ -1,0 +1,94 @@
+{
+  "completed": true,
+  "scope": "Disposable synthetic containers, only127.0.0.1:8443 published; local CA, not public TLS acceptance",
+  "checks": [
+    "Real TLS handshake/hostname/chain verified using extracted local CA, no verify=False; HSTS/frame headers, actual158 KPI and server write403 verified through Caddy and Next",
+    "Kernel cgroup memory/cpu/pids match configured limits; roots read-only, capabilities dropped, internal network and only proxy loopback port published",
+    "Attempted root write fails;32MiB tmpfs hits actual ENOSPC and is cleaned; API remains ready afterward",
+    "Real Chromium read-only demo flow and16 responsive route/width checks passed through container TLS proxy",
+    "Actual demo API container restart retains the sealed synthetic identity and calculated data without accounts or sessions",
+    "Stopping API triggers actual ALERT after failed readiness polls; restarting it produces RECOVERY; notifications remain local logs, not an unverified email/paging integration",
+    "Full protected API starts on actual64MiB bounded disposable filesystem; ready200 and anonymous workspace401. This tmpfs rehearsal is not persistent pilot storage or production ACL validation"
+  ],
+  "resources": {
+    "api": {
+      "memory_bytes": 1073741824,
+      "nano_cpus": 1000000000,
+      "pids": 96,
+      "read_only_root": true,
+      "ports": {},
+      "tmpfs": {
+        "/tmp": "size=32m,mode=1777"
+      },
+      "user": "10001:10001"
+    },
+    "web": {
+      "memory_bytes": 805306368,
+      "nano_cpus": 1000000000,
+      "pids": 128,
+      "read_only_root": true,
+      "ports": {},
+      "tmpfs": {
+        "/app/.next/cache": "size=32m,uid=10001,gid=10001",
+        "/tmp": "size=32m,mode=1777"
+      },
+      "user": "10001:10001"
+    },
+    "proxy": {
+      "memory_bytes": 268435456,
+      "nano_cpus": 500000000,
+      "pids": 64,
+      "read_only_root": true,
+      "ports": {
+        "8443/tcp": [
+          {
+            "HostIp": "127.0.0.1",
+            "HostPort": "8443"
+          }
+        ]
+      },
+      "tmpfs": {
+        "/config": "size=8m,uid=10001,gid=10001",
+        "/data": "size=32m,uid=10001,gid=10001",
+        "/tmp": "size=8m,mode=1777"
+      },
+      "user": "10001:10001"
+    },
+    "monitor": {
+      "memory_bytes": 134217728,
+      "nano_cpus": 250000000,
+      "pids": 32,
+      "read_only_root": true,
+      "ports": {},
+      "tmpfs": {
+        "/tmp": "size=8m,mode=1777"
+      },
+      "user": "10001:10001"
+    }
+  },
+  "kernel_cgroup_limits": {
+    "memory.max": "1073741824",
+    "cpu.max": "100000 100000",
+    "pids.max": "96"
+  },
+  "storage_probe": {
+    "root_write_denied": true,
+    "tmpfs_enospc": true,
+    "tmpfs_bytes": 33554432
+  },
+  "monitor_events": [
+    "{\"event\": \"ALERT\", \"time\": \"2026-10-29T13:19:35.466680+00:00\", \"failed_endpoints\": [\"http://api:8000/api/ready\"]}",
+    "{\"event\": \"RECOVERY\", \"time\": \"2026-10-29T13:19:50.516670+00:00\"}"
+  ],
+  "oom_probe": {
+    "exit_code": 137,
+    "oom_killed": true,
+    "scope": "32MiB disposable container only; no API or user DB was stressed"
+  },
+  "bounded_pilot_probe": {
+    "ready": 200,
+    "anonymous_workspace": 401,
+    "filesystem_bytes": 67108864,
+    "unbounded_filesystem_refused": true
+  }
+}

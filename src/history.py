@@ -71,8 +71,11 @@ def _key(value: str) -> str:
 
 
 class HistoryStore:
-    def __init__(self, path: str | Path):
+    def __init__(self, path: str | Path, *, read_only=False):
         self.path = Path(path).expanduser()
+        self.read_only = read_only
+        if read_only:
+            return
         self.path.parent.mkdir(parents=True, exist_ok=True)
         with self._connect() as connection:
             connection.execute("PRAGMA journal_mode=WAL")
@@ -98,7 +101,7 @@ class HistoryStore:
 
     @contextmanager
     def _connect(self):
-        connection = sqlite3.connect(self.path, timeout=5)
+        connection = sqlite3.connect(self.path.resolve().as_uri() + "?mode=ro&immutable=1", uri=True, timeout=5) if self.read_only else sqlite3.connect(self.path, timeout=5)
         try:
             with connection:
                 yield connection

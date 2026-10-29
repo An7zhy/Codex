@@ -1,0 +1,24 @@
+FROM python:3.12.14-slim@sha256:f77ac9e44ae96ef2c90b8053ea08c31f8be030f824196b0ae4db6d462c84e51f AS business
+ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1 OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 \
+    LOGISTICS_PILOT_MODE=1 LOGISTICS_COOKIE_SECURE=1
+WORKDIR /app
+COPY requirements-core.txt requirements-web.txt ./
+ARG OFFLINE_DEPS=0
+COPY deploy/build-deps/python /wheels
+RUN if [ "$OFFLINE_DEPS" = "1" ]; then \
+      python -m pip install --no-cache-dir --no-index --find-links=/wheels pip==26.2.2 -r requirements-web.txt; \
+    else python -m pip install --no-cache-dir --upgrade pip==26.2.2 && python -m pip install --no-cache-dir -r requirements-web.txt; fi \
+    && groupadd --gid 10001 logistics && useradd --uid 10001 --gid 10001 --no-create-home logistics \
+    && chown logistics:logistics /app && rm -rf /wheels
+COPY --chown=10001:10001 backend ./backend
+COPY --chown=10001:10001 src ./src
+COPY --chown=10001:10001 config ./config
+COPY --chown=10001:10001 scripts ./scripts
+USER 10001:10001
+EXPOSE 8000
+HEALTHCHECK --interval=15s --timeout=5s --start-period=20s --retries=3 CMD ["python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/api/ready',timeout=3)"]
+CMD ["python", "-m", "scripts.serve_api"]
+
+FROM business AS demo
+RUN python -m scripts.prepare_demo /app/demo-seed
+ENV LOGISTICS_INSTANCE_MODE=demo LOGISTICS_DEMO_ROOT=/app/demo-seed

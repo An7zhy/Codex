@@ -20,6 +20,7 @@ class StrictBody(BaseModel):
 
 
 class PrioritySettings(StrictBody):
+    expected_version: int = Field(ge=1, strict=True)
     weights: dict[str, float] = Field(default_factory=lambda: dict(zip(
         ("urgency", "delay", "financial", "value", "downstream"), (30, 25, 20, 10, 15))))
     urgency_window_hours: float = 72

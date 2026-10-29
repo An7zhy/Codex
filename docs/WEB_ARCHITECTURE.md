@@ -30,7 +30,7 @@ application are unchanged by the migration. All existing business tests remain.
 | `/app/exceptions` | prioritize_shipments and active_exception |
 | `/app/decisions` | default_assumptions, compare_actions, original history matching |
 | `/app/decisions/history` | HistoryStore list/create/update/export |
-| `/app/optimization` | generate_planning_demo, adjust_planning, solve/compare_strategies |
+| `/app/optimization` | Synthetic generator or confirmed uploaded planning tables, original solve/compare_strategies |
 | `/app/analytics` | saved V3 experiment/simulation details and run_evaluation |
 | `/app/settings` | persisted PriorityConfig; validation delegated to the original class |
 
@@ -42,13 +42,15 @@ API shows an error; absent experiments show an empty state.
 
 | Method and endpoint | Purpose |
 | --- | --- |
-| GET `/api/health` | Process readiness |
+| GET `/api/health` | Process liveness |
+| GET `/api/ready` | DB binding/storage or sealed demo readiness |
 | GET/POST `/api/datasets` | List persistent datasets / validate CSV or Excel upload |
 | GET `/api/workspace` | Filtered KPIs, paginated rows, priority queue, quality findings and charts |
 | GET `/api/exports/{kind}` | Full filtered shipments/exceptions/priorities/quality CSV or English report |
 | GET `/api/demo/{csv,xlsx}` | Original V1 synthetic examples |
-| GET `/api/settings` | Applied priority configuration and actual capability descriptions |
-| PUT `/api/settings/priority` | Validate and persist explicit settings |
+| GET `/api/settings` | Applied priority configuration, durable version and capabilities |
+| PUT `/api/settings/priority` | Admin CAS update with mandatory expected_version; stale409 |
+| GET `/api/settings/priority/history` | Admin-only actor/time/version/difference history |
 | GET `/api/decisions/defaults` | Existing Python scenario defaults |
 | POST `/api/decisions/compare` | Calculate supplied assumptions for an active exception |
 | GET/POST `/api/cases` | Query / save a server-recomputed, idempotent decision |
@@ -60,7 +62,10 @@ API shows an error; absent experiments show an empty state.
 | GET `/api/optimization/runs/{id}` | Retrieve a saved experiment |
 | GET `/api/optimization/runs/{id}/export/{kind}` | Complete JSON, comparison/allocation/candidate CSV |
 
-Interactive request schemas are served by FastAPI at `/docs` on port 8000.
+Public `/docs`/OpenAPI endpoints are disabled. Planning contract and templates are
+served through authenticated `/api/planning/contract` and `/api/planning/templates/*`.
+`/api/planning/imports/preview`, confirmation and `/api/planning/runs` implement
+the protected uploaded planning pipeline; see [input contract](PLANNING_INPUT_CONTRACT.md).
 
 `workspace` accepts dataset_id, as_of, carrier, mode, status, q, offset and limit.
 The API analyzes the full input before filtering, retaining original cost thresholds.
@@ -75,13 +80,13 @@ unverified and never automatically declared real or synthetic.
 
 ## Persistence and isolation
 
-- `web_datasets`, `web_settings`, `web_runs` live in
+- `web_datasets`, versioned `web_settings`, `setting_changes`, `web_runs` and `planning_imports` live in
   `data/local/web_workspace.sqlite3` by default.
 - The original `HistoryStore` uses `data/local/exception_history.sqlite3`.
 - Environment overrides are `LOGISTICS_WEB_DB_PATH` and `LOGISTICS_DB_PATH`.
 - Parameterized SQL and original case validation are retained. New tables do not
   replace, clear or rewrite existing cases.
-- Browser localStorage only remembers dataset/date. Raw uploads and experiments
+- Scoped localStorage remembers dataset/date/filters; tab sessionStorage retains drafts with their base versions. Raw uploads and experiments
   stay on the local Python server and survive an API process restart.
 - Priority settings persist for this local web workspace. They do not overwrite
   `config/priority_rules.json` or Streamlit session preferences.
@@ -91,19 +96,25 @@ unverified and never automatically declared real or synthetic.
 
 This is one authenticated organization per independent instance, not shared multi-tenant SaaS.
 `backend/access.py` hashes passwords and opaque sessions, binds both DBs to a server-side instance identity, and enforces viewer/operator/admin roles through the ASGI boundary. No client tenant field grants access. Unsafe requests require an allowlisted Origin; all business APIs/downloads require authentication.
-See [pilot operations](PILOT_OPERATIONS.md) for offline provisioning, body/solver/storage budgets, retention, backup/restore and HTTPS requirements. Streamlit is disabled when LOGISTICS_PILOT_MODE=1. Public deployment is not validated.
+See [pilot operations](PILOT_OPERATIONS.md) and [deployment readiness](DEPLOYMENT_READINESS.md)
+for offline provisioning, versioned updates, resource budgets, retention and TLS.
+The separate sealed demo instance has a server-enforced GET allowlist, no business
+accounts, no uploaded data and no mutations, rather than relaxed business authentication.
+Streamlit is disabled when LOGISTICS_PILOT_MODE=1. Public deployment is not validated.
 
 ## V3 assumptions and limits
 
-The UI generates separate planning inputs because V1 uploads lack service costs,
-capacity and uncertainty data. It never fabricates those fields on uploaded orders.
+Synthetic Mode generates separate planning inputs because V1 uploads lack service
+quotes, shared capacities and uncertainty data. Uploaded Mode requires four explicit
+planning tables, confirmed provenance and assumptions; it infers no historical
+distribution and performs no Monte Carlo. It never fabricates those fields on V1 orders.
 Existing V3 constraints, integer rounding, objectives and solver status semantics
 remain authoritative; see `V3_TECHNICAL_REPORT.md`.
 
-All strategies use the same constraints and scenario draws. FEASIBLE is explicitly
+All strategies use the same constraints and, in Synthetic Mode, common scenario draws. FEASIBLE is explicitly
 not proven optimal; UNKNOWN is not treated as infeasible. Failed solves have no
-reported cost or benefit. Risk is an assumed lognormal probability, not a carrier
-history statistic. The API caps interactive planning at 500 orders and ten seconds
+reported cost or benefit. Synthetic risk uses an assumed lognormal distribution,
+not carrier history; Uploaded Mode probability fields remain Not estimated. The API caps interactive planning at 500 orders and ten seconds
 per strategy. Allocation/simulation tables preview 100 rows; exports are complete.
 
 ## Frontend and runtime

@@ -23,6 +23,9 @@ ROLES = {"viewer": 0, "operator": 1, "admin": 2}
 
 
 def paths():
+    from backend.demo_policy import demo_enabled, demo_paths
+    if demo_enabled():
+        return demo_paths()
     return (Path(os.environ.get("LOGISTICS_WEB_DB_PATH", ROOT / "data/local/web_workspace.sqlite3")),
             Path(os.environ.get("LOGISTICS_DB_PATH", ROOT / "data/local/exception_history.sqlite3")))
 
@@ -34,6 +37,9 @@ def password_hash(password, salt):
 
 class AccessStore:
     def __init__(self):
+        from backend.demo_policy import demo_enabled
+        if demo_enabled():
+            raise HTTPException(503, "A read-only synthetic demo has no business accounts or mutable access store.")
         self.path, self.history_path = paths()
         self.path.parent.mkdir(mode=0o700, parents=True, exist_ok=True)
         with self.connect() as db:
@@ -165,6 +171,8 @@ class AccessStore:
 
 
 def required_role(method, path):
+    if path == "/api/settings/priority/history":
+        return "admin"
     if method in {"GET", "HEAD", "OPTIONS"} or path in {"/api/auth/logout", "/api/decisions/compare"}:
         return "viewer"
     if path.startswith("/api/settings") or method == "DELETE" or path.startswith("/api/maintenance"):
