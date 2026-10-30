@@ -1,6 +1,6 @@
 # 新官网和业务平台：中文本地运行说明
 
-新版本分支：`feature/sprint-2-real-input`。旧 Streamlit 仍可使用。
+当前版本分支：`feature/sprint-2-5-readiness`。本地完整版保留V1—V3，旧Streamlit仍可使用。
 
 ## 你会打开什么
 
@@ -12,7 +12,7 @@
 
 ## Windows：首次安装
 
-1. 从 GitHub 下载 **feature/sprint-2-real-input** 分支，解压到独立文件夹，D 盘可以。
+1. 从 GitHub 下载 **feature/sprint-2-5-readiness** 分支，解压到独立文件夹，D 盘可以。
    找到包含 `start-web.bat`、`requirements-web.txt`、`backend` 和 `web` 的那一层。
 2. 安装 [Node.js 24 LTS](https://nodejs.org/)，它包含 npm；建议使用 Python 3.12。
    安装后重新打开终端，让 PATH 生效。
@@ -98,7 +98,7 @@ FEASIBLE 表示找到有效分配但未证明最优；UNKNOWN 不等于不可行
 
 ## Sprint 2：使用自己的运输规划输入
 
-本轮先查看修复与检查报告，不需要制作或下载新的ZIP。运行方式保持不变。
+最新版ZIP包含完整本地应用；运行方式保持不变，先按本页首次安装步骤启动。
 
 1. 管理员或操作员登录后，进入 **Optimization**，将 **Optimization input mode** 选为 **Uploaded Data Mode**。
    **Synthetic Demo Mode** 仍是独立模拟沙盘；顶部V1/V2数据集不会被自动补成报价和运力。
