@@ -1,0 +1,436 @@
+{
+  "completed": true,
+  "checks": [
+    "Fresh SSR defaults zh-CN; English cookie survives reload in actual server HTML; bilingual login/errors carry HTTP401; KPI payload unchanged",
+    "Canonical In Transit filter and page2/identical shipment IDs survive both language changes and reload",
+    "Selected File, import preview/confirmation and saved uploaded dataset survive switching language; upload is actually persisted",
+    "Chinese decision comparison computes actual USD333; draft/selected canonical action/notes survive language changes; saved SQLite action and priority exactly match applied comparison",
+    "Unsaved settings draft82 survives language+navigation; server remains20 with unchanged CAS version",
+    "Chinese synthetic optimization invokes original OR-Tools, returns OPTIMAL/12 actual assignments; language changes preserve run and exact backend results",
+    "Chinese zero-budget solve returns actual INFEASIBLE, translated diagnostics retain constraint uncertainty",
+    "Chinese invalid EUR import has localized correction and no confirm path; original currency contract unchanged",
+    "Chinese uploaded 2-order import/preview/confirmation/solve/export, hand costs120/180/120; file+checkbox preserved, reliability remains not estimated, raw CSV identifiers unchanged"
+  ],
+  "javascript_errors": [],
+  "responsive_matrix": [
+    {
+      "route": "/",
+      "locale": "zh",
+      "width": 360,
+      "document": 360
+    },
+    {
+      "route": "/app",
+      "locale": "zh",
+      "width": 360,
+      "document": 360
+    },
+    {
+      "route": "/app/shipments",
+      "locale": "zh",
+      "width": 360,
+      "document": 360
+    },
+    {
+      "route": "/app/exceptions",
+      "locale": "zh",
+      "width": 360,
+      "document": 360
+    },
+    {
+      "route": "/app/decisions",
+      "locale": "zh",
+      "width": 360,
+      "document": 360
+    },
+    {
+      "route": "/app/decisions/history",
+      "locale": "zh",
+      "width": 360,
+      "document": 360
+    },
+    {
+      "route": "/app/optimization",
+      "locale": "zh",
+      "width": 360,
+      "document": 360
+    },
+    {
+      "route": "/app/analytics",
+      "locale": "zh",
+      "width": 360,
+      "document": 360
+    },
+    {
+      "route": "/app/settings",
+      "locale": "zh",
+      "width": 360,
+      "document": 360
+    },
+    {
+      "route": "/",
+      "locale": "zh",
+      "width": 1440,
+      "document": 1440
+    },
+    {
+      "route": "/app",
+      "locale": "zh",
+      "width": 1440,
+      "document": 1440
+    },
+    {
+      "route": "/app/shipments",
+      "locale": "zh",
+      "width": 1440,
+      "document": 1440
+    },
+    {
+      "route": "/app/exceptions",
+      "locale": "zh",
+      "width": 1440,
+      "document": 1440
+    },
+    {
+      "route": "/app/decisions",
+      "locale": "zh",
+      "width": 1440,
+      "document": 1440
+    },
+    {
+      "route": "/app/decisions/history",
+      "locale": "zh",
+      "width": 1440,
+      "document": 1440
+    },
+    {
+      "route": "/app/optimization",
+      "locale": "zh",
+      "width": 1440,
+      "document": 1440
+    },
+    {
+      "route": "/app/analytics",
+      "locale": "zh",
+      "width": 1440,
+      "document": 1440
+    },
+    {
+      "route": "/app/settings",
+      "locale": "zh",
+      "width": 1440,
+      "document": 1440
+    },
+    {
+      "route": "/",
+      "locale": "en",
+      "width": 360,
+      "document": 360
+    },
+    {
+      "route": "/app",
+      "locale": "en",
+      "width": 360,
+      "document": 360
+    },
+    {
+      "route": "/app/shipments",
+      "locale": "en",
+      "width": 360,
+      "document": 360
+    },
+    {
+      "route": "/app/exceptions",
+      "locale": "en",
+      "width": 360,
+      "document": 360
+    },
+    {
+      "route": "/app/decisions",
+      "locale": "en",
+      "width": 360,
+      "document": 360
+    },
+    {
+      "route": "/app/decisions/history",
+      "locale": "en",
+      "width": 360,
+      "document": 360
+    },
+    {
+      "route": "/app/optimization",
+      "locale": "en",
+      "width": 360,
+      "document": 360
+    },
+    {
+      "route": "/app/analytics",
+      "locale": "en",
+      "width": 360,
+      "document": 360
+    },
+    {
+      "route": "/app/settings",
+      "locale": "en",
+      "width": 360,
+      "document": 360
+    },
+    {
+      "route": "/",
+      "locale": "en",
+      "width": 1440,
+      "document": 1440
+    },
+    {
+      "route": "/app",
+      "locale": "en",
+      "width": 1440,
+      "document": 1440
+    },
+    {
+      "route": "/app/shipments",
+      "locale": "en",
+      "width": 1440,
+      "document": 1440
+    },
+    {
+      "route": "/app/exceptions",
+      "locale": "en",
+      "width": 1440,
+      "document": 1440
+    },
+    {
+      "route": "/app/decisions",
+      "locale": "en",
+      "width": 1440,
+      "document": 1440
+    },
+    {
+      "route": "/app/decisions/history",
+      "locale": "en",
+      "width": 1440,
+      "document": 1440
+    },
+    {
+      "route": "/app/optimization",
+      "locale": "en",
+      "width": 1440,
+      "document": 1440
+    },
+    {
+      "route": "/app/analytics",
+      "locale": "en",
+      "width": 1440,
+      "document": 1440
+    },
+    {
+      "route": "/app/settings",
+      "locale": "en",
+      "width": 1440,
+      "document": 1440
+    }
+  ],
+  "demo": false,
+  "request_count": 44,
+  "display_text_review": {
+    "/": [
+      "Logistics Insight",
+      "SYN-0027",
+      "SYN-0007",
+      "SYN-0107",
+      "由 Python 规则引擎计算，每个数字都有明确口径。",
+      "将 CSV 和 Excel 订单汇入统一视图，检查配送指标、承运商表现和数据质量。",
+      "OR-Tools 共享运力分配",
+      "全新界面连接独立测试的 Python 逻辑。图表、评分和运力分配均来自同一计算引擎。",
+      "Next.js + React",
+      "Python + FastAPI",
+      "pandas 规则、可解释评分与确定性报告。",
+      "OR-Tools + SQLite",
+      "不依赖付费 AI API，未接入实时承运商网络。模拟可靠性不代表经过验证的承运商表现。"
+    ],
+    "/app": [
+      "Logistics Insight",
+      "Synthetic i18n test organization",
+      "browser-admin",
+      "155 条有效成本 · USD",
+      "SYN-0027",
+      "Demo Air Two",
+      "Shanghai",
+      "Rotterdam",
+      "SYN-0007",
+      "Unknown",
+      "SYN-0107",
+      "Demo Ocean Two",
+      "Hamburg",
+      "SYN-0038",
+      "Demo Air One",
+      "SYN-0158",
+      "Demo Ocean One",
+      "Ho Chi Minh City",
+      "Seattle",
+      "Shenzhen",
+      "Los Angeles",
+      "Singapore",
+      "保留订单全部状态的有限 USD 成本之和，范围 0–1,000,000,000,000；排除缺失 / 无效成本。上限为技术保护，不是市场基准。"
+    ],
+    "/app/shipments": [
+      "Logistics Insight",
+      "Synthetic i18n test organization",
+      "browser-admin",
+      "导出 CSV",
+      "成本（USD）",
+      "SYN-0001",
+      "Shanghai, China",
+      "Rotterdam, Netherlands",
+      "Demo Ocean Two",
+      "SYN-0002",
+      "Demo Ocean One",
+      "SYN-0003",
+      "SYN-0004",
+      "SYN-0005",
+      "SYN-0006",
+      "Unknown",
+      "SYN-0007",
+      "SYN-0009",
+      "SYN-0010",
+      "SYN-0011",
+      "SYN-0012",
+      "SYN-0013",
+      "SYN-0014",
+      "SYN-0015",
+      "SYN-0016",
+      "SYN-0017",
+      "SYN-0018",
+      "SYN-0019",
+      "SYN-0020"
+    ],
+    "/app/exceptions": [
+      "Logistics Insight",
+      "Synthetic i18n test organization",
+      "browser-admin",
+      "优先级 CSV",
+      "SYN-0027",
+      "Demo Air Two",
+      "Shanghai",
+      "Rotterdam",
+      "SYN-0007",
+      "Unknown",
+      "SYN-0107",
+      "Demo Ocean Two",
+      "Hamburg",
+      "SYN-0038",
+      "Demo Air One",
+      "SYN-0158",
+      "Demo Ocean One",
+      "Ho Chi Minh City",
+      "Seattle",
+      "SYN-0039",
+      "SYN-0147",
+      "SYN-0059",
+      "Shenzhen",
+      "Los Angeles",
+      "SYN-0070",
+      "SYN-0090",
+      "Singapore",
+      "SYN-0067",
+      "SYN-0068",
+      "SYN-0018",
+      "SYN-0110",
+      "SYN-0060",
+      "SYN-0150",
+      "SYN-0159",
+      "SYN-0139",
+      "SYN-0019",
+      "SYN-0140"
+    ],
+    "/app/decisions": [
+      "Logistics Insight",
+      "Synthetic i18n test organization",
+      "browser-admin",
+      "SYN-0027",
+      "紧迫性：距 delivery_deadline 24.0 小时；评估窗口 72 小时。 延误：用户提供的场景预估为 48 小时；不是根据已逾期时长推断。 财务影响：声明预估 USD 12,000.00；依据：虚构的罚款 / 处理费用假设，并非实际损失。这不是实际损失。 货物价值：声明 USD 100,000.00，仅作风险敞口背景，不是损失估计。 下游影响：声明有 4 项依赖活动；依据：虚构的依赖活动，仅用于演示。数量仅为代理指标，不是故障概率。 加权评分仅用于异常分流，不是损失预测。",
+      "等待并观察：追加成本（USD）",
+      "User assumption with spaces\n第二行",
+      "请求加急处理：追加成本（USD）",
+      "安排替代运输方案：追加成本（USD）",
+      "delivery_deadline",
+      "中文决策验证 / I18N synthetic test"
+    ],
+    "/app/decisions/history": [
+      "Logistics Insight",
+      "Synthetic i18n test organization",
+      "browser-admin",
+      "SQLite 持久历史。第 1 页（每页最多 200 条）；CSV 导出完整组织历史。",
+      "SYN-0027"
+    ],
+    "/app/optimization": [
+      "Logistics Insight",
+      "Synthetic i18n test organization",
+      "browser-admin",
+      "仅接受 USD、kg、m3 和 h；完整 ISO 时间必须包含 Z 或时区偏移。不会自动推断币种、单位或本地时区。",
+      "Excel 模板 · 2 条合成订单",
+      "CSV 模板",
+      "字段定义与规则 JSON",
+      "模板包含有标注的合成样例。共享服务容量仅声明一次，不按每单重复声明。所有订单共用 planning_start；同一服务的预计运输时间必须一致。报价、时效、容量需标注 estimate 或 user_verified 并提供来源；本应用不会独立核实这些声明。",
+      "6cf25dbc82754e07a78cd296023e08a0",
+      "· 确认人 browser-admin",
+      "仅限 USD / kg / m3 / h。不推断或转换汇率和单位，仅接受小数点数字。",
+      "必须为带时区偏移的 ISO 时间；拒绝纯日期或无时区时间。全部订单共用 planning_start。",
+      "estimate 和 user_verified 是上传人附来源的声明，不代表本应用已独立核实。",
+      "导入审计 JSON",
+      "已证明最优（OPTIMAL）",
+      "最低成本与最快送达策略均为受约束的 OR-Tools 基线。",
+      "分配结果 CSV",
+      "输入与结果 JSON",
+      "策略 CSV",
+      "共 2 条分配，展示前 100 条。请导出 CSV 获取完整规划。",
+      "UPLOAD-0001",
+      "SHARED-ECO",
+      "UPLOAD-0002",
+      "SHARED-FAST"
+    ],
+    "/app/analytics": [
+      "Logistics Insight",
+      "Synthetic i18n test organization",
+      "browser-admin",
+      "策略 CSV",
+      "SYN-0006",
+      "Demo Ocean One",
+      "SYN-0012",
+      "SYN-0024",
+      "Demo Air One",
+      "SYN-0036",
+      "SYN-0042",
+      "SYN-0054",
+      "上传规划 · 2 条订单 · Synthetic template example: 2 shipments (not real business data)",
+      "6cf25dbc82754e07a78cd296023e08a0",
+      "已证明最优（OPTIMAL）",
+      "5a8f353d3cfde687bc662170b100e7eb1dad255adb4097a903e8d1e046d77fab",
+      "使用当前已保存的评分设置运行原 Python 评估；参考标签并非由评分公式生成。"
+    ],
+    "/app/settings": [
+      "Logistics Insight",
+      "Synthetic i18n test organization",
+      "browser-admin",
+      "财务影响尺度（USD）",
+      "货物价值尺度（USD）",
+      "草稿仅在保存后生效；设置持久保存于本地 SQLite。",
+      "新版界面使用现有 Python 业务逻辑。",
+      "现有 Google OR-Tools CP-SAT V3 模型",
+      "本地 SQLite",
+      "是否需要付费 API",
+      "上传数据、评分设置与优化结果持久保存在本地。异常处理历史复用原 V2 SQLite 存储，刷新页面不会删除已保存记录。",
+      "内置数据均为合成数据。上传来源未经独立核实。此应用为服务端角色保护的单组织实例，未连接真实承运商、不依赖付费 API，也不宣称已验证商业效果。",
+      "。新版网页的评分设置与 Streamlit 会话设置相互独立。",
+      "KPI 定义",
+      "保留订单全部状态的有限 USD 成本之和，范围 0–1,000,000,000,000；排除缺失 / 无效成本。上限为技术保护，不是市场基准。"
+    ]
+  },
+  "verification": {
+    "build_id": "xNXy8ggnRSSPxJODmiwVg",
+    "frontend_source_sha256": "20c812e2123d282dfc077c27b05ed9441cb258e8df168933a7b15a6db32997f3",
+    "original_test_file_sha256": "5e02f563bdf1f596ee5bd7b63e7d6a44b479dd599842f5cecc1277dc7394e127",
+    "language_precondition": "fresh browser defaults zh",
+    "temporary_database": true
+  }
+}

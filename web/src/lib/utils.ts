@@ -23,12 +23,42 @@ export function num(value: number | null | undefined, digits = 1) {
 }
 
 export class ApiError extends Error {
-  constructor(message: string, public status: number) { super(message); }
+  constructor(
+    message: string,
+    public status: number,
+  ) {
+    super(`${message} [HTTP ${status}]`);
+  }
 }
+// A page loads session, workspace and auxiliary data. Serialize client reads so a single
+// visitor cannot exceed the sealed demo's unchanged two-operation server boundary.
+// Writes retain their original behavior; this does not retry or hide server errors.
+let readTail: Promise<void> = Promise.resolve();
 export async function api<T>(path: string, init?: RequestInit): Promise<T> {
+  if ((init?.method ?? "GET").toUpperCase() !== "GET")
+    return request<T>(path, init);
+  const previous = readTail;
+  let release!: () => void;
+  readTail = new Promise<void>((resolve) => {
+    release = resolve;
+  });
+  await previous;
+  try {
+    if (init?.signal?.aborted)
+      throw new DOMException("The operation was aborted.", "AbortError");
+    return await request<T>(path, init);
+  } finally {
+    release();
+  }
+}
+async function request<T>(path: string, init?: RequestInit): Promise<T> {
   const response = await fetch(`/api${path}`, { cache: "no-store", ...init });
   if (!response.ok) {
-    if (response.status === 401 && path !== "/auth/login" && path !== "/auth/session") {
+    if (
+      response.status === 401 &&
+      path !== "/auth/login" &&
+      path !== "/auth/session"
+    ) {
       window.dispatchEvent(new Event("logistics-auth-expired"));
     }
     let message = `Request failed (${response.status}). Check that the Python API is running.`;

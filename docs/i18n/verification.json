@@ -1,0 +1,114 @@
+{
+  "baseline": "fc1115dc369b71ce327464cb4f7a9c14475fe29b",
+  "branch": "feature/native-zh-en-localization",
+  "verified_at_utc": "2026-10-30T14:12:08.041263+00:00",
+  "platform": "Linux-6.18.55-x86_64-with-glibc2.41",
+  "python": "3.12.14",
+  "node": "v24.19.0",
+  "chromium": "Chromium 154.0.8037.57 built on Debian GNU/Linux 13 (trixie)",
+  "build_id": "xNXy8ggnRSSPxJODmiwVg",
+  "frontend_source_sha256": "20c812e2123d282dfc077c27b05ed9441cb258e8df168933a7b15a6db32997f3",
+  "existing_python_business_and_test_files_unchanged": true,
+  "python_regressions": {
+    "total": 395,
+    "passed": 395,
+    "failed": 0,
+    "skipped": 0,
+    "xfail": 0,
+    "seconds": 171.11,
+    "identities_match_sprint2_5": true
+  },
+  "frontend_checks": [
+    {
+      "dictionary_entries": 1000,
+      "assertions": 3026,
+      "passed": true
+    },
+    {
+      "jsxFiles": 30,
+      "checked_display_keys": 605,
+      "canonical_options": 24,
+      "passed": true
+    },
+    {
+      "read_peak": 1,
+      "reads": 8,
+      "aborted_fetches": 0,
+      "network_and_429_recovery": true,
+      "writes_unchanged": true,
+      "passed": true
+    }
+  ],
+  "browser_flows": {
+    "i18n-business": {
+      "completed": true,
+      "layout_checks": 36,
+      "javascript_errors": [],
+      "build_id": "xNXy8ggnRSSPxJODmiwVg"
+    },
+    "i18n-demo": {
+      "completed": true,
+      "layout_checks": 36,
+      "javascript_errors": [],
+      "build_id": "xNXy8ggnRSSPxJODmiwVg"
+    },
+    "premium": {
+      "completed": true,
+      "layout_checks": 0,
+      "javascript_errors": [],
+      "build_id": "xNXy8ggnRSSPxJODmiwVg"
+    },
+    "hardening": {
+      "completed": true,
+      "layout_checks": 28,
+      "javascript_errors": [],
+      "build_id": "xNXy8ggnRSSPxJODmiwVg"
+    },
+    "uploaded": {
+      "completed": true,
+      "layout_checks": 28,
+      "javascript_errors": [],
+      "build_id": "xNXy8ggnRSSPxJODmiwVg"
+    },
+    "settings-cas": {
+      "completed": true,
+      "layout_checks": 0,
+      "javascript_errors": [],
+      "build_id": "xNXy8ggnRSSPxJODmiwVg"
+    },
+    "legacy-demo": {
+      "completed": true,
+      "layout_checks": 16,
+      "javascript_errors": [],
+      "build_id": "xNXy8ggnRSSPxJODmiwVg"
+    }
+  },
+  "commands": [
+    ".venv/bin/python -m pytest -q --junitxml=artifacts/i18n/pytest.xml",
+    "npm --prefix web run test:i18n",
+    "npm --prefix web run typecheck",
+    "npm --prefix web run build",
+    ".venv/bin/python -m scripts.verify_i18n",
+    ".venv/bin/python -m compileall -q backend src scripts tests",
+    ".venv/bin/python -m pip check",
+    "git diff --check"
+  ],
+  "build_output": "\n> logistics-insight-web@1.0.0 build\n> next build\n\n▲ Next.js 16.4.3 (Turbopack)\n✓ Running next.config.ts took 73ms\n\n  Creating an optimized production build ...\n✓ Compiled successfully in 2.8s\n  Running TypeScript ...\n  Finished TypeScript in 7.0s ...\n  Collecting page data using 4 workers ...\n  Generating static pages using 4 workers (0/11) ...\n  Generating static pages using 4 workers (2/11) \n  Generating static pages using 4 workers (5/11) \n  Generating static pages using 4 workers (8/11) \n✓ Generating static pages using 4 workers (11/11) in 344ms\n  Finalizing page optimization ...\n\nRoute (app)\n┌ ƒ /\n├ ƒ /_not-found\n├ ƒ /app\n├ ƒ /app/analytics\n├ ƒ /app/decisions\n├ ƒ /app/decisions/history\n├ ƒ /app/exceptions\n├ ƒ /app/optimization\n├ ƒ /app/settings\n└ ƒ /app/shipments\n\n\nƒ  (Dynamic)  server-rendered on demand\n\nnpm notice\nnpm notice New major version of npm available! 11.9.0 -> 12.2.1\nnpm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.1\nnpm notice To update run: npm install -g npm@12.2.1\nnpm notice\n",
+  "intermediate_observations": [
+    "New browser selector initially matched Next route-announcer alert as well as login error; narrowed to the actual login component without changing assertion.",
+    "New pagination test initially captured old rows before the new API response committed; now asserts exact API page shipment IDs before changing language.",
+    "A broad translated template preceded a more specific remaining-hours template; production matcher now sorts literal specificity, with new exact label assertion.",
+    "Unpaced 36-page business crawl correctly hit unchanged180/min budget with429; acceptance crawl now paces below existing budgets, no API limit changes.",
+    "Text-node review found English KPI-definition labels and template link labels; translated their display labels explicitly, without changing schema keys.",
+    "Mobile screenshot showed cramped breadcrumb/account text; removed redundant mobile breadcrumb prefix and preserved single-line page title/logout.",
+    "Demo crawl exposed a genuine client burst: session is followed by datasets/workspace/exceptions reads; the third could exceed server2 concurrent operations despite fewer than120 requests. Frontend GET serialization now keeps server limits intact; added queue, abort, error recovery and unchanged-write assertions.",
+    "Controlled assumption notes need verbatim unknown text: preserved whitespace/newlines in translator fallback, and used exact-only catalog lookup for editable default notes and evidence basis to avoid generic templates translating user prose. Added exact whitespace/pattern-like prose assertions and browser request payload equality."
+  ],
+  "not_verified": [
+    "Native Windows and Python3.14",
+    "Firefox/Safari/real mobile hardware",
+    "Forced browser translation extensions",
+    "New deployment images/public HTTPS/real organizational data",
+    "Production multi-user load"
+  ]
+}

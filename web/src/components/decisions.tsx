@@ -1,4 +1,5 @@
 "use client";
+import { useI18n } from "@/lib/i18n/provider";
 
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
@@ -31,13 +32,14 @@ import { useAccess } from "@/components/access";
 import { useSessionDraft } from "@/lib/session-draft";
 
 export function DecisionNav({ history = false }: { history?: boolean }) {
+  const { t } = useI18n();
   return (
-    <nav className="subnav" aria-label="Decision Center views">
+    <nav className="subnav" aria-label={t("Decision Center views")}>
       <Link href="/app/decisions" className={history ? "" : "active"}>
-        Scenario comparison
+        {t("Scenario comparison")}
       </Link>
       <Link href="/app/decisions/history" className={history ? "active" : ""}>
-        Handling history
+        {t("Handling history")}
       </Link>
     </nav>
   );
@@ -51,16 +53,37 @@ type ScenarioState = {
   notes?: string;
 };
 export function Decisions() {
+  const { t, tExact } = useI18n();
   const user = useAccess();
   const { data, datasetId, asOf, notify } = useWorkspace();
   const params = useSearchParams();
-  const [queuePage, setQueuePage] = useSessionDraft("decision-page", 0), [search, setSearch] = useSessionDraft("decision-search", params.get("shipment") ?? "");
+  const [queuePage, setQueuePage] = useSessionDraft("decision-page", 0),
+    [search, setSearch] = useSessionDraft(
+      "decision-search",
+      params.get("shipment") ?? "",
+    );
   const queue = useExceptionQueue(queuePage, true, search, 50);
   const [defaults, setDefaults] = useState<Assumption[]>([]),
     [selected, setSelected] = useSessionDraft("decision-selected", "");
-  const [states, setStates] = useSessionDraft<Record<string, ScenarioState>>("decision-scenarios", {}, (value) => Object.values(value as Record<string, ScenarioState>).every((state) =>
-    Array.isArray(state?.draft) && state.draft.length === 3 && state.draft.every((item) => typeof item?.action === "string" && typeof item?.remaining_hours === "number" && typeof item?.additional_cost === "number") &&
-    (state.result === null || (Array.isArray(state.result?.comparison) && typeof state.result?.comparison_token === "string"))));
+  const [states, setStates] = useSessionDraft<Record<string, ScenarioState>>(
+    "decision-scenarios",
+    {},
+    (value) =>
+      Object.values(value as Record<string, ScenarioState>).every(
+        (state) =>
+          Array.isArray(state?.draft) &&
+          state.draft.length === 3 &&
+          state.draft.every(
+            (item) =>
+              typeof item?.action === "string" &&
+              typeof item?.remaining_hours === "number" &&
+              typeof item?.additional_cost === "number",
+          ) &&
+          (state.result === null ||
+            (Array.isArray(state.result?.comparison) &&
+              typeof state.result?.comparison_token === "string")),
+      ),
+  );
   const [busy, setBusy] = useState(false),
     [saving, setSaving] = useState(false),
     [error, setError] = useState("");
@@ -90,17 +113,32 @@ export function Decisions() {
     applied: null,
     result: null,
   };
-  const action = current.action ?? "", notes = current.notes ?? "";
-  const exceptionType = current.exceptionType ?? row?.exception_types.split("; ")[0] ?? "";
-  function updateChoice(field: "action" | "notes" | "exceptionType", value: string) {
-    setStates((old) => ({ ...old, [key]: { ...(old[key] ?? current), [field]: value } }));
+  const action = current.action ?? "",
+    notes = current.notes ?? "";
+  const exceptionType =
+    current.exceptionType ?? row?.exception_types.split("; ")[0] ?? "";
+  function updateChoice(
+    field: "action" | "notes" | "exceptionType",
+    value: string,
+  ) {
+    setStates((old) => ({
+      ...old,
+      [key]: { ...(old[key] ?? current), [field]: value },
+    }));
   }
   const setAction = (value: string) => updateChoice("action", value);
   const setNotes = (value: string) => updateChoice("notes", value);
-  const setExceptionType = (value: string) => updateChoice("exceptionType", value);
-  useEffect(() => { setError(""); }, [key]);
+  const setExceptionType = (value: string) =>
+    updateChoice("exceptionType", value);
+  useEffect(() => {
+    setError("");
+  }, [key]);
   const appliedAction =
-    (current.result?.comparison.some((item) => item.action === action && item.assumed_available) ? action : "") ||
+    (current.result?.comparison.some(
+      (item) => item.action === action && item.assumed_available,
+    )
+      ? action
+      : "") ||
     current.result?.comparison.find((item) => item.assumed_available)?.action ||
     "";
   function edit(
@@ -183,37 +221,69 @@ export function Decisions() {
   return (
     <>
       <PageHeading
-        title="Decision Center"
-        description="Compare the alternatives. Know the assumptions. Record the choice."
+        title={t("Decision Center")}
+        description={t(
+          "Compare the alternatives. Know the assumptions. Record the choice.",
+        )}
         action={
           <Button asChild variant="outline" size="sm">
             <Link href="/app/decisions/history">
               <History size={13} />
-              Handling history
+              {t("Handling history")}
             </Link>
           </Button>
         }
       />
       <DecisionNav />
-      <p className="muted small">Drafts and applied comparisons are restored in this browser tab for your account. A changed server context still requires recomparison before saving.</p>
+      <p className="muted small">
+        {t(
+          "Drafts and applied comparisons are restored in this browser tab for your account. A changed server context still requires recomparison before saving.",
+        )}
+      </p>
       <div className="filters">
-        <input aria-label="Find active exception ID" className="input" placeholder="Search all active shipment IDs" value={search} onChange={(e) => { setSearch(e.target.value); setQueuePage(0); }} />
-        <Button variant="outline" disabled={!queuePage || queue.loading} onClick={() => setQueuePage((v) => v - 1)}>Previous active page</Button>
-        <span>{queue.total} active exceptions · page {queuePage + 1}</span>
-        <Button variant="outline" disabled={(queuePage + 1) * 50 >= queue.total || queue.loading} onClick={() => setQueuePage((v) => v + 1)}>Next active page</Button>
+        <input
+          aria-label={t("Find active exception ID")}
+          className="input"
+          placeholder={t("Search all active shipment IDs")}
+          value={search}
+          onChange={(e) => {
+            setSearch(e.target.value);
+            setQueuePage(0);
+          }}
+        />
+        <Button
+          variant="outline"
+          disabled={!queuePage || queue.loading}
+          onClick={() => setQueuePage((v) => v - 1)}
+        >
+          {t("Previous active page")}
+        </Button>
+        <span>
+          {t(queue.total)} {t(" active exceptions · page ")}
+          {t(queuePage + 1)}
+        </span>
+        <Button
+          variant="outline"
+          disabled={(queuePage + 1) * 50 >= queue.total || queue.loading}
+          onClick={() => setQueuePage((v) => v + 1)}
+        >
+          {t("Next active page")}
+        </Button>
       </div>
-      {queue.error && <ErrorState message={queue.error} />}
+      {queue.error && <ErrorState message={t(queue.error)} />}
       <WorkspaceBoundary>
         {data && (
           <>
             {active.length ? (
               <>
                 <Panel
-                  title="Select an active exception"
-                  subtitle="Only retained In Transit exceptions without a reported actual delivery are actionable."
+                  title={t("Select an active exception")}
+                  subtitle={t(
+                    "Only retained In Transit exceptions without a reported actual delivery are actionable.",
+                  )}
                 >
                   <div className="panel-body">
-                    <Field label="Shipment for decision review">
+                    <Field label={t("Shipment for decision review")}>
                       <select
                         className="input"
                         value={selected}
@@ -228,8 +298,10 @@ export function Decisions() {
                               key={item.source_row}
                               value={item.shipment_id}
                             >
-                              {item.shipment_id} — {item.origin.split(",")[0]}{" "}
-                              to {item.destination.split(",")[0]}
+                              {item.shipment_id} — {item.origin.split(",")[0]}
+                              {t(" ")}
+                              {t("to ")}
+                              {item.destination.split(",")[0]}
                             </option>
                           ))}
                       </select>
@@ -237,17 +309,37 @@ export function Decisions() {
                     {row && (
                       <div className="explanation-block">
                         <h3>
-                          {row.shipment_id}{" "}
-                          <StatusBadge value={current.result?.priority_level ?? row.priority_level} />
+                          {row.shipment_id}
+                          {t(" ")}
+                          <StatusBadge
+                            value={
+                              current.result?.priority_level ??
+                              row.priority_level
+                            }
+                          />
                         </h3>
                         <p>
-                          Priority score: {num(current.result ? current.result.priority_score : row.priority_score, 4)}.{" "}
-                          {current.result?.explanation ?? row.explanation}
+                          {t("Priority score: ")}
+                          {t(
+                            num(
+                              current.result
+                                ? current.result.priority_score
+                                : row.priority_score,
+                              4,
+                            ),
+                          )}
+                          .{t(" ")}
+                          {t(current.result?.explanation ?? row.explanation)}
                         </p>
-                        {(current.result?.missing_information ?? row.missing_information) && (
+                        {(current.result?.missing_information ??
+                          row.missing_information) && (
                           <p>
-                            <strong>Missing information:</strong>{" "}
-                            {current.result?.missing_information ?? row.missing_information}
+                            <strong>{t("Missing information:")}</strong>
+                            {t(" ")}
+                            {t(
+                              current.result?.missing_information ??
+                                row.missing_information,
+                            )}
                           </p>
                         )}
                       </div>
@@ -257,13 +349,12 @@ export function Decisions() {
                 <div className="notice notice-amber">
                   <ShieldCheck size={16} />
                   <p>
-                    Simulation only. Additional cost, remaining transit time and
-                    availability are independent assumptions. A higher price
-                    does not imply faster delivery. No live rate, ETA or service
-                    commitment is requested.
+                    {t(
+                      "Simulation only. Additional cost, remaining transit time and availability are independent assumptions. A higher price does not imply faster delivery. No live rate, ETA or service commitment is requested.",
+                    )}
                   </p>
                 </div>
-                {error && <ErrorState message={error} />}
+                {error && <ErrorState message={t(error)} />}
                 <form onSubmit={compare}>
                   <div className="scenario-grid">
                     {current.draft.map((option, i) => {
@@ -272,9 +363,9 @@ export function Decisions() {
                       );
                       return (
                         <section className="scenario-card" key={option.action}>
-                          <h3>{option.action}</h3>
+                          <h3>{t(option.action)}</h3>
                           <Field
-                            label={`${option.action}: additional cost (USD)`}
+                            label={t(`${option.action}: additional cost (USD)`)}
                           >
                             <input
                               className="input"
@@ -293,7 +384,7 @@ export function Decisions() {
                               }
                             />
                           </Field>
-                          <Field label={`${option.action}: remaining hours`}>
+                          <Field label={t(`${option.action}: remaining hours`)}>
                             <input
                               className="input"
                               type="number"
@@ -319,28 +410,39 @@ export function Decisions() {
                                 edit(i, "assumed_available", e.target.checked)
                               }
                             />
-                            Assume available in this scenario
+                            {t("Assume available in this scenario")}
                           </label>
-                          <Field label={`${option.action}: key assumptions`}>
+                          <Field label={t(`${option.action}: key assumptions`)}>
                             <textarea
                               className="input"
                               required
                               maxLength={2000}
-                              value={option.notes}
+                              value={tExact(option.notes)}
                               onChange={(e) => edit(i, "notes", e.target.value)}
                             />
                           </Field>
                           {result && (
                             <div className="scenario-result">
                               <strong>
-                                {money(result.estimated_additional_cost_usd, 2)}
+                                {t(
+                                  money(
+                                    result.estimated_additional_cost_usd,
+                                    2,
+                                  ),
+                                )}
                               </strong>
-                              <p>{result.deadline_impact}</p>
+                              <p>{t(result.deadline_impact)}</p>
                               <p>
-                                Applied remaining time:{" "}
-                                {num(result.assumed_remaining_hours)} h<br />
-                                Scenario arrival:{" "}
-                                {result.scenario_arrival_utc ?? "Unavailable"}
+                                {t("Applied remaining time:")}
+                                {t(" ")}
+                                {t(num(result.assumed_remaining_hours))}{" "}
+                                {t(" h")}
+                                <br />
+                                {t("Scenario arrival:")}
+                                {t(" ")}
+                                {t(
+                                  result.scenario_arrival_utc ?? "Unavailable",
+                                )}
                               </p>
                             </div>
                           )}
@@ -350,12 +452,21 @@ export function Decisions() {
                   </div>
                   <div className="form-actions">
                     <p>
-                      {unapplied
-                        ? "Draft edits are not applied. Displayed results and saved cases use the last comparison."
-                        : "Recalculate to apply all three scenario assumptions together."}
+                      {t(
+                        unapplied
+                          ? "Draft edits are not applied. Displayed results and saved cases use the last comparison."
+                          : "Recalculate to apply all three scenario assumptions together.",
+                      )}
                     </p>
-                    <Button type="submit" disabled={busy || !defaults.length || user?.read_only_demo}>
-                      <BusyLabel busy={busy}>Compare scenarios</BusyLabel>
+                    <Button
+                      type="submit"
+                      disabled={
+                        busy || !defaults.length || user?.read_only_demo
+                      }
+                    >
+                      <BusyLabel busy={busy}>
+                        {t("Compare scenarios")}
+                      </BusyLabel>
                     </Button>
                   </div>
                 </form>
@@ -363,18 +474,27 @@ export function Decisions() {
                   <>
                     <div className="notice">
                       <p>
-                        Scenario starts at {current.result.cutoff}. Deadline
-                        source: {current.result.deadline_source}. Deadline:{" "}
-                        {current.result.deadline ?? "Insufficient information"}.
+                        {t("Scenario starts at ")}
+                        {current.result.cutoff}
+                        {t(". Deadline source: ")}
+                        {t(current.result.deadline_source)}
+                        {t(". Deadline:")}
+                        {t(" ")}
+                        {t(
+                          current.result.deadline ?? "Insufficient information",
+                        )}
+                        .
                       </p>
                     </div>
                     <Panel
-                      title="Record the handling decision"
-                      subtitle="Saving uses the applied comparison. Unchanged repeated saves reuse the same case."
+                      title={t("Record the handling decision")}
+                      subtitle={t(
+                        "Saving uses the applied comparison. Unchanged repeated saves reuse the same case.",
+                      )}
                     >
                       <form onSubmit={save}>
                         <div className="form-section form-grid">
-                          <Field label="Selected action">
+                          <Field label={t("Selected action")}>
                             <select
                               className="input"
                               value={appliedAction}
@@ -383,59 +503,72 @@ export function Decisions() {
                               {current.result.comparison
                                 .filter((item) => item.assumed_available)
                                 .map((item) => (
-                                  <option key={item.action}>
-                                    {item.action}
+                                  <option key={item.action} value={item.action}>
+                                    {t(item.action)}
                                   </option>
                                 ))}
                             </select>
                           </Field>
-                          <Field label="Exception type for history">
+                          <Field label={t("Exception type for history")}>
                             <select
                               className="input"
                               value={exceptionType}
                               onChange={(e) => setExceptionType(e.target.value)}
                             >
                               {row?.exception_types.split("; ").map((type) => (
-                                <option key={type}>{type}</option>
+                                <option key={type} value={type}>
+                                  {t(type)}
+                                </option>
                               ))}
                             </select>
                           </Field>
-                          <Field label="Decision notes">
+                          <Field label={t("Decision notes")}>
                             <textarea
                               className="input"
                               maxLength={4000}
                               value={notes}
                               onChange={(e) => setNotes(e.target.value)}
-                              placeholder="Why was this option selected?"
+                              placeholder={t("Why was this option selected?")}
                             />
                           </Field>
                         </div>
                         <div className="form-actions">
                           <p>
-                            Actual outcomes remain unknown until you enter them
-                            in history.
+                            {t(
+                              "Actual outcomes remain unknown until you enter them in history.",
+                            )}
                           </p>
                           <Button
                             type="submit"
-                            disabled={saving || !appliedAction || user?.role === "viewer"}
+                            disabled={
+                              saving ||
+                              !appliedAction ||
+                              user?.role === "viewer"
+                            }
                           >
                             <Save size={14} />
-                            <BusyLabel busy={saving}>Save decision</BusyLabel>
+                            <BusyLabel busy={saving}>
+                              {t("Save decision")}
+                            </BusyLabel>
                           </Button>
                         </div>
                       </form>
                     </Panel>
                     <Panel
                       className="mt-5"
-                      title="Past similar cases"
-                      subtitle="Exact directional route, transport mode and primary exception type; this shipment is excluded."
+                      title={t("Past similar cases")}
+                      subtitle={t(
+                        "Exact directional route, transport mode and primary exception type; this shipment is excluded.",
+                      )}
                     >
                       {current.result.similar_cases.length ? (
                         <HistoryTable rows={current.result.similar_cases} />
                       ) : (
                         <EmptyState
-                          title="No comparable cases yet"
-                          text="Saved handling decisions will appear here when the deterministic matching fields agree. Matches are not predictions."
+                          title={t("No comparable cases yet")}
+                          text={t(
+                            "Saved handling decisions will appear here when the deterministic matching fields agree. Matches are not predictions.",
+                          )}
                         />
                       )}
                     </Panel>
@@ -444,12 +577,15 @@ export function Decisions() {
               </>
             ) : (
               <EmptyState
-                title="No active transport exception"
-                text="Choose Synthetic Demo Data, clear filters, or upload In Transit orders with operational exceptions. Completed records remain available in Shipments."
+                title={t("No active transport exception")}
+                text={t(
+                  "Choose Synthetic Demo Data, clear filters, or upload In Transit orders with operational exceptions. Completed records remain available in Shipments.",
+                )}
                 action={
                   <Button asChild variant="outline">
                     <Link href="/app/shipments">
-                      Inspect shipments <ArrowUpRight size={14} />
+                      {t("Inspect shipments ")}
+                      <ArrowUpRight size={14} />
                     </Link>
                   </Button>
                 }
@@ -469,17 +605,18 @@ function HistoryTable({
   rows: CaseRecord[];
   select?: (row: CaseRecord) => void;
 }) {
+  const { t } = useI18n();
   return (
     <div className="table-scroll">
       <table>
         <thead>
           <tr>
-            <th>Shipment</th>
-            <th>Action</th>
-            <th>Estimate / actual cost</th>
-            <th>Estimate / actual delay</th>
-            <th>Status</th>
-            {select && <th>Update</th>}
+            <th>{t("Shipment")}</th>
+            <th>{t("Action")}</th>
+            <th>{t("Estimate / actual cost")}</th>
+            <th>{t("Estimate / actual delay")}</th>
+            <th>{t("Status")}</th>
+            {select && <th>{t("Update")}</th>}
           </tr>
         </thead>
         <tbody>
@@ -487,19 +624,21 @@ function HistoryTable({
             <tr key={row.case_id}>
               <td>
                 <strong>{row.shipment_id}</strong>
-                <span className="cell-sub">{row.exception_type}</span>
+                <span className="cell-sub">{t(row.exception_type)}</span>
               </td>
-              <td>{row.selected_action}</td>
+              <td>{t(row.selected_action)}</td>
               <td>
-                {money(row.estimated_cost, 2)}
+                {t(money(row.estimated_cost, 2))}
                 <span className="cell-sub">
-                  Actual: {money(row.actual_cost, 2)}
+                  {t("Actual: ")}
+                  {t(money(row.actual_cost, 2))}
                 </span>
               </td>
               <td>
-                {num(row.estimated_delay)} h
+                {t(num(row.estimated_delay))} {t(" h")}
                 <span className="cell-sub">
-                  Actual: {num(row.actual_delay)} h
+                  {t("Actual: ")}
+                  {t(num(row.actual_delay))} {t(" h")}
                 </span>
               </td>
               <td>
@@ -510,7 +649,7 @@ function HistoryTable({
                   <button
                     className="text-button"
                     onClick={() => select(row)}
-                    aria-label={`Update case ${row.shipment_id}`}
+                    aria-label={t(`Update case ${row.shipment_id}`)}
                   >
                     <ArrowUpRight size={15} />
                   </button>
@@ -524,15 +663,25 @@ function HistoryTable({
   );
 }
 export function HandlingHistory() {
+  const { t } = useI18n();
   const user = useAccess();
   const { notify } = useWorkspace();
   const [rows, setRows] = useState<CaseRecord[]>([]),
     [error, setError] = useState(""),
     [busy, setBusy] = useState(false);
   const [filter, setFilter] = useSessionDraft("history-status-filter", ""),
-    [shipment, setShipment, filterReady] = useSessionDraft("history-shipment-filter", "");
+    [shipment, setShipment, filterReady] = useSessionDraft(
+      "history-shipment-filter",
+      "",
+    );
   const [page, setPage] = useSessionDraft("history-page", 0);
-  const [selected, setSelected] = useSessionDraft<CaseRecord | null>("history-selected", null, (value) => !!(value as CaseRecord)?.case_id && Number.isInteger((value as CaseRecord)?.version)),
+  const [selected, setSelected] = useSessionDraft<CaseRecord | null>(
+      "history-selected",
+      null,
+      (value) =>
+        !!(value as CaseRecord)?.case_id &&
+        Number.isInteger((value as CaseRecord)?.version),
+    ),
     [actualCost, setActualCost] = useSessionDraft("history-actual-cost", ""),
     [actualDelay, setActualDelay] = useSessionDraft("history-actual-delay", "");
   const [status, setStatus] = useSessionDraft("history-edit-status", "Open"),
@@ -590,13 +739,15 @@ export function HandlingHistory() {
   return (
     <>
       <PageHeading
-        title="Handling history"
-        description="A persistent record of choices, estimates and observed outcomes."
+        title={t("Handling history")}
+        description={t(
+          "A persistent record of choices, estimates and observed outcomes.",
+        )}
         action={
           <Button asChild variant="outline" size="sm">
             <a href="/api/cases/export" download>
               <Download size={13} />
-              Export history
+              {t("Export history")}
             </a>
           </Button>
         }
@@ -606,56 +757,85 @@ export function HandlingHistory() {
         className="filters"
         onSubmit={(e) => {
           e.preventDefault();
-          if (page) setPage(0); else void load();
+          if (page) setPage(0);
+          else void load();
         }}
       >
         <input
-          aria-label="History shipment ID"
-          placeholder="Exact shipment ID"
+          aria-label={t("History shipment ID")}
+          placeholder={t("Exact shipment ID")}
           className="input"
           value={shipment}
           onChange={(e) => setShipment(e.target.value)}
         />
         <select
           className="input"
-          aria-label="History status filter"
+          aria-label={t("History status filter")}
           value={filter}
-          onChange={(e) => { setFilter(e.target.value); setPage(0); }}
+          onChange={(e) => {
+            setFilter(e.target.value);
+            setPage(0);
+          }}
         >
-          <option value="">All statuses</option>
+          <option value="">{t("All statuses")}</option>
           {["Open", "In Progress", "Resolved", "Cancelled"].map((value) => (
-            <option key={value}>{value}</option>
+            <option key={value} value={value}>
+              {t(value)}
+            </option>
           ))}
         </select>
         <Button type="submit" size="sm" variant="outline" disabled={busy}>
-          Apply filters
+          {t("Apply filters")}
         </Button>
       </form>
-      {error && <ErrorState message={error} retry={load} />}
+      {error && <ErrorState message={t(error)} retry={load} />}
       <Panel
-        title="Saved decisions"
-        subtitle={`Persistent SQLite history. Page ${page + 1} (up to 200 records); CSV exports the complete organization history.`}
+        title={t("Saved decisions")}
+        subtitle={t(
+          `Persistent SQLite history. Page ${page + 1} (up to 200 records); CSV exports the complete organization history.`,
+        )}
       >
         {rows.length ? (
-          <HistoryTable rows={rows} select={user?.role === "viewer" ? undefined : select} />
+          <HistoryTable
+            rows={rows}
+            select={user?.role === "viewer" ? undefined : select}
+          />
         ) : (
           <EmptyState
-            title={busy ? "Loading local cases" : "No saved cases match"}
-            text="Save an applied scenario in Decision Center, or change the history filters."
+            title={t(busy ? "Loading local cases" : "No saved cases match")}
+            text={t(
+              "Save an applied scenario in Decision Center, or change the history filters.",
+            )}
           />
         )}
       </Panel>
-      <div className="form-actions"><Button variant="outline" disabled={busy || !page} onClick={() => setPage((v) => v - 1)}>Previous history page</Button>
-        <Button variant="outline" disabled={busy || rows.length < 200} onClick={() => setPage((v) => v + 1)}>Next history page</Button></div>
+      <div className="form-actions">
+        <Button
+          variant="outline"
+          disabled={busy || !page}
+          onClick={() => setPage((v) => v - 1)}
+        >
+          {t("Previous history page")}
+        </Button>
+        <Button
+          variant="outline"
+          disabled={busy || rows.length < 200}
+          onClick={() => setPage((v) => v + 1)}
+        >
+          {t("Next history page")}
+        </Button>
+      </div>
       {selected && user?.role !== "viewer" && (
         <Panel
           className="mt-5"
-          title={`Update ${selected.shipment_id}`}
-          subtitle={`Case version ${selected.version}. A concurrent update is rejected until you reload the record.`}
+          title={t(`Update ${selected.shipment_id}`)}
+          subtitle={t(
+            `Case version ${selected.version}. A concurrent update is rejected until you reload the record.`,
+          )}
         >
           <form onSubmit={update}>
             <div className="form-section form-grid">
-              <Field label="Resolution status">
+              <Field label={t("Resolution status")}>
                 <select
                   className="input"
                   value={status}
@@ -663,14 +843,16 @@ export function HandlingHistory() {
                 >
                   {["Open", "In Progress", "Resolved", "Cancelled"].map(
                     (value) => (
-                      <option key={value}>{value}</option>
+                      <option key={value} value={value}>
+                        {t(value)}
+                      </option>
                     ),
                   )}
                 </select>
               </Field>
               <Field
-                label="Actual additional cost (USD)"
-                hint="Leave blank if unknown."
+                label={t("Actual additional cost (USD)")}
+                hint={t("Leave blank if unknown.")}
               >
                 <input
                   className="input"
@@ -683,8 +865,8 @@ export function HandlingHistory() {
                 />
               </Field>
               <Field
-                label="Actual delay (hours)"
-                hint="Leave blank if unknown."
+                label={t("Actual delay (hours)")}
+                hint={t("Leave blank if unknown.")}
               >
                 <input
                   className="input"
@@ -696,7 +878,7 @@ export function HandlingHistory() {
                   onChange={(e) => setActualDelay(e.target.value)}
                 />
               </Field>
-              <Field label="Resolution notes">
+              <Field label={t("Resolution notes")}>
                 <textarea
                   className="input"
                   maxLength={4000}
@@ -707,7 +889,7 @@ export function HandlingHistory() {
             </div>
             <div className="form-actions">
               <Button type="submit" disabled={busy}>
-                <BusyLabel busy={busy}>Save outcome</BusyLabel>
+                <BusyLabel busy={busy}>{t("Save outcome")}</BusyLabel>
               </Button>
             </div>
           </form>

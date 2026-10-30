@@ -1,4 +1,5 @@
 "use client";
+import { useI18n } from "@/lib/i18n/provider";
 
 import {
   cloneElement,
@@ -17,9 +18,11 @@ export function Badge({
   children: ReactNode;
   tone?: string;
 }) {
-  return <span className={cn("badge", `badge-${tone}`)}>{children}</span>;
+  const { t } = useI18n();
+  return <span className={cn("badge", `badge-${tone}`)}>{t(children)}</span>;
 }
 export function StatusBadge({ value }: { value: string }) {
+  const { t } = useI18n();
   const tone = ["OPTIMAL", "Delivered", "Resolved", "Low"].includes(value)
     ? "green"
     : ["INFEASIBLE", "High", "Delayed delivery"].includes(value)
@@ -33,7 +36,7 @@ export function StatusBadge({ value }: { value: string }) {
           ].includes(value)
         ? "amber"
         : "neutral";
-  return <Badge tone={tone}>{value}</Badge>;
+  return <Badge tone={tone}>{t(value)}</Badge>;
 }
 export function Panel({
   title,
@@ -48,16 +51,17 @@ export function Panel({
   children: ReactNode;
   className?: string;
 }) {
+  const { t } = useI18n();
   return (
     <section className={cn("panel", className)}>
       <header className="panel-head">
         <div>
-          <h2>{title}</h2>
-          {subtitle && <p>{subtitle}</p>}
+          <h2>{t(title)}</h2>
+          {subtitle && <p>{t(subtitle)}</p>}
         </div>
-        {action}
+        {t(action)}
       </header>
-      {children}
+      {t(children)}
     </section>
   );
 }
@@ -70,13 +74,14 @@ export function PageHeading({
   description: string;
   action?: ReactNode;
 }) {
+  const { t } = useI18n();
   return (
     <div className="page-heading">
       <div>
-        <h1>{title}</h1>
-        <p>{description}</p>
+        <h1>{t(title)}</h1>
+        <p>{t(description)}</p>
       </div>
-      <div className="heading-actions">{action}</div>
+      <div className="heading-actions">{t(action)}</div>
     </div>
   );
 }
@@ -89,12 +94,13 @@ export function EmptyState({
   text: string;
   action?: ReactNode;
 }) {
+  const { t } = useI18n();
   return (
     <div className="empty-state">
       <Inbox size={30} strokeWidth={1.2} />
-      <h3>{title}</h3>
-      <p>{text}</p>
-      {action}
+      <h3>{t(title)}</h3>
+      <p>{t(text)}</p>
+      {t(action)}
     </div>
   );
 }
@@ -105,15 +111,17 @@ export function ErrorState({
   message: string;
   retry?: () => void;
 }) {
+  const { t } = useI18n();
   return (
     <div className="error-state" role="alert">
       <AlertTriangle size={20} />
       <div>
-        <strong>Unable to complete this request</strong>
-        <p>{message}</p>
+        <strong>{t("Unable to complete this request")}</strong>
+        <p>{t(message)}</p>
         {retry && (
           <button className="text-button" onClick={retry}>
-            Try again <ArrowUpRight size={13} />
+            {t("Try again ")}
+            <ArrowUpRight size={13} />
           </button>
         )}
       </div>
@@ -121,11 +129,12 @@ export function ErrorState({
   );
 }
 export function LoadingState() {
+  const { t } = useI18n();
   return (
     <div
       className="loading-layout"
       aria-busy="true"
-      aria-label="Loading calculated results"
+      aria-label={t("Loading calculated results")}
     >
       <div className="skeleton skeleton-title" />
       <div className="skeleton-kpis">
@@ -145,10 +154,11 @@ export function BusyLabel({
   busy: boolean;
   children: ReactNode;
 }) {
+  const { t } = useI18n();
   return (
     <>
       {busy && <LoaderCircle size={16} className="spin" />}
-      {children}
+      {t(children)}
     </>
   );
 }
@@ -161,6 +171,7 @@ export function Field({
   children: ReactNode;
   hint?: string;
 }) {
+  const { t } = useI18n();
   const generated = useId();
   const child = isValidElement(children)
     ? (children as ReactElement<{ id?: string; "aria-describedby"?: string }>)
@@ -169,7 +180,7 @@ export function Field({
   const hintId = `${id}-hint`;
   return (
     <div className="field">
-      <label htmlFor={id}>{label}</label>
+      <label htmlFor={id}>{t(label)}</label>
       {child
         ? cloneElement(child, {
             id,
@@ -179,7 +190,7 @@ export function Field({
                 .join(" ") || undefined,
           })
         : children}
-      {hint && <small id={hintId}>{hint}</small>}
+      {hint && <small id={hintId}>{t(hint)}</small>}
     </div>
   );
 }

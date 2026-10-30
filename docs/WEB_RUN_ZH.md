@@ -1,18 +1,31 @@
 # 新官网和业务平台：中文本地运行说明
 
-当前版本分支：`feature/sprint-2-5-readiness`。本地完整版保留V1—V3，旧Streamlit仍可使用。
+当前双语版本分支：`feature/native-zh-en-localization`（基于稳定的 Sprint 2.5）。本地完整版保留V1—V3，旧Streamlit仍可使用。
+
+## 原生中文 / 英文切换
+
+- 默认显示中文。官网顶部、登录卡片、平台右上角均有 **中文 / EN** 按钮。
+- **进入平台 / Launch platform** 指向同一业务应用。概览、订单管理、异常管理、决策中心、运输优化、分析评估和设置均支持双语。
+- 语言偏好保存在浏览器；刷新或切页后保留。切换语言不会清除已上传的数据、筛选、分页、当前待上传文件、方案参数或未保存的草稿。
+- 请关闭浏览器的自动网页翻译，使用应用自带按钮。页面已提供禁止自动翻译提示，但无法控制强制改写 DOM 的第三方插件。
+- 模拟数据始终标注为 **合成演示数据 / Synthetic Demo Data**。上传规划没有历史分布时，可靠性显示 **尚未估计 / Not estimated**，不会声称预测了真实逾期概率。
+- 原始订单编号、服务编号、JSON / CSV 字段、技术诊断引用及用户备注保留原文；下载的运营分析报告仍为英文。
+- 只读合成演示与受保护完整版均支持双语；切换语言不会解除只读或角色权限限制。
+
+已有下载版本的用户，请先备份本地数据，再下载新分支至独立文件夹测试；不要直接把旧业务数据库复制进只读 Demo。
+验证范围与未验证项见根目录 `I18N_IMPLEMENTATION_REPORT.md`。
 
 ## 你会打开什么
 
 - `http://127.0.0.1:3000`：新官网，大标题和原创动态科技图形。
-- 点击 **Launch platform**：进入实际业务平台 `/app`。
+- 点击 **进入平台 / Launch platform**：进入实际业务平台 `/app`。
 - 左侧 Overview、Shipments、Exceptions、Decision Center、Optimization、Analytics、Settings
   各自切换到独立网页地址。
 - `http://localhost:8501` 通常是旧 Streamlit，不是这次新官网。
 
 ## Windows：首次安装
 
-1. 从 GitHub 下载 **feature/sprint-2-5-readiness** 分支，解压到独立文件夹，D 盘可以。
+1. 从 GitHub 下载 **feature/native-zh-en-localization** 分支，解压到独立文件夹，D 盘可以。
    找到包含 `start-web.bat`、`requirements-web.txt`、`backend` 和 `web` 的那一层。
 2. 安装 [Node.js 24 LTS](https://nodejs.org/)，它包含 npm；建议使用 Python 3.12。
    安装后重新打开终端，让 PATH 生效。
@@ -57,7 +70,7 @@ cd ..
 
 ## 建议演示顺序
 
-1. 官网点击 **Launch platform**，登录后默认 **Synthetic Demo Data**，分析日期 **2026-10-01**。
+1. 官网点击 **进入平台 / Launch platform**，登录后默认 **Synthetic Demo Data**，分析日期 **2026-10-01**。
 2. Overview 对照：158 单、47.8% 准时率、30 单运输中逾期、USD 539,830.75 有效运费。
 3. Shipments 筛选状态、翻页、打开数据质量记录，下载结果 CSV。
 4. Exceptions 查看分数、解释和缺失信息。Settings 将财务权重20改100并保存，

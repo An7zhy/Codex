@@ -1,0 +1,191 @@
+{
+  "completed": true,
+  "checks": [
+    "Anonymous direct APIs/downloads rejected; UI sign-in creates a real server session",
+    "PR-09: removing selected expedite resets visible/submitted/saved action consistently",
+    "PR-09: changed scoring context returns 409, recomparison pins the displayed/saved score, zero available actions cannot save",
+    "PR-04/05: explicit preview and confirmation, duplicate conflict disclosure, EUR excluded from USD KPI",
+    "PR-08: 501st active exception discoverable in Decision Center and comparable via real API",
+    "Viewer reads/exports within its organization but server denies settings/solve/delete, independent of disabled UI controls",
+    "Admin UI deletion removes the uploaded dataset; missing ID cannot be read afterward",
+    "Logout invalidates server-side session; subsequent direct API read returns 401"
+  ],
+  "responsive_matrix": [
+    {
+      "route": "/app",
+      "viewport": 360,
+      "document": 360,
+      "overflow": false
+    },
+    {
+      "route": "/app/shipments",
+      "viewport": 360,
+      "document": 360,
+      "overflow": false
+    },
+    {
+      "route": "/app/exceptions",
+      "viewport": 360,
+      "document": 360,
+      "overflow": false
+    },
+    {
+      "route": "/app/decisions",
+      "viewport": 360,
+      "document": 360,
+      "overflow": false
+    },
+    {
+      "route": "/app/optimization",
+      "viewport": 360,
+      "document": 360,
+      "overflow": false
+    },
+    {
+      "route": "/app/analytics",
+      "viewport": 360,
+      "document": 360,
+      "overflow": false
+    },
+    {
+      "route": "/app/settings",
+      "viewport": 360,
+      "document": 360,
+      "overflow": false
+    },
+    {
+      "route": "/app",
+      "viewport": 393,
+      "document": 393,
+      "overflow": false
+    },
+    {
+      "route": "/app/shipments",
+      "viewport": 393,
+      "document": 393,
+      "overflow": false
+    },
+    {
+      "route": "/app/exceptions",
+      "viewport": 393,
+      "document": 393,
+      "overflow": false
+    },
+    {
+      "route": "/app/decisions",
+      "viewport": 393,
+      "document": 393,
+      "overflow": false
+    },
+    {
+      "route": "/app/optimization",
+      "viewport": 393,
+      "document": 393,
+      "overflow": false
+    },
+    {
+      "route": "/app/analytics",
+      "viewport": 393,
+      "document": 393,
+      "overflow": false
+    },
+    {
+      "route": "/app/settings",
+      "viewport": 393,
+      "document": 393,
+      "overflow": false
+    },
+    {
+      "route": "/app",
+      "viewport": 768,
+      "document": 768,
+      "overflow": false
+    },
+    {
+      "route": "/app/shipments",
+      "viewport": 768,
+      "document": 768,
+      "overflow": false
+    },
+    {
+      "route": "/app/exceptions",
+      "viewport": 768,
+      "document": 768,
+      "overflow": false
+    },
+    {
+      "route": "/app/decisions",
+      "viewport": 768,
+      "document": 768,
+      "overflow": false
+    },
+    {
+      "route": "/app/optimization",
+      "viewport": 768,
+      "document": 768,
+      "overflow": false
+    },
+    {
+      "route": "/app/analytics",
+      "viewport": 768,
+      "document": 768,
+      "overflow": false
+    },
+    {
+      "route": "/app/settings",
+      "viewport": 768,
+      "document": 768,
+      "overflow": false
+    },
+    {
+      "route": "/app",
+      "viewport": 1440,
+      "document": 1440,
+      "overflow": false
+    },
+    {
+      "route": "/app/shipments",
+      "viewport": 1440,
+      "document": 1440,
+      "overflow": false
+    },
+    {
+      "route": "/app/exceptions",
+      "viewport": 1440,
+      "document": 1440,
+      "overflow": false
+    },
+    {
+      "route": "/app/decisions",
+      "viewport": 1440,
+      "document": 1440,
+      "overflow": false
+    },
+    {
+      "route": "/app/optimization",
+      "viewport": 1440,
+      "document": 1440,
+      "overflow": false
+    },
+    {
+      "route": "/app/analytics",
+      "viewport": 1440,
+      "document": 1440,
+      "overflow": false
+    },
+    {
+      "route": "/app/settings",
+      "viewport": 1440,
+      "document": 1440,
+      "overflow": false
+    }
+  ],
+  "javascript_errors": [],
+  "verification": {
+    "build_id": "xNXy8ggnRSSPxJODmiwVg",
+    "frontend_source_sha256": "20c812e2123d282dfc077c27b05ed9441cb258e8df168933a7b15a6db32997f3",
+    "original_test_file_sha256": "b3488d0810cdf30bf36b2cde578ff9b216065c60ba1a45a9ef44e4cede81873c",
+    "language_precondition": "en",
+    "temporary_database": true
+  }
+}

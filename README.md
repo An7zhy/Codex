@@ -1,5 +1,41 @@
 # Logistics Insight AI
 
+## Native Chinese / English interface
+
+The Next.js website and every platform route now default to **中文**, with a **中文 / EN**
+control in the landing navigation, application header, sign-in card and upload dialog.
+Language changes update React-rendered copy in place; they do not replace the workspace,
+reset filters/drafts, translate API field names, or alter Python calculations. A one-year
+SameSite=Lax preference cookie supplies the server-rendered language after refresh;
+localStorage synchronizes open tabs. No authentication token is stored in that preference.
+
+Keep browser automatic page translation off for this application. The root declares
+`lang`, `translate="no"`, `notranslate` and Google’s no-translate metadata. The app does
+not suppress DOM exceptions or patch React/browser insertion methods. Extensions that
+ignore these hints can still change the DOM.
+
+- Both the protected full instance and sealed read-only synthetic demo are bilingual.
+- KPI definitions, V2 explanations/missing evidence, import policies, errors (with HTTP
+  status), CP-SAT statuses, strategy results and simulation caveats use one display catalog.
+- Raw JSON/CSV keys and enums, user IDs/names/notes, source timestamps, code, and the
+  deliberately **English downloadable operations report** stay unchanged. Uploaded
+  reliability is still **Not estimated / 尚未估计**. Streamlit remains the original fallback.
+- Add UI copy through `web/src/lib/i18n/zh.json` and `useI18n()`; see
+  [implementation and executed verification](I18N_IMPLEMENTATION_REPORT.md).
+
+```bash
+# Existing Python regressions, then pure translation/catalog/JSX guards:
+python -m pytest -q
+npm --prefix web run test:i18n
+npm --prefix web run typecheck
+npm --prefix web run build
+# Real Chromium flows on disposable business/demo instances (build first):
+python -m scripts.verify_i18n
+```
+
+Implementation branch: `feature/native-zh-en-localization`, based on stable Sprint2.5
+`fc1115d`. This does not grant public-deployment or real-customer-data readiness.
+
 ## Sprint 2.5 — Readiness hardening
 
 The protected full application retains V1–V3, including **Synthetic Demo Mode**
@@ -85,7 +121,7 @@ working fallback. Download this feature branch to obtain the new `web/` folder.
 
 These are real App Router pages, not anchor sections or screenshots. Chart values
 and business outputs come from FastAPI adapters calling existing `src/` modules.
-Next's prerendered HTML is the page shell; workspace data is fetched from the
+Next server-renders the page shell and selected language; workspace data is fetched from the
 Python API. No KPI growth rates, customer logos or live carrier claims are invented.
 
 ![Premium homepage, captured from the running application](docs/images/premium/landing-desktop.png)

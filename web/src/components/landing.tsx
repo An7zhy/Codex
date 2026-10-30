@@ -1,4 +1,5 @@
 "use client";
+import { LanguageSwitcher, useI18n } from "@/lib/i18n/provider";
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -23,6 +24,7 @@ import { api, money, percent } from "@/lib/utils";
 import type { Workspace } from "@/lib/types";
 
 function PlatformPreview() {
+  const { t } = useI18n();
   const [data, setData] = useState<Workspace | null>(null);
   const [failed, setFailed] = useState(false);
   useEffect(() => {
@@ -38,26 +40,28 @@ function PlatformPreview() {
     <div className="product-preview">
       <div className="preview-sidebar">
         <Layers3 size={24} />
-        <span className="preview-active">Overview</span>
-        <span>Shipments</span>
-        <span>Exceptions</span>
-        <span>Decisions</span>
-        <span>Optimization</span>
-        <span>Analytics</span>
+        <span className="preview-active">{t("Overview")}</span>
+        <span>{t("Shipments")}</span>
+        <span>{t("Exceptions")}</span>
+        <span>{t("Decisions")}</span>
+        <span>{t("Optimization")}</span>
+        <span>{t("Analytics")}</span>
       </div>
       <div className="preview-main">
         <div className="preview-title">
           <div>
-            <span className="live-dot" /> Synthetic Demo Data
-            <h3>Your network. In perspective.</h3>
+            <span className="live-dot" /> {t(" Synthetic Demo Data")}
+            <h3>{t("Your network. In perspective.")}</h3>
           </div>
-          <Link href="/app" aria-label="Open interactive platform preview">
+          <Link href="/app" aria-label={t("Open interactive platform preview")}>
             <ArrowUpRight size={21} />
           </Link>
         </div>
         {failed ? (
           <p className="muted">
-            Sign in to the protected platform to explore the computed synthetic demo. No private workspace data is public.
+            {t(
+              "Sign in to the protected platform to explore the computed synthetic demo. No private workspace data is public.",
+            )}
           </p>
         ) : (
           <>
@@ -74,28 +78,31 @@ function PlatformPreview() {
                 ],
               ].map(([label, value]) => (
                 <div key={label}>
-                  <span>{label}</span>
-                  <strong>{value ?? "—"}</strong>
+                  <span>{t(label)}</span>
+                  <strong>{t(value ?? "—")}</strong>
                 </div>
               ))}
             </div>
             <div className="preview-table">
               <div className="preview-table-head">
-                <span>Shipment</span>
-                <span>Transport</span>
-                <span>Priority</span>
+                <span>{t("Shipment")}</span>
+                <span>{t("Transport")}</span>
+                <span>{t("Priority")}</span>
               </div>
               {(data?.exceptions ?? []).slice(0, 3).map((row) => (
                 <div key={row.source_row}>
                   <span>{row.shipment_id}</span>
-                  <span>{row.transport_mode}</span>
-                  <span className="preview-priority">{row.priority_level}</span>
+                  <span>{t(row.transport_mode)}</span>
+                  <span className="preview-priority">
+                    {t(row.priority_level)}
+                  </span>
                 </div>
               ))}
             </div>
             <p className="preview-foot">
-              Computed by the Python rules engine. Every figure has a
-              definition.
+              {t(
+                "Computed by the Python rules engine. Every figure has a definition.",
+              )}
             </p>
           </>
         )}
@@ -105,19 +112,22 @@ function PlatformPreview() {
 }
 
 export function Landing() {
+  const { t } = useI18n();
   const reduce = useReducedMotion();
   return (
     <div className="marketing">
       <header className="marketing-nav">
         <Brand />
-        <nav aria-label="Main navigation">
-          <a href="#platform">Platform</a>
-          <a href="#intelligence">Intelligence</a>
-          <a href="#architecture">Architecture</a>
+        <LanguageSwitcher />
+        <nav aria-label={t("Main navigation")}>
+          <a href="#platform">{t("Platform")}</a>
+          <a href="#intelligence">{t("Intelligence")}</a>
+          <a href="#architecture">{t("Architecture")}</a>
         </nav>
         <Button asChild variant="outline" size="sm">
           <Link href="/app">
-            Launch platform <ArrowUpRight size={15} />
+            {t("Launch platform ")}
+            <ArrowUpRight size={15} />
           </Link>
         </Button>
       </header>
@@ -132,36 +142,43 @@ export function Landing() {
           >
             <div className="hero-kicker">
               <span className="live-dot" />
-              Clarity across the supply chain
+              {t("Clarity across the supply chain")}
             </div>
             <h1>
-              Intelligence
+              {t("Intelligence")}
               <br />
-              behind every
+              {t("behind every")}
               <br />
-              shipment.
+              {t("shipment.")}
             </h1>
             <p>
-              Turn complex logistics data into explainable decisions with
-              optimization, risk analysis, and intelligent workflows.
+              {t(
+                "Turn complex logistics data into explainable decisions with optimization, risk analysis, and intelligent workflows.",
+              )}
             </p>
             <div className="hero-actions">
               <Button asChild>
                 <Link href="/app">
-                  Launch platform <ArrowUpRight size={18} />
+                  {t("Launch platform ")}
+                  <ArrowUpRight size={18} />
                 </Link>
               </Button>
               <a className="quiet-link" href="#platform">
-                Explore the possibilities <ArrowDown size={15} />
+                {t("Explore the possibilities ")}
+                <ArrowDown size={15} />
               </a>
             </div>
             <p className="hero-disclaimer">
-              Independent engineering prototype. Powered by synthetic data.
+              {t(
+                "Independent engineering prototype. Powered by synthetic data.",
+              )}
             </p>
           </motion.div>
           <div className="hero-bottom">
-            <span>From operational noise to a decision you can explain.</span>
-            <a href="#platform" aria-label="Explore platform capabilities">
+            <span>
+              {t("From operational noise to a decision you can explain.")}
+            </span>
+            <a href="#platform" aria-label={t("Explore platform capabilities")}>
               <ArrowDown size={17} />
             </a>
           </div>
@@ -169,34 +186,35 @@ export function Landing() {
         <section className="capability-strip">
           <span>
             <ShieldCheck />
-            Explainable by design
+            {t("Explainable by design")}
           </span>
           <span>
             <Route />
-            Constraint-aware optimization
+            {t("Constraint-aware optimization")}
           </span>
           <span>
             <GitBranch />
-            Reproducible scenarios
+            {t("Reproducible scenarios")}
           </span>
           <span>
             <Box />
-            Your data stays local
+            {t("Your data stays local")}
           </span>
         </section>
         <section id="platform" className="marketing-section platform-section">
           <div className="section-intro">
             <div>
-              <p className="section-kicker">The platform</p>
+              <p className="section-kicker">{t("The platform")}</p>
               <h2>
-                See the exception.
+                {t("See the exception.")}
                 <br />
-                Understand the decision.
+                {t("Understand the decision.")}
               </h2>
             </div>
             <p>
-              One connected workspace to examine shipment performance,
-              prioritize what needs attention, and compare the paths forward.
+              {t(
+                "One connected workspace to examine shipment performance, prioritize what needs attention, and compare the paths forward.",
+              )}
             </p>
           </div>
           <PlatformPreview />
@@ -205,39 +223,45 @@ export function Landing() {
               <div className="feature-icon">
                 <ChartNoAxesCombined />
               </div>
-              <h3>A complete operational picture</h3>
+              <h3>{t("A complete operational picture")}</h3>
               <p>
-                Bring CSV and Excel orders into a consistent view. Inspect
-                delivery KPIs, carrier performance and data quality.
+                {t(
+                  "Bring CSV and Excel orders into a consistent view. Inspect delivery KPIs, carrier performance and data quality.",
+                )}
               </p>
               <Link href="/app">
-                Explore overview <MoveUpRight size={14} />
+                {t("Explore overview ")}
+                <MoveUpRight size={14} />
               </Link>
             </article>
             <article>
               <div className="feature-icon">
                 <ShieldCheck />
               </div>
-              <h3>Focus where it matters</h3>
+              <h3>{t("Focus where it matters")}</h3>
               <p>
-                Explainable priorities surface active exceptions. Missing
-                evidence stays visible, instead of becoming false confidence.
+                {t(
+                  "Explainable priorities surface active exceptions. Missing evidence stays visible, instead of becoming false confidence.",
+                )}
               </p>
               <Link href="/app/exceptions">
-                Review exceptions <MoveUpRight size={14} />
+                {t("Review exceptions ")}
+                <MoveUpRight size={14} />
               </Link>
             </article>
             <article>
               <div className="feature-icon">
                 <Route />
               </div>
-              <h3>Make the trade-offs explicit</h3>
+              <h3>{t("Make the trade-offs explicit")}</h3>
               <p>
-                Compare cost, time and simulated risk while respecting the same
-                budget, deadline and shared-capacity constraints.
+                {t(
+                  "Compare cost, time and simulated risk while respecting the same budget, deadline and shared-capacity constraints.",
+                )}
               </p>
               <Link href="/app/optimization">
-                Explore optimization <MoveUpRight size={14} />
+                {t("Explore optimization ")}
+                <MoveUpRight size={14} />
               </Link>
             </article>
           </div>
@@ -247,48 +271,51 @@ export function Landing() {
           className="marketing-section intelligence-section"
         >
           <div className="intelligence-copy">
-            <p className="section-kicker">Decision intelligence</p>
+            <p className="section-kicker">{t("Decision intelligence")}</p>
             <h2>
-              Powerful reasoning.
-              <br />A visible rationale.
+              {t("Powerful reasoning.")}
+              <br />
+              {t("A visible rationale.")}
             </h2>
             <p>
-              Go beyond identifying a late shipment. Explore alternatives,
-              understand the assumptions, and keep a record of the choice.
+              {t(
+                "Go beyond identifying a late shipment. Explore alternatives, understand the assumptions, and keep a record of the choice.",
+              )}
             </p>
             <ul>
               <li>
                 <CircleCheck />
-                Deterministic rules with transparent scoring
+                {t("Deterministic rules with transparent scoring")}
               </li>
               <li>
                 <CircleCheck />
-                Shared-capacity allocation with OR-Tools
+                {t("Shared-capacity allocation with OR-Tools")}
               </li>
               <li>
                 <CircleCheck />
-                Monte Carlo evaluation with a fixed random seed
+                {t("Monte Carlo evaluation with a fixed random seed")}
               </li>
               <li>
                 <CircleCheck />
-                Persistent handling history and recorded outcomes
+                {t("Persistent handling history and recorded outcomes")}
               </li>
             </ul>
             <Button asChild variant="outline">
               <Link href="/app/decisions">
-                Enter the decision center <ArrowUpRight size={16} />
+                {t("Enter the decision center ")}
+                <ArrowUpRight size={16} />
               </Link>
             </Button>
           </div>
           <div
             className="decision-visual"
-            aria-label="Decision process diagram"
+            aria-label={t("Decision process diagram")}
           >
             <div className="decision-node">
               <Box />
               <div>
-                Shipment context
-                <small>Deadlines, costs, available evidence</small>
+                {t("Shipment context")}
+                <small>{t("Deadlines, costs, available evidence")}</small>
               </div>
             </div>
             <div className="decision-connector" />
@@ -296,8 +323,8 @@ export function Landing() {
               <div className="core-symbol">
                 <GitBranch size={36} />
               </div>
-              <strong>Explainable decision engine</strong>
-              <span>Rules. Constraints. Assumptions.</span>
+              <strong>{t("Explainable decision engine")}</strong>
+              <span>{t("Rules. Constraints. Assumptions.")}</span>
             </div>
             <div className="decision-branches">
               <span />
@@ -305,11 +332,13 @@ export function Landing() {
               <span />
             </div>
             <div className="decision-options">
-              <div>Monitor</div>
-              <div>Expedite</div>
-              <div>Reroute</div>
+              <div>{t("Monitor")}</div>
+              <div>{t("Expedite")}</div>
+              <div>{t("Reroute")}</div>
             </div>
-            <p>Hypothetical alternatives. Human judgment stays in control.</p>
+            <p>
+              {t("Hypothetical alternatives. Human judgment stays in control.")}
+            </p>
           </div>
         </section>
         <section
@@ -318,77 +347,86 @@ export function Landing() {
         >
           <div className="section-intro">
             <div>
-              <p className="section-kicker">Built to be understood</p>
+              <p className="section-kicker">{t("Built to be understood")}</p>
               <h2>
-                Modern on the surface.
+                {t("Modern on the surface.")}
                 <br />
-                Grounded underneath.
+                {t("Grounded underneath.")}
               </h2>
             </div>
             <p>
-              A new interface over independently tested Python logic. Every
-              chart, score and allocation comes from the same calculation
-              engine.
+              {t(
+                "A new interface over independently tested Python logic. Every chart, score and allocation comes from the same calculation engine.",
+              )}
             </p>
           </div>
           <div className="architecture-row">
             <div>
-              <span>Experience</span>
-              <h3>Next.js + React</h3>
+              <span>{t("Experience")}</span>
+              <h3>{t("Next.js + React")}</h3>
               <p>
-                Responsive, accessible workspaces with real application routes.
+                {t(
+                  "Responsive, accessible workspaces with real application routes.",
+                )}
               </p>
             </div>
             <ArrowRight />
             <div>
-              <span>Analysis</span>
-              <h3>Python + FastAPI</h3>
+              <span>{t("Analysis")}</span>
+              <h3>{t("Python + FastAPI")}</h3>
               <p>
-                pandas rules, explainable scoring and deterministic reporting.
+                {t(
+                  "pandas rules, explainable scoring and deterministic reporting.",
+                )}
               </p>
             </div>
             <ArrowRight />
             <div>
-              <span>Decision + memory</span>
-              <h3>OR-Tools + SQLite</h3>
+              <span>{t("Decision + memory")}</span>
+              <h3>{t("OR-Tools + SQLite")}</h3>
               <p>
-                Constraint-based allocation and persistent local case records.
+                {t(
+                  "Constraint-based allocation and persistent local case records.",
+                )}
               </p>
             </div>
           </div>
           <p className="architecture-note">
-            No paid AI API. No live carrier network. Simulated reliability is
-            not verified carrier performance.
+            {t(
+              "No paid AI API. No live carrier network. Simulated reliability is not verified carrier performance.",
+            )}
           </p>
         </section>
         <section className="marketing-cta">
           <div>
-            <p className="section-kicker">A clearer next move</p>
+            <p className="section-kicker">{t("A clearer next move")}</p>
             <h2>
-              Put intelligence
+              {t("Put intelligence")}
               <br />
-              into motion.
+              {t("into motion.")}
             </h2>
           </div>
           <Button asChild>
             <Link href="/app">
-              Launch platform <ArrowUpRight size={20} />
+              {t("Launch platform ")}
+              <ArrowUpRight size={20} />
             </Link>
           </Button>
         </section>
       </main>
       <footer className="marketing-footer">
         <Brand compact />
-        <p>An independent logistics engineering prototype.</p>
+        <p>{t("An independent logistics engineering prototype.")}</p>
         <div>
           <a
             href="https://github.com/An7zhy/Codex/tree/feature/premium-web-redesign"
             target="_blank"
             rel="noreferrer"
           >
-            Source code <ArrowUpRight size={13} />
+            {t("Source code ")}
+            <ArrowUpRight size={13} />
           </a>
-          <Link href="/app/settings">Methodology</Link>
+          <Link href="/app/settings">{t("Methodology")}</Link>
         </div>
       </footer>
     </div>

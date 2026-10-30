@@ -1,4 +1,5 @@
 "use client";
+import { useI18n } from "@/lib/i18n/provider";
 
 import { useEffect, useState } from "react";
 import { Download, Save, ShieldCheck } from "lucide-react";
@@ -30,17 +31,41 @@ const labels: Record<string, string> = {
   downstream: "Downstream disruption",
 };
 export function Settings() {
+  const { t } = useI18n();
   const user = useAccess();
-  const { refresh, notify, data, datasetId, datasets, selectDataset } = useWorkspace();
+  const { refresh, notify, data, datasetId, datasets, selectDataset } =
+    useWorkspace();
   const [deleteConfirmation, setDeleteConfirmation] = useState("");
   const [settings, setSettings] = useState<SettingsResponse | null>(null);
-  const [draftState, setDraftState, draftReady, restored] = useSessionDraft<{ config: PriorityConfig; expectedVersion: number } | null>("priority-settings-v2", null, (value) => {
-    const candidate = value as { config: PriorityConfig; expectedVersion: number };
-    return Number.isInteger(candidate?.expectedVersion) && candidate.expectedVersion > 0 && !!candidate?.config?.weights && Object.keys(labels).every((key) => typeof candidate.config.weights[key] === "number");
+  const [draftState, setDraftState, draftReady, restored] = useSessionDraft<{
+    config: PriorityConfig;
+    expectedVersion: number;
+  } | null>("priority-settings-v2", null, (value) => {
+    const candidate = value as {
+      config: PriorityConfig;
+      expectedVersion: number;
+    };
+    return (
+      Number.isInteger(candidate?.expectedVersion) &&
+      candidate.expectedVersion > 0 &&
+      !!candidate?.config?.weights &&
+      Object.keys(labels).every(
+        (key) => typeof candidate.config.weights[key] === "number",
+      )
+    );
   });
   const draft = draftState?.config ?? null;
   function setDraft(value: React.SetStateAction<PriorityConfig | null>) {
-    setDraftState((old) => old ? { ...old, config: (typeof value === "function" ? value(old.config) : value) ?? old.config } : old);
+    setDraftState((old) =>
+      old
+        ? {
+            ...old,
+            config:
+              (typeof value === "function" ? value(old.config) : value) ??
+              old.config,
+          }
+        : old,
+    );
   }
   const [conflict, setConflict] = useState(false);
   const [busy, setBusy] = useState(false),
@@ -50,7 +75,11 @@ export function Settings() {
     api<SettingsResponse>("/settings")
       .then((value) => {
         setSettings(value);
-        if (!restored) setDraftState({ config: value.priority, expectedVersion: value.version });
+        if (!restored)
+          setDraftState({
+            config: value.priority,
+            expectedVersion: value.version,
+          });
       })
       .catch((err) => setError(err.message));
   }, [draftReady]);
@@ -60,10 +89,16 @@ export function Settings() {
     setBusy(true);
     setError("");
     try {
-      const saved = await api<{ priority: PriorityConfig; version: number }>("/settings/priority", {
-        ...jsonBody({ ...draft, expected_version: draftState.expectedVersion }),
-        method: "PUT",
-      });
+      const saved = await api<{ priority: PriorityConfig; version: number }>(
+        "/settings/priority",
+        {
+          ...jsonBody({
+            ...draft,
+            expected_version: draftState.expectedVersion,
+          }),
+          method: "PUT",
+        },
+      );
       setSettings((old) => (old ? { ...old, ...saved } : null));
       setDraftState({ config: saved.priority, expectedVersion: saved.version });
       setConflict(false);
@@ -83,11 +118,20 @@ export function Settings() {
     try {
       const latest = await api<SettingsResponse>("/settings");
       setSettings(latest);
-      setDraftState({ config: latest.priority, expectedVersion: latest.version });
-      setConflict(false); setError("");
-      notify("Latest settings loaded. The previous draft was discarded; review before saving.");
-    } catch (err) { setError((err as Error).message); }
-    finally { setBusy(false); }
+      setDraftState({
+        config: latest.priority,
+        expectedVersion: latest.version,
+      });
+      setConflict(false);
+      setError("");
+      notify(
+        "Latest settings loaded. The previous draft was discarded; review before saving.",
+      );
+    } catch (err) {
+      setError((err as Error).message);
+    } finally {
+      setBusy(false);
+    }
   }
   function exportSettings() {
     if (!settings) return;
@@ -108,8 +152,10 @@ export function Settings() {
   return (
     <>
       <PageHeading
-        title="Workspace settings"
-        description="Make the rules explicit. Keep assumptions and evidence requirements visible."
+        title={t("Workspace settings")}
+        description={t(
+          "Make the rules explicit. Keep assumptions and evidence requirements visible.",
+        )}
         action={
           <Button
             variant="outline"
@@ -118,30 +164,51 @@ export function Settings() {
             disabled={!settings}
           >
             <Download size={13} />
-            Applied settings
+            {t("Applied settings")}
           </Button>
         }
       />
-      {error && <ErrorState message={error} />}
-      {settings && <div className="notice"><p>Applied version {settings.version}. Draft based on version {draftState?.expectedVersion ?? "—"}.
-        {conflict && " Conflict: your draft has not been saved."} Reload discards your unsaved draft.</p>
-        <Button variant="outline" size="sm" disabled={busy} onClick={reloadLatest}>Reload latest settings</Button></div>}
+      {error && <ErrorState message={t(error)} />}
+      {settings && (
+        <div className="notice">
+          <p>
+            {t("Applied version ")}
+            {t(settings.version)}
+            {t(". Draft based on version ")}
+            {t(draftState?.expectedVersion ?? "—")}.
+            {t(conflict && " Conflict: your draft has not been saved.")}{" "}
+            {t(" Reload discards your unsaved draft.")}
+          </p>
+          <Button
+            variant="outline"
+            size="sm"
+            disabled={busy}
+            onClick={reloadLatest}
+          >
+            {t("Reload latest settings")}
+          </Button>
+        </div>
+      )}
       {!draft || !settings ? (
         !error && <LoadingState />
       ) : (
         <>
           <Panel
-            title="Exception priority methodology"
-            subtitle="These V2 settings affect triage, not V1 KPIs or V3 transportation constraints."
+            title={t("Exception priority methodology")}
+            subtitle={t(
+              "These V2 settings affect triage, not V1 KPIs or V3 transportation constraints.",
+            )}
           >
             <form onSubmit={save}>
               <div className="form-section">
-                <h3>Relative component weights</h3>
+                <h3>{t("Relative component weights")}</h3>
                 <div className="form-grid">
                   {Object.entries(draft.weights).map(([key, value]) => (
                     <Field
-                      label={`${labels[key]} weight`}
-                      hint={`Draft share: ${total ? percent(value / total) : "Invalid all-zero configuration"}`}
+                      label={t(`${labels[key]} weight`)}
+                      hint={t(
+                        `Draft share: ${total ? percent(value / total) : "Invalid all-zero configuration"}`,
+                      )}
                       key={key}
                     >
                       <input
@@ -171,7 +238,7 @@ export function Settings() {
                 </div>
               </div>
               <div className="form-section">
-                <h3>Normalization scales and thresholds</h3>
+                <h3>{t("Normalization scales and thresholds")}</h3>
                 <div className="form-grid">
                   {(
                     [
@@ -184,7 +251,7 @@ export function Settings() {
                       ["High priority threshold", "high_threshold"],
                     ] as const
                   ).map(([label, key]) => (
-                    <Field label={label} key={key}>
+                    <Field label={t(label)} key={key}>
                       <input
                         className="input"
                         type="number"
@@ -207,89 +274,138 @@ export function Settings() {
               </div>
               <div className="form-actions">
                 <p>
-                  Draft edits are applied only after saving. Settings persist in
-                  local SQLite.
+                  {t(
+                    "Draft edits are applied only after saving. Settings persist in local SQLite.",
+                  )}
                 </p>
-                <Button type="submit" disabled={busy || conflict || user?.role !== "admin"}>
+                <Button
+                  type="submit"
+                  disabled={busy || conflict || user?.role !== "admin"}
+                >
                   <Save size={13} />
-                  <BusyLabel busy={busy}>Apply priority settings</BusyLabel>
+                  <BusyLabel busy={busy}>
+                    {t("Apply priority settings")}
+                  </BusyLabel>
                 </Button>
               </div>
             </form>
             <details className="disclosure">
-              <summary>Last applied configuration</summary>
+              <summary>{t("Last applied configuration")}</summary>
               <pre>{JSON.stringify(settings.priority, null, 2)}</pre>
             </details>
           </Panel>
           <div className="notice">
             <ShieldCheck size={17} />
             <p>
-              Enabled components require valid evidence. Missing inputs produce
-              Insufficient information, not a zero score. Shipment value
-              represents exposure context and is never treated as realized loss.
+              {t(
+                "Enabled components require valid evidence. Missing inputs produce Insufficient information, not a zero score. Shipment value represents exposure context and is never treated as realized loss.",
+              )}
             </p>
           </div>
           <div className="dashboard-grid dashboard-grid-equal">
             <Panel
-              title="Calculation and persistence"
-              subtitle="The premium interface uses the existing Python business logic."
+              title={t("Calculation and persistence")}
+              subtitle={t(
+                "The premium interface uses the existing Python business logic.",
+              )}
             >
               <div className="panel-body">
                 {Object.entries(settings.capabilities).map(([key, value]) => (
                   <p className="muted small mb-3" key={key}>
-                    <strong>{key.replaceAll("_", " ")}:</strong>{" "}
-                    {typeof value === "boolean"
-                      ? value
-                        ? "Yes"
-                        : "No"
-                      : value}
+                    <strong>{t(key.replaceAll("_", " "))}:</strong>
+                    {t(" ")}
+                    {t(
+                      typeof value === "boolean"
+                        ? value
+                          ? "Yes"
+                          : "No"
+                        : value,
+                    )}
                   </p>
                 ))}
               </div>
             </Panel>
             <Panel
-              title="Local data and provenance"
-              subtitle="This prototype is designed for one local trusted workspace."
+              title={t("Local data and provenance")}
+              subtitle={t(
+                "This prototype is designed for one local trusted workspace.",
+              )}
             >
               <div className="panel-body">
                 <p className="muted small">
-                  Uploads, priority settings and optimization runs persist
-                  locally. Exception handling history shares the original V2
-                  SQLite store. Refreshing a page does not delete saved records.
+                  {t(
+                    "Uploads, priority settings and optimization runs persist locally. Exception handling history shares the original V2 SQLite store. Refreshing a page does not delete saved records.",
+                  )}
                 </p>
                 <p className="muted small mt-4">
-                  The built-in datasets are synthetic. Uploaded provenance is
-                  not verified. This is one protected organization instance with server-enforced roles. There is no real carrier
-                  connection, paid API requirement or claim of commercial
-                  effectiveness.
+                  {t(
+                    "The built-in datasets are synthetic. Uploaded provenance is not verified. This is one protected organization instance with server-enforced roles. There is no real carrier connection, paid API requirement or claim of commercial effectiveness.",
+                  )}
                 </p>
                 <p className="muted small mt-4">
-                  To use the original interface, run{" "}
-                  <code>python -m streamlit run app.py</code>. Premium-web
-                  priority settings are separate from Streamlit session
-                  settings.
+                  {t("To use the original interface, run")}
+                  {t(" ")}
+                  <code>{t("python -m streamlit run app.py")}</code>
+                  {t(
+                    ". Premium-web priority settings are separate from Streamlit session settings.",
+                  )}
                 </p>
               </div>
             </Panel>
           </div>
-          {user?.role === "admin" && datasetId !== "demo" && <Panel title="Delete this uploaded dataset" subtitle="Removes source rows and linked web decision cases. This action does not remove separate backups; apply the backup retention policy.">
-            <div className="panel-body"><Field label="Type DELETE to confirm dataset removal"><input className="input" value={deleteConfirmation} onChange={(e) => setDeleteConfirmation(e.target.value)} /></Field>
-              <Button variant="outline" disabled={busy || deleteConfirmation !== "DELETE"} onClick={async () => {
-                setBusy(true); setError("");
-                try { await api(`/datasets/${datasetId}`, { method: "DELETE" }); setDeleteConfirmation("");
-                  const demo = datasets.find((item) => item.dataset_id === "demo"); if (demo) selectDataset(demo); refresh(); notify("Dataset and linked web cases deleted.");
-                } catch (err) { setError((err as Error).message); } finally { setBusy(false); }
-              }}>Delete dataset and linked cases</Button>
-            </div></Panel>}
+          {user?.role === "admin" && datasetId !== "demo" && (
+            <Panel
+              title={t("Delete this uploaded dataset")}
+              subtitle={t(
+                "Removes source rows and linked web decision cases. This action does not remove separate backups; apply the backup retention policy.",
+              )}
+            >
+              <div className="panel-body">
+                <Field label={t("Type DELETE to confirm dataset removal")}>
+                  <input
+                    className="input"
+                    value={deleteConfirmation}
+                    onChange={(e) => setDeleteConfirmation(e.target.value)}
+                  />
+                </Field>
+                <Button
+                  variant="outline"
+                  disabled={busy || deleteConfirmation !== "DELETE"}
+                  onClick={async () => {
+                    setBusy(true);
+                    setError("");
+                    try {
+                      await api(`/datasets/${datasetId}`, { method: "DELETE" });
+                      setDeleteConfirmation("");
+                      const demo = datasets.find(
+                        (item) => item.dataset_id === "demo",
+                      );
+                      if (demo) selectDataset(demo);
+                      refresh();
+                      notify("Dataset and linked web cases deleted.");
+                    } catch (err) {
+                      setError((err as Error).message);
+                    } finally {
+                      setBusy(false);
+                    }
+                  }}
+                >
+                  {t("Delete dataset and linked cases")}
+                </Button>
+              </div>
+            </Panel>
+          )}
           {data && (
             <Panel
-              title="KPI definitions"
-              subtitle="Denominators and eligibility match the existing V1 engine."
+              title={t("KPI definitions")}
+              subtitle={t(
+                "Denominators and eligibility match the existing V1 engine.",
+              )}
             >
               <div className="panel-body">
                 {Object.entries(data.definitions).map(([name, definition]) => (
                   <p className="muted small mb-4" key={name}>
-                    <strong>{name}:</strong> {definition}
+                    <strong>{t(name)}:</strong> {t(definition)}
                   </p>
                 ))}
               </div>

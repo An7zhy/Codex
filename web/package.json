@@ -6,7 +6,8 @@
     "dev": "next dev --hostname 127.0.0.1",
     "build": "next build",
     "start": "next start --hostname 127.0.0.1",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test:i18n": "node scripts/test-i18n.cjs && node scripts/test-api-queue.cjs"
   },
   "dependencies": {
     "next": "16.4.3",

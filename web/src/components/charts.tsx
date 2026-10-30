@@ -1,4 +1,5 @@
 "use client";
+import { useI18n } from "@/lib/i18n/provider";
 
 import {
   BarChart,
@@ -22,6 +23,7 @@ export function CarrierChart({
 }: {
   data: Workspace["charts"]["carriers"];
 }) {
+  const { t } = useI18n();
   return (
     <div className="chart-box">
       <ResponsiveContainer width="100%" height="100%">
@@ -54,7 +56,7 @@ export function CarrierChart({
             cursor={{ fill: "#1b2c46" }}
             formatter={(value) => [
               `${num(Number(value))}%`,
-              "On-time delivery",
+              t("On-time delivery"),
             ]}
           />
           <Bar
@@ -75,6 +77,7 @@ export function StatusChart({
   data: Workspace["charts"]["statuses"];
   total: number;
 }) {
+  const { t } = useI18n();
   return (
     <div className="donut-wrap">
       <div className="donut-chart">
@@ -94,20 +97,20 @@ export function StatusChart({
                 <Cell fill={colors[i % colors.length]} key={i} />
               ))}
             </Pie>
-            <Tooltip />
+            <Tooltip formatter={(value, name) => [value, t(String(name))]} />
           </PieChart>
         </ResponsiveContainer>
         <div className="donut-center">
-          <strong>{total}</strong>
-          <span>Shipments</span>
+          <strong>{t(total)}</strong>
+          <span>{t("Shipments")}</span>
         </div>
       </div>
       <div className="donut-legend">
         {data.map((row, i) => (
           <div key={row.status}>
             <i style={{ background: colors[i % colors.length] }} />
-            <span>{row.status}</span>
-            <strong>{row.count}</strong>
+            <span>{t(row.status)}</span>
+            <strong>{t(row.count)}</strong>
           </div>
         ))}
       </div>
@@ -115,6 +118,7 @@ export function StatusChart({
   );
 }
 export function CostChart({ data }: { data: Workspace["charts"]["costs"] }) {
+  const { t } = useI18n();
   return (
     <div className="chart-box">
       <ResponsiveContainer width="100%" height="100%">
@@ -130,6 +134,7 @@ export function CostChart({ data }: { data: Workspace["charts"]["costs"] }) {
           />
           <XAxis
             dataKey="transport_mode"
+            tickFormatter={(value) => t(String(value))}
             tick={axis}
             axisLine={false}
             tickLine={false}
@@ -144,7 +149,7 @@ export function CostChart({ data }: { data: Workspace["charts"]["costs"] }) {
             cursor={{ fill: "#1b2c46" }}
             formatter={(value) => [
               `$${num(Number(value), 2)}`,
-              "Average shipping cost",
+              t("Average shipping cost"),
             ]}
           />
           <Bar
@@ -159,6 +164,7 @@ export function CostChart({ data }: { data: Workspace["charts"]["costs"] }) {
   );
 }
 export function StrategyChart({ run }: { run: OptimizationRun }) {
+  const { t } = useI18n();
   const data = run.summary
     .filter((row) => row.total_shipping_cost_usd != null)
     .map((row) => ({
@@ -178,7 +184,13 @@ export function StrategyChart({ run }: { run: OptimizationRun }) {
             vertical={false}
             strokeDasharray="2 5"
           />
-          <XAxis dataKey="name" tick={axis} tickLine={false} axisLine={false} />
+          <XAxis
+            tickFormatter={(value) => t(String(value))}
+            dataKey="name"
+            tick={axis}
+            tickLine={false}
+            axisLine={false}
+          />
           <YAxis
             tick={axis}
             tickLine={false}
@@ -186,7 +198,7 @@ export function StrategyChart({ run }: { run: OptimizationRun }) {
             tickFormatter={(v) => `$${Number(v) / 1000}k`}
           />
           <Tooltip
-            formatter={(v) => [`$${num(Number(v), 2)}`, "Shipping cost"]}
+            formatter={(v) => [`$${num(Number(v), 2)}`, t("Shipping cost")]}
             cursor={{ fill: "#1b2c46" }}
           />
           <Bar
@@ -204,6 +216,7 @@ export function StrategyChart({ run }: { run: OptimizationRun }) {
   );
 }
 export function CapacityChart({ run }: { run: OptimizationRun }) {
+  const { t } = useI18n();
   const data = run.results["Optimized Allocation"].capacity.map((row) => ({
     ...row,
     service: row.service_id.replace("SYN-", ""),
@@ -247,21 +260,21 @@ export function CapacityChart({ run }: { run: OptimizationRun }) {
           <Bar
             isAnimationActive={false}
             dataKey="weight_utilization"
-            name="Weight"
+            name={t("Weight")}
             fill="#6497f2"
             radius={[2, 2, 0, 0]}
           />
           <Bar
             isAnimationActive={false}
             dataKey="volume_utilization"
-            name="Volume"
+            name={t("Volume")}
             fill="#83b9ae"
             radius={[2, 2, 0, 0]}
           />
           <Bar
             isAnimationActive={false}
             dataKey="slot_utilization"
-            name="Slots"
+            name={t("Slots")}
             fill="#ba9ad8"
             radius={[2, 2, 0, 0]}
           />

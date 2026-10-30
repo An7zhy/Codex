@@ -1,8 +1,15 @@
+"use client";
+import { useI18n } from "@/lib/i18n/provider";
 import Link from "next/link";
 
 export function Brand({ compact = false }: { compact?: boolean }) {
+  const { t } = useI18n();
   return (
-    <Link className="brand" href="/" aria-label="Logistics Insight AI home">
+    <Link
+      className="brand"
+      href="/"
+      aria-label={t("Logistics Insight AI home")}
+    >
       <svg
         width="31"
         height="34"
@@ -27,9 +34,10 @@ export function Brand({ compact = false }: { compact?: boolean }) {
         />
       </svg>
       <span>
-        Logistics Insight{!compact && <small>Decision intelligence</small>}
+        {t("Logistics Insight")}
+        {!compact && <small>{t("Decision intelligence")}</small>}
       </span>
-      <span className="brand-ai">AI</span>
+      <span className="brand-ai">{t("AI")}</span>
     </Link>
   );
 }

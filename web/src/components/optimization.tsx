@@ -1,10 +1,8 @@
 "use client";
+import { useI18n } from "@/lib/i18n/provider";
 
 import { useEffect, useState } from "react";
-import {
-  Play,
-  Route,
-} from "lucide-react";
+import { Play, Route } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Badge,
@@ -43,18 +41,44 @@ const initial: OptimizationInput = {
 
 export { StrategyTable } from "@/components/optimization-results";
 export function Optimization() {
+  const { t } = useI18n();
   const user = useAccess();
   const [mode, setMode] = useSessionDraft("optimization-mode", "synthetic");
-  return <>{user?.read_only_demo && <div className="notice">Read-only synthetic demo. The allocation below was computed from built-in synthetic inputs. Uploads and online solving are disabled on the server.</div>}
-    <Field label="Optimization input mode"><select className="input optimization-mode" disabled={user?.read_only_demo} value={user?.read_only_demo ? "synthetic" : mode} onChange={(event) => setMode(event.target.value)}>
-    <option value="synthetic">Synthetic Demo Mode</option><option value="uploaded">Uploaded Data Mode</option>
-  </select></Field>{mode === "uploaded" && !user?.read_only_demo ? <UploadedOptimization /> : <SyntheticOptimization />}</>;
+  return (
+    <>
+      {user?.read_only_demo && (
+        <div className="notice">
+          {t(
+            "Read-only synthetic demo. The allocation below was computed from built-in synthetic inputs. Uploads and online solving are disabled on the server.",
+          )}
+        </div>
+      )}
+      <Field label={t("Optimization input mode")}>
+        <select
+          className="input optimization-mode"
+          disabled={user?.read_only_demo}
+          value={user?.read_only_demo ? "synthetic" : mode}
+          onChange={(event) => setMode(event.target.value)}
+        >
+          <option value="synthetic">{t("Synthetic Demo Mode")}</option>
+          <option value="uploaded">{t("Uploaded Data Mode")}</option>
+        </select>
+      </Field>
+      {mode === "uploaded" && !user?.read_only_demo ? (
+        <UploadedOptimization />
+      ) : (
+        <SyntheticOptimization />
+      )}
+    </>
+  );
 }
 
 function SyntheticOptimization() {
+  const { t } = useI18n();
   const user = useAccess();
   const { notify } = useWorkspace();
-  const [draft, setDraft, draftReady, restored] = useSessionDraft<OptimizationInput>("optimization-synthetic", initial);
+  const [draft, setDraft, draftReady, restored] =
+    useSessionDraft<OptimizationInput>("optimization-synthetic", initial);
   const [run, setRun] = useState<OptimizationRun | null>(null);
   const [previous, setPrevious] = useState<OptimizationRun | null>(null),
     [busy, setBusy] = useState(false),
@@ -89,7 +113,7 @@ function SyntheticOptimization() {
     step = "any",
   ) {
     return (
-      <Field label={label} key={key}>
+      <Field label={t(label)} key={key}>
         <input
           className="input"
           type="number"
@@ -123,30 +147,37 @@ function SyntheticOptimization() {
       setBusy(false);
     }
   }
-  const unapplied = run && JSON.stringify(run.request) !== JSON.stringify(draft);
+  const unapplied =
+    run && JSON.stringify(run.request) !== JSON.stringify(draft);
   return (
     <>
       <PageHeading
-        title="Transportation optimization"
-        description="Allocate shared capacity. Make cost, time and risk trade-offs explicit."
-        action={<Badge tone="blue">V3 · Synthetic planning sandbox</Badge>}
+        title={t("Transportation optimization")}
+        description={t(
+          "Allocate shared capacity. Make cost, time and risk trade-offs explicit.",
+        )}
+        action={
+          <Badge tone="blue">{t("V3 · Synthetic planning sandbox")}</Badge>
+        }
       />
       <div className="notice">
         <Route size={16} />
         <p>
-          Planning inputs are fictional and independent of the shipment dataset
-          above. Prices, availability and transit distributions are assumptions.
-          No booking or live routing is performed.
+          {t(
+            "Planning inputs are fictional and independent of the shipment dataset above. Prices, availability and transit distributions are assumptions. No booking or live routing is performed.",
+          )}
         </p>
       </div>
       <Panel
-        title="Define the planning scenario"
-        subtitle="Hard constraints are applied before cost, time and simulated reliability preferences."
+        title={t("Define the planning scenario")}
+        subtitle={t(
+          "Hard constraints are applied before cost, time and simulated reliability preferences.",
+        )}
       >
         <form onSubmit={solve}>
           <div className="form-section">
             <div className="form-grid">
-              <Field label="Synthetic planning orders">
+              <Field label={t("Synthetic planning orders")}>
                 <select
                   className="input"
                   value={draft.count}
@@ -154,54 +185,62 @@ function SyntheticOptimization() {
                 >
                   {[12, 100, 500, 0].map((n) => (
                     <option value={n} key={n}>
-                      {n} orders
+                      {t(n)} {t(" orders")}
                     </option>
                   ))}
                 </select>
               </Field>
-              {numberField("Budget allowance (%)", "budget_percent", 0, 150)}
-              {numberField(
-                "Deadline shift (hours)",
-                "deadline_shift_hours",
-                -400,
-                400,
+              {t(numberField("Budget allowance (%)", "budget_percent", 0, 150))}
+              {t(
+                numberField(
+                  "Deadline shift (hours)",
+                  "deadline_shift_hours",
+                  -400,
+                  400,
+                ),
               )}
             </div>
             <p className="muted small mt-4">
-              Budget is a percentage of the sum of each order’s most expensive
-              synthetic option. Expected arrival must meet the deadline, even
-              when the optimizer prefers lower cost.
+              {t(
+                "Budget is a percentage of the sum of each order’s most expensive synthetic option. Expected arrival must meet the deadline, even when the optimizer prefers lower cost.",
+              )}
             </p>
           </div>
           <div className="form-section">
-            <h3>Shared service capacities</h3>
+            <h3>{t("Shared service capacities")}</h3>
             <div className="form-grid">
-              {numberField(
-                "Weight capacity (%)",
-                "weight_capacity_percent",
-                0,
-                200,
+              {t(
+                numberField(
+                  "Weight capacity (%)",
+                  "weight_capacity_percent",
+                  0,
+                  200,
+                ),
               )}
-              {numberField(
-                "Volume capacity (%)",
-                "volume_capacity_percent",
-                0,
-                200,
+              {t(
+                numberField(
+                  "Volume capacity (%)",
+                  "volume_capacity_percent",
+                  0,
+                  200,
+                ),
               )}
-              {numberField(
-                "Shipment slots (%)",
-                "shipment_capacity_percent",
-                0,
-                200,
+              {t(
+                numberField(
+                  "Shipment slots (%)",
+                  "shipment_capacity_percent",
+                  0,
+                  200,
+                ),
               )}
             </div>
           </div>
           <div className="form-section">
-            <h3>Optimization preferences</h3>
+            <h3>{t("Optimization preferences")}</h3>
             <div className="form-grid">
-              {numberField("Cost weight", "cost_weight", 0, 100)}
-              {numberField("Time weight", "time_weight", 0, 100)}
-              {numberField("Simulated risk weight", "risk_weight", 0, 100)}
+              {t(numberField("Cost weight", "cost_weight", 0, 100))}
+              {t(numberField("Time weight", "time_weight", 0, 100))}
+              {t(numberField("Simulated risk weight", "risk_weight", 0, 100))}
             </div>
             <label className="checkbox-field mt-5">
               <input
@@ -209,64 +248,87 @@ function SyntheticOptimization() {
                 checked={draft.allow_unassigned}
                 onChange={(e) => edit("allow_unassigned", e.target.checked)}
               />
-              Allow unassigned orders with an explicit penalty
+              {t("Allow unassigned orders with an explicit penalty")}
             </label>
           </div>
           <details className="disclosure">
-            <summary>Simulation and solver settings</summary>
+            <summary>{t("Simulation and solver settings")}</summary>
             <div className="form-grid mt-5">
-              {numberField(
-                "Planning data seed",
-                "data_seed",
-                0,
-                2 ** 32 - 1,
-                "1",
+              {t(
+                numberField(
+                  "Planning data seed",
+                  "data_seed",
+                  0,
+                  2 ** 32 - 1,
+                  "1",
+                ),
               )}
-              {numberField("Monte Carlo seed", "seed", 0, 2 ** 32 - 1, "1")}
-              {numberField(
-                "Monte Carlo scenarios",
-                "scenario_count",
-                100,
-                10000,
-                "1",
+              {t(numberField("Monte Carlo seed", "seed", 0, 2 ** 32 - 1, "1"))}
+              {t(
+                numberField(
+                  "Monte Carlo scenarios",
+                  "scenario_count",
+                  100,
+                  10000,
+                  "1",
+                ),
               )}
-              {numberField(
-                "Solver limit per strategy (seconds)",
-                "time_limit_seconds",
-                0.1,
-                10,
+              {t(
+                numberField(
+                  "Solver limit per strategy (seconds)",
+                  "time_limit_seconds",
+                  0.1,
+                  10,
+                ),
               )}
-              {numberField(
-                "Unassigned penalty (virtual USD)",
-                "unassigned_penalty_usd",
-                0,
-                1e6,
+              {t(
+                numberField(
+                  "Unassigned penalty (virtual USD)",
+                  "unassigned_penalty_usd",
+                  0,
+                  1e6,
+                ),
               )}
             </div>
           </details>
           <div className="form-actions">
             <p>
-              {unapplied
-                ? "Draft differs from the saved run below. Run again to apply it."
-                : "All three strategies share constraints and random scenarios."}
+              {t(
+                unapplied
+                  ? "Draft differs from the saved run below. Run again to apply it."
+                  : "All three strategies share constraints and random scenarios.",
+              )}
             </p>
             <Button type="submit" disabled={busy || user?.role === "viewer"}>
               <BusyLabel busy={busy}>
                 <Play size={14} />
-                Run optimization
+                {t("Run optimization")}
               </BusyLabel>
             </Button>
           </div>
         </form>
       </Panel>
-      {error && <ErrorState message={error} />}
+      {error && <ErrorState message={t(error)} />}
       {busy && (
         <div className="notice" role="status">
-          Solving three strategies and evaluating common Monte Carlo scenarios.
-          Up to {draft.time_limit_seconds * 3} seconds of solver search.
+          {t(
+            "Solving three strategies and evaluating common Monte Carlo scenarios. Up to ",
+          )}
+          {t(draft.time_limit_seconds * 3)} {t(" seconds of solver search.")}
         </div>
       )}
-      {run ? <AllocationResults key={run.run_id} run={run} previous={previous} /> : !busy && <EmptyState title="Ready to evaluate a transportation plan" text="Run the default 12-order synthetic scenario, then adjust budget, deadlines or capacity to inspect feasibility and trade-offs." />}
+      {run ? (
+        <AllocationResults key={run.run_id} run={run} previous={previous} />
+      ) : (
+        !busy && (
+          <EmptyState
+            title={t("Ready to evaluate a transportation plan")}
+            text={t(
+              "Run the default 12-order synthetic scenario, then adjust budget, deadlines or capacity to inspect feasibility and trade-offs.",
+            )}
+          />
+        )
+      )}
     </>
   );
 }

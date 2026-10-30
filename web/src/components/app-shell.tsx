@@ -1,4 +1,5 @@
 "use client";
+import { LanguageSwitcher, useI18n } from "@/lib/i18n/provider";
 
 import { useState, type ReactNode } from "react";
 import Link from "next/link";
@@ -44,11 +45,12 @@ const navigation = [
   { href: "/app/settings", label: "Settings", icon: Settings2 },
 ];
 function Navigation({ close }: { close?: () => void }) {
+  const { t } = useI18n();
   const path = usePathname();
   return (
     <>
-      <p className="workspace-label">Operations workspace</p>
-      <nav className="app-nav" aria-label="Platform navigation">
+      <p className="workspace-label">{t("Operations workspace")}</p>
+      <nav className="app-nav" aria-label={t("Platform navigation")}>
         {navigation.map((item) => (
           <Link
             onClick={close}
@@ -74,9 +76,9 @@ function Navigation({ close }: { close?: () => void }) {
             }
           >
             <item.icon strokeWidth={1.6} />
-            {item.label}
+            {t(item.label)}
             {item.label === "Optimization" && (
-              <span className="nav-index">V3</span>
+              <span className="nav-index">{t("V3")}</span>
             )}
           </Link>
         ))}
@@ -86,6 +88,7 @@ function Navigation({ close }: { close?: () => void }) {
 }
 
 function UploadDialog() {
+  const { t } = useI18n();
   const user = useAccess();
   const [open, setOpen] = useState(false),
     [busy, setBusy] = useState(false),
@@ -93,7 +96,17 @@ function UploadDialog() {
   const [file, setFile] = useState<File | null>(null);
   const { asOf, selectDataset, notify } = useWorkspace();
   const [date, setDate] = useState(asOf);
-  const [preview, setPreview] = useState<{ confirmation: string; rules: Record<string, string>; kpis: Record<string, number>; issue_count: number; duplicate_rows: number; date_precision: unknown; conflict_preview: unknown; issues: unknown; sample: unknown } | null>(null);
+  const [preview, setPreview] = useState<{
+    confirmation: string;
+    rules: Record<string, string>;
+    kpis: Record<string, number>;
+    issue_count: number;
+    duplicate_rows: number;
+    date_precision: unknown;
+    conflict_preview: unknown;
+    issues: unknown;
+    sample: unknown;
+  } | null>(null);
   const [confirmed, setConfirmed] = useState(false);
   async function upload(event: React.FormEvent) {
     event.preventDefault();
@@ -112,11 +125,18 @@ function UploadDialog() {
     form.append("as_of", date);
     try {
       if (!preview) {
-        const result = await api<NonNullable<typeof preview>>("/datasets/preview", { method: "POST", body: form });
-        setPreview(result); setConfirmed(false);
+        const result = await api<NonNullable<typeof preview>>(
+          "/datasets/preview",
+          { method: "POST", body: form },
+        );
+        setPreview(result);
+        setConfirmed(false);
         return;
       }
-      if (!confirmed) { setError("Review and confirm the import rules first."); return; }
+      if (!confirmed) {
+        setError("Review and confirm the import rules first.");
+        return;
+      }
       form.append("confirmed", preview.confirmation);
       const data = await api<Dataset>("/datasets", {
         method: "POST",
@@ -140,74 +160,132 @@ function UploadDialog() {
         if (value) {
           setDate(asOf);
           setError("");
-          setPreview(null); setConfirmed(false);
+          setPreview(null);
+          setConfirmed(false);
         }
       }}
     >
       <Dialog.Trigger asChild>
         <Button variant="outline" size="sm" disabled={user?.role === "viewer"}>
           <Upload size={13} />
-          Upload data
+          {t("Upload data")}
         </Button>
       </Dialog.Trigger>
       <Dialog.Portal>
         <Dialog.Overlay className="dialog-overlay" />
         <Dialog.Content className="dialog-content">
-          <Dialog.Title>Bring your orders into focus.</Dialog.Title>
+          <LanguageSwitcher />
+          <Dialog.Title>{t("Bring your orders into focus.")}</Dialog.Title>
           <Dialog.Description>
-            Upload a UTF-8 CSV or Excel workbook. Invalid rows remain
-            reviewable; your file is saved only in this local workspace.
+            {t(
+              "Upload a UTF-8 CSV or Excel workbook. Invalid rows remain reviewable; your file is saved only in this local workspace.",
+            )}
           </Dialog.Description>
-          <Dialog.Close className="dialog-close" aria-label="Close upload">
+          <Dialog.Close className="dialog-close" aria-label={t("Close upload")}>
             <X size={18} />
           </Dialog.Close>
           <form onSubmit={upload}>
             <div className="dropzone">
               <Upload size={26} />
               <label htmlFor="shipment-file">
-                Choose a shipment file
+                {t("Choose a shipment file")}
                 <br />
-                <span className="muted">.csv or .xlsx · up to 20 MB</span>
+                <span className="muted">
+                  {t(".csv or .xlsx · up to 20 MB")}
+                </span>
               </label>
               <input
                 id="shipment-file"
                 type="file"
                 accept=".csv,.xlsx"
-                onChange={(event) => { setFile(event.target.files?.[0] ?? null); setPreview(null); setConfirmed(false); }}
+                onChange={(event) => {
+                  setFile(event.target.files?.[0] ?? null);
+                  setPreview(null);
+                  setConfirmed(false);
+                }}
               />
             </div>
-            <Field label="Analysis date (UTC)">
+            <Field label={t("Analysis date (UTC)")}>
               <input
                 className="input"
                 type="date"
                 required
                 value={date}
-                onChange={(e) => { setDate(e.target.value); setPreview(null); setConfirmed(false); }}
+                onChange={(e) => {
+                  setDate(e.target.value);
+                  setPreview(null);
+                  setConfirmed(false);
+                }}
               />
             </Field>
             <p className="muted small">
-              Required: shipment_id, origin, destination, transport_mode,
-              carrier, planned_delivery, actual_delivery, shipping_cost, status.
+              {t(
+                "Required: shipment_id, origin, destination, transport_mode, carrier, planned_delivery, actual_delivery, shipping_cost, status.",
+              )}
             </p>
             {error && (
               <p className="inline-error" role="alert">
-                {error}
+                {t(error)}
               </p>
             )}
-            {preview && <div className="import-preview" aria-label="Import preview">
-              <h3>Review the import contract</h3>
-              {Object.entries(preview.rules).filter(([name]) => name !== "version").map(([name, value]) => <p key={name}><strong>{name}:</strong> {value}</p>)}
-              <p>{preview.kpis.total_shipments} retained shipments · {preview.kpis.cost_eligible_shipments} USD costs · {preview.issue_count} quality findings · {preview.duplicate_rows} duplicate source rows.</p>
-              <details><summary>Date precision, conflicts and quality preview</summary><pre>{JSON.stringify({ date_precision: preview.date_precision, sample: preview.sample, duplicates: preview.conflict_preview, issues: preview.issues }, null, 2)}</pre></details>
-              <label className="checkbox-field"><input type="checkbox" checked={confirmed} onChange={(e) => setConfirmed(e.target.checked)} />I confirm UTC/midnight deadlines, first-occurrence duplicates and USD cost rules for this file.</label>
-            </div>}
+            {preview && (
+              <div className="import-preview" aria-label={t("Import preview")}>
+                <h3>{t("Review the import contract")}</h3>
+                {Object.entries(preview.rules)
+                  .filter(([name]) => name !== "version")
+                  .map(([name, value]) => (
+                    <p key={name}>
+                      <strong>{t(name)}:</strong> {t(value)}
+                    </p>
+                  ))}
+                <p>
+                  {t(preview.kpis.total_shipments)}{" "}
+                  {t(" retained shipments · ")}
+                  {t(preview.kpis.cost_eligible_shipments)} {t(" USD costs · ")}
+                  {t(preview.issue_count)} {t(" quality findings · ")}
+                  {t(preview.duplicate_rows)} {t(" duplicate source rows.")}
+                </p>
+                <details>
+                  <summary>
+                    {t("Date precision, conflicts and quality preview")}
+                  </summary>
+                  <pre>
+                    {JSON.stringify(
+                      {
+                        date_precision: preview.date_precision,
+                        sample: preview.sample,
+                        duplicates: preview.conflict_preview,
+                        issues: preview.issues,
+                      },
+                      null,
+                      2,
+                    )}
+                  </pre>
+                </details>
+                <label className="checkbox-field">
+                  <input
+                    type="checkbox"
+                    checked={confirmed}
+                    onChange={(e) => setConfirmed(e.target.checked)}
+                  />
+                  {t(
+                    "I confirm UTC/midnight deadlines, first-occurrence duplicates and USD cost rules for this file.",
+                  )}
+                </label>
+              </div>
+            )}
             <div className="toolbar-actions">
-              <Button type="submit" disabled={busy || (!!preview && !confirmed)}>
-                <BusyLabel busy={busy}>{preview ? "Confirm import" : "Preview import"}</BusyLabel>
+              <Button
+                type="submit"
+                disabled={busy || (!!preview && !confirmed)}
+              >
+                <BusyLabel busy={busy}>
+                  {t(preview ? "Confirm import" : "Preview import")}
+                </BusyLabel>
               </Button>
               <Button asChild variant="ghost">
                 <a href="/api/demo/csv" download>
-                  Download demo CSV
+                  {t("Download demo CSV")}
                 </a>
               </Button>
             </div>
@@ -219,6 +297,7 @@ function UploadDialog() {
 }
 
 function Shell({ children }: { children: ReactNode }) {
+  const { t } = useI18n();
   const user = useAccess();
   const path = usePathname();
   const title =
@@ -235,15 +314,16 @@ function Shell({ children }: { children: ReactNode }) {
         <div className="sidebar-bottom">
           <div>
             <span className="live-dot" />
-            Local workspace
+            {t("Local workspace")}
           </div>
           <p>
-            Explainable decisions.
+            {t("Explainable decisions.")}
             <br />
-            Human judgment in control.
+            {t("Human judgment in control.")}
           </p>
           <Link href="/">
-            Back to website <ArrowUpRight size={12} />
+            {t("Back to website ")}
+            <ArrowUpRight size={12} />
           </Link>
         </div>
       </aside>
@@ -256,7 +336,7 @@ function Shell({ children }: { children: ReactNode }) {
                   className="mobile-menu-button"
                   size="icon"
                   variant="ghost"
-                  aria-label="Open navigation"
+                  aria-label={t("Open navigation")}
                 >
                   <Menu size={20} />
                 </Button>
@@ -265,14 +345,14 @@ function Shell({ children }: { children: ReactNode }) {
                 <Dialog.Overlay className="dialog-overlay" />
                 <Dialog.Content className="mobile-drawer">
                   <Dialog.Title className="sr-only">
-                    Platform navigation
+                    {t("Platform navigation")}
                   </Dialog.Title>
                   <Dialog.Description className="sr-only">
-                    Choose a workspace page.
+                    {t("Choose a workspace page.")}
                   </Dialog.Description>
                   <Dialog.Close
                     className="dialog-close"
-                    aria-label="Close navigation"
+                    aria-label={t("Close navigation")}
                   >
                     <X size={19} />
                   </Dialog.Close>
@@ -281,25 +361,35 @@ function Shell({ children }: { children: ReactNode }) {
                 </Dialog.Content>
               </Dialog.Portal>
             </Dialog.Root>
-            <span>Workspace</span>
+            <span>{t("Workspace")}</span>
             <ChevronRight size={12} />
-            <strong>{title}</strong>
+            <strong>{t(title)}</strong>
           </div>
           <div className="header-right">
+            <LanguageSwitcher />
             <AccountControl />
-            <Link href="/app/settings" aria-label="Methodology and settings">
+            <Link
+              href="/app/settings"
+              aria-label={t("Methodology and settings")}
+            >
               <CircleHelp size={16} className="muted" />
             </Link>
-            <span className="avatar" aria-label="Local workspace">
-              LI
+            <span className="avatar" aria-label={t("Local workspace")}>
+              {t("LI")}
             </span>
           </div>
         </header>
         <main id="main-content" className="app-content">
-          {user?.read_only_demo && <div className="notice" role="status">Read-only synthetic demo. No real customer data or accounts. Uploads, scenario comparison, settings changes, history edits and online optimization are disabled by the server. The full protected application retains these operations.</div>}
+          {user?.read_only_demo && (
+            <div className="notice" role="status">
+              {t(
+                "Read-only synthetic demo. No real customer data or accounts. Uploads, scenario comparison, settings changes, history edits and online optimization are disabled by the server. The full protected application retains these operations.",
+              )}
+            </div>
+          )}
           <div className="dataset-bar">
             <select
-              aria-label="Active dataset"
+              aria-label={t("Active dataset")}
               className="input dataset-select"
               value={datasetId}
               onChange={(e) => {
@@ -309,7 +399,7 @@ function Shell({ children }: { children: ReactNode }) {
                 if (dataset) selectDataset(dataset);
               }}
             >
-              <option value="demo">Synthetic Demo Data</option>
+              <option value="demo">{t("Synthetic Demo Data")}</option>
               {datasets
                 .filter((item) => item.dataset_id !== "demo")
                 .map((item) => (
@@ -319,9 +409,9 @@ function Shell({ children }: { children: ReactNode }) {
                 ))}
             </select>
             <label>
-              Analysis date
+              {t("Analysis date")}
               <input
-                aria-label="Workspace analysis date"
+                aria-label={t("Workspace analysis date")}
                 type="date"
                 className="input"
                 value={asOf}
@@ -332,19 +422,23 @@ function Shell({ children }: { children: ReactNode }) {
             </label>
             <UploadDialog />
             <Badge tone={data?.dataset.synthetic ? "blue" : "neutral"}>
-              {data?.dataset.synthetic
-                ? "Synthetic Demo Data"
-                : data
-                  ? "User upload · provenance unverified"
-                  : "Local dataset"}
+              {t(
+                data?.dataset.synthetic
+                  ? "Synthetic Demo Data"
+                  : data
+                    ? "User upload · provenance unverified"
+                    : "Local dataset",
+              )}
             </Badge>
           </div>
-          {children}
+          {t(children)}
           <footer className="app-footer">
             <span>
-              Engineering prototype. Simulated data and assumptions are labeled.
+              {t(
+                "Engineering prototype. Simulated data and assumptions are labeled.",
+              )}
             </span>
-            <span>No live carrier connections</span>
+            <span>{t("No live carrier connections")}</span>
           </footer>
         </main>
       </div>
@@ -352,11 +446,12 @@ function Shell({ children }: { children: ReactNode }) {
   );
 }
 export function AppShell({ children }: { children: ReactNode }) {
+  const { t } = useI18n();
   return (
     <AccessGate>
-    <WorkspaceProvider>
-      <Shell>{children}</Shell>
-    </WorkspaceProvider>
+      <WorkspaceProvider>
+        <Shell>{t(children)}</Shell>
+      </WorkspaceProvider>
     </AccessGate>
   );
 }

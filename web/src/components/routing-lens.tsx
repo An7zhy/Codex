@@ -1,3 +1,5 @@
+"use client";
+import { useI18n } from "@/lib/i18n/provider";
 // Original projected torus mesh. No downloaded images, WebGL or frame-by-frame JS.
 function point(u: number, v: number) {
   const r = 205 + 66 * Math.cos(v);
@@ -14,6 +16,7 @@ function point(u: number, v: number) {
   return { x: 360 + xx * perspective, y: 360 + yy * perspective, z: depth };
 }
 export function RoutingLens() {
+  const { t } = useI18n();
   const faces = [];
   for (let i = 0; i < 72; i++)
     for (let j = 0; j < 20; j++) {
@@ -95,9 +98,11 @@ export function RoutingLens() {
       </svg>
       <span className="lens-note lens-note-one">
         <i />
-        Constraints in focus
+        {t("Constraints in focus")}
       </span>
-      <span className="lens-note lens-note-two">A clearer path forward</span>
+      <span className="lens-note lens-note-two">
+        {t("A clearer path forward")}
+      </span>
     </div>
   );
 }

@@ -2218,3 +2218,27 @@ td strong {
 }
 .table-scroll { position: relative; } /* Contain absolute sr-only table labels in the scroller. */
 .notice p { overflow-wrap: anywhere; }
+
+/* Native language controls; no workspace remount or DOM translation mutation. */
+.language-switcher { display:flex; align-items:center; gap:5px; flex-shrink:0; padding:4px; border:1px solid var(--border, #283348); border-radius:8px; font-size:12px; white-space:nowrap; }
+.language-switcher button { color:#a8b8cf; padding:4px 7px; border:0; background:transparent; cursor:pointer; border-radius:5px; font:inherit; }
+.language-switcher button[aria-pressed="true"] { background:#233653; color:#fff; }
+.language-switcher button:focus-visible { outline:2px solid #8fb7ff; outline-offset:2px; }
+.access-language { display:flex; justify-content:flex-end; margin-bottom:12px; }
+html[lang="zh-CN"] body { font-family:"Manrope Variable","PingFang SC","Microsoft YaHei","Noto Sans CJK SC",sans-serif; }
+html[lang="zh-CN"] .hero h1 { line-height:1.2; letter-spacing:-.035em; }
+html[lang="zh-CN"] .hero-copy > p { line-height:1.9; }
+html[lang="zh-CN"] .button { white-space:normal; text-align:center; }
+@media(max-width:600px) {
+  .marketing-nav { flex-wrap:wrap; gap:12px; }
+  .marketing-nav .language-switcher { margin-left:auto; }
+  .header-right { gap:6px; }
+  .header-location { min-width:0; }
+  .header-location strong { overflow-wrap:anywhere; }
+  .app-header .avatar { display:none; }
+}
+@media(max-width:600px) {
+  .header-location > span, .header-location > svg { display:none; }
+  .header-location strong { white-space:nowrap; overflow-wrap:normal; }
+  .header-right .button { white-space:nowrap; padding-inline:8px; }
+}

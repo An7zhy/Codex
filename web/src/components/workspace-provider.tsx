@@ -1,4 +1,5 @@
 "use client";
+import { useI18n } from "@/lib/i18n/provider";
 
 import {
   createContext,
@@ -49,6 +50,7 @@ type ContextValue = {
 const Context = createContext<ContextValue | null>(null);
 
 export function WorkspaceProvider({ children }: { children: ReactNode }) {
+  const { t } = useI18n();
   const user = useAccess();
   const storageKey = `logistics-workspace-v2:${user?.instance_id}:${user?.username}`;
   const [datasetId, setDatasetId] = useState("demo");
@@ -64,14 +66,26 @@ export function WorkspaceProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     try {
       const saved = JSON.parse(
-        localStorage.getItem(storageKey) || localStorage.getItem("logistics-workspace-v1") || "null",
+        localStorage.getItem(storageKey) ||
+          localStorage.getItem("logistics-workspace-v1") ||
+          "null",
       );
       if (saved?.datasetId && saved?.asOf) {
         setDatasetId(saved.datasetId);
         setAsOf(saved.asOf);
         if (saved.filters && typeof saved.filters === "object") {
-          setFilters({ ...emptyFilters, ...Object.fromEntries(Object.entries(saved.filters).filter(([key, value]) => key in emptyFilters &&
-            (key === "offset" ? Number.isInteger(value) && Number(value) >= 0 : typeof value === "string"))) });
+          setFilters({
+            ...emptyFilters,
+            ...Object.fromEntries(
+              Object.entries(saved.filters).filter(
+                ([key, value]) =>
+                  key in emptyFilters &&
+                  (key === "offset"
+                    ? Number.isInteger(value) && Number(value) >= 0
+                    : typeof value === "string"),
+              ),
+            ),
+          });
         }
       }
     } catch {
@@ -175,13 +189,13 @@ export function WorkspaceProvider({ children }: { children: ReactNode }) {
         notify: setToast,
       }}
     >
-      {children}
+      {t(children)}
       {toast && (
         <div className="toast" role="status">
           <CheckCircle2 size={18} />
-          <span>{toast}</span>
+          <span>{t(toast)}</span>
           <button
-            aria-label="Dismiss notification"
+            aria-label={t("Dismiss notification")}
             onClick={() => setToast("")}
           >
             <X size={15} />
@@ -196,32 +210,48 @@ export function useWorkspace() {
   if (!context) throw new Error("Workspace provider is required.");
   return context;
 }
-export function useExceptionQueue(page: number, actionable = false, search = "", limit = 20) {
+export function useExceptionQueue(
+  page: number,
+  actionable = false,
+  search = "",
+  limit = 20,
+) {
   const { query, data } = useWorkspace();
-  const [queue, setQueue] = useState<{ items: Shipment[]; total: number }>({ items: [], total: 0 });
+  const [queue, setQueue] = useState<{ items: Shipment[]; total: number }>({
+    items: [],
+    total: 0,
+  });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   useEffect(() => {
     const controller = new AbortController();
     const params = new URLSearchParams(query);
-    params.set("offset", String(page * limit)); params.set("limit", String(limit));
+    params.set("offset", String(page * limit));
+    params.set("limit", String(limit));
     params.set("actionable_only", String(actionable));
     if (search) params.set("q", search);
-    setLoading(true); setError("");
-    api<typeof queue>(`/exceptions?${params}`, { signal: controller.signal }).then(setQueue)
-      .catch((err) => { if (err.name !== "AbortError") setError(err.message); })
-      .finally(() => { if (!controller.signal.aborted) setLoading(false); });
+    setLoading(true);
+    setError("");
+    api<typeof queue>(`/exceptions?${params}`, { signal: controller.signal })
+      .then(setQueue)
+      .catch((err) => {
+        if (err.name !== "AbortError") setError(err.message);
+      })
+      .finally(() => {
+        if (!controller.signal.aborted) setLoading(false);
+      });
     return () => controller.abort();
   }, [query, page, actionable, search, limit, data]); // refreshed settings also refresh the queue
   return { ...queue, error, loading };
 }
 export function WorkspaceBoundary({ children }: { children: ReactNode }) {
+  const { t } = useI18n();
   const { loading, error, data, refresh, datasets, selectDataset } =
     useWorkspace();
   if (error)
     return (
       <>
-        <ErrorState message={error} retry={refresh} />
+        <ErrorState message={t(error)} retry={refresh} />
         {error.startsWith("Dataset not found") && (
           <Button
             variant="outline"
@@ -237,7 +267,7 @@ export function WorkspaceBoundary({ children }: { children: ReactNode }) {
               )
             }
           >
-            Use Synthetic Demo Data
+            {t("Use Synthetic Demo Data")}
           </Button>
         )}
       </>

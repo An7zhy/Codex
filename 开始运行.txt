@@ -1,4 +1,8 @@
-﻿Logistics Insight AI — Sprint 2.5 本地完整版
+﻿原生双语版本：feature/native-zh-en-localization
+默认中文；页面顶部 中文 / EN 切换。请关闭浏览器自动翻译。
+语言切换保留数据和草稿；下载的运营报告仍为英文。
+
+Logistics Insight AI — Sprint 2.5 本地完整版
 
 这个版本包含 V1/V2/V3、新官网、上传优化、决策历史和设置并发修复。
 默认启动的是可操作的受保护完整应用。请先使用 Synthetic Demo Data 测试。
