@@ -1,0 +1,27 @@
+{
+  "completed": true,
+  "observations": {
+    "exception_page": {
+      "card_values": [
+        "7",
+        "0",
+        "7",
+        "13"
+      ],
+      "queue_total": 63,
+      "displayed_rows": 20
+    },
+    "stale_decision_page": {
+      "actual_active_count": 37,
+      "empty_state_after_dataset_switch": true
+    }
+  },
+  "javascript_errors": [],
+  "verification": {
+    "build_id": "xNXy8ggnRSSPxJODmiwVg",
+    "frontend_source_sha256": "20c812e2123d282dfc077c27b05ed9441cb258e8df168933a7b15a6db32997f3",
+    "original_test_file_sha256": "9f1321d08e1c4e57f9a93f6a9418d40d3e1aee2a759ff7cdd277f0a267846749",
+    "language_precondition": "fresh browser defaults zh",
+    "temporary_database": true
+  }
+}

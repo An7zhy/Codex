@@ -2,7 +2,7 @@
 import { useI18n } from "@/lib/i18n/provider";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   ArrowRight,
   ArrowUpRight,
@@ -20,6 +20,7 @@ import {
 import { Button } from "@/components/ui/button";
 import {
   Badge,
+  LoadingState,
   EmptyState,
   PageHeading,
   Panel,
@@ -108,71 +109,144 @@ export function KpiRail({ data }: { data: Workspace }) {
     </>
   );
 }
-export function Filters() {
+export function ActiveFilterSummary({
+  search = "",
+  clearSearch,
+}: {
+  search?: string;
+  clearSearch?: () => void;
+}) {
+  const { t } = useI18n();
+  const { filters, clearFilters } = useWorkspace();
+  const entries = [
+    ["Carrier", filters.carrier],
+    ["Transport", filters.mode],
+    ["Status", filters.status],
+    ["Search shipment ID", filters.q],
+    ["Active exception search", search],
+  ].filter(([, value]) => value);
+  return (
+    <div className="filter-summary" aria-label={t("Active filters")}>
+      <strong>{t("Active filters (AND)")}</strong>
+      {entries.length ? (
+        entries.map(([label, value]) => (
+          <span key={label}>
+            {t(label)}: {t(value)}
+          </span>
+        ))
+      ) : (
+        <span>{t("No filters: all records in this dataset")}</span>
+      )}
+      {(entries.length > 0 || filters.offset > 0) && (
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => {
+            clearFilters();
+            clearSearch?.();
+          }}
+        >
+          {t("Clear all filters")}
+        </Button>
+      )}
+      <small>
+        {t(
+          "Filters combine with AND. Search matches shipment IDs only, without case sensitivity.",
+        )}
+      </small>
+    </div>
+  );
+}
+
+export function Filters({ summary = true }: { summary?: boolean }) {
   const { t } = useI18n();
   const { filters, setFilter, data, clearFilters } = useWorkspace();
   return (
-    <div className="filters">
-      <label className="search-field">
-        <Search size={15} />
-        <input
-          aria-label={t("Search shipment ID")}
+    <>
+      <div className="filters">
+        <label className="search-field">
+          <Search size={15} />
+          <input
+            aria-label={t("Search shipment ID")}
+            className="input"
+            placeholder={t("Search shipment ID…")}
+            value={filters.q}
+            onChange={(e) => setFilter("q", e.target.value)}
+          />
+        </label>
+        <select
           className="input"
-          placeholder={t("Search shipment ID…")}
-          value={filters.q}
-          onChange={(e) => setFilter("q", e.target.value)}
-        />
-      </label>
-      <select
-        className="input"
-        aria-label={t("Filter carrier")}
-        value={filters.carrier}
-        onChange={(e) => setFilter("carrier", e.target.value)}
-      >
-        <option value="">{t("All carriers")}</option>
-        {data?.filters.carrier.map((v) => (
-          <option key={v} value={v}>
-            {t(v)}
-          </option>
-        ))}
-      </select>
-      <select
-        className="input"
-        aria-label={t("Filter transport mode")}
-        value={filters.mode}
-        onChange={(e) => setFilter("mode", e.target.value)}
-      >
-        <option value="">{t("All modes")}</option>
-        {data?.filters.transport_mode.map((v) => (
-          <option key={v} value={v}>
-            {t(v)}
-          </option>
-        ))}
-      </select>
-      <select
-        className="input"
-        aria-label={t("Filter shipment status")}
-        value={filters.status}
-        onChange={(e) => setFilter("status", e.target.value)}
-      >
-        <option value="">{t("All statuses")}</option>
-        {data?.filters.status.map((v) => (
-          <option key={v} value={v}>
-            {t(v)}
-          </option>
-        ))}
-      </select>
-      {(filters.q || filters.carrier || filters.mode || filters.status) && (
-        <Button
-          variant="ghost"
-          size="icon"
-          aria-label={t("Clear filters")}
-          onClick={clearFilters}
+          aria-label={t("Filter carrier")}
+          value={filters.carrier}
+          onChange={(e) => setFilter("carrier", e.target.value)}
         >
-          <X size={15} />
-        </Button>
-      )}
-    </div>
+          <option value="">{t("All carriers")}</option>
+          {filters.carrier &&
+            data &&
+            !data.filters.carrier.includes(filters.carrier) && (
+              <option value={filters.carrier}>
+                {t(`Unavailable filter value: ${filters.carrier}`)}
+              </option>
+            )}
+          {data?.filters.carrier.map((v) => (
+            <option key={v} value={v}>
+              {t(v)}
+            </option>
+          ))}
+        </select>
+        <select
+          className="input"
+          aria-label={t("Filter transport mode")}
+          value={filters.mode}
+          onChange={(e) => setFilter("mode", e.target.value)}
+        >
+          <option value="">{t("All modes")}</option>
+          {filters.mode &&
+            data &&
+            !data.filters.transport_mode.includes(filters.mode) && (
+              <option value={filters.mode}>
+                {t(`Unavailable filter value: ${filters.mode}`)}
+              </option>
+            )}
+          {data?.filters.transport_mode.map((v) => (
+            <option key={v} value={v}>
+              {t(v)}
+            </option>
+          ))}
+        </select>
+        <select
+          className="input"
+          aria-label={t("Filter shipment status")}
+          value={filters.status}
+          onChange={(e) => setFilter("status", e.target.value)}
+        >
+          <option value="">{t("All statuses")}</option>
+          {filters.status &&
+            data &&
+            !data.filters.status.includes(filters.status) && (
+              <option value={filters.status}>
+                {t(`Unavailable filter value: ${filters.status}`)}
+              </option>
+            )}
+          {data?.filters.status.map((v) => (
+            <option key={v} value={v}>
+              {t(v)}
+            </option>
+          ))}
+        </select>
+        {(filters.q || filters.carrier || filters.mode || filters.status) && (
+          <Button
+            variant="ghost"
+            size="icon"
+            aria-label={t("Clear filters")}
+            onClick={clearFilters}
+          >
+            <X size={15} />
+          </Button>
+        )}
+      </div>
+      {summary && <ActiveFilterSummary />}
+    </>
   );
 }
 function ExceptionRows({
@@ -666,10 +740,7 @@ export function Exceptions() {
   const { data, query } = useWorkspace();
   const [page, setPage] = useState(0),
     [selected, setSelected] = useState("");
-  useEffect(() => {
-    setPage(0);
-  }, [data]);
-  const queue = useExceptionQueue(page);
+  const queue = useExceptionQueue(page, false, "", 20, setPage);
   const selectedRow = queue.items.find(
     (row) => `${row.source_row}` === selected,
   );
@@ -691,32 +762,43 @@ export function Exceptions() {
       />
       <Filters />
       {queue.error && <p role="alert">{t(queue.error)}</p>}
+      {queue.loading && <LoadingState />}
       <WorkspaceBoundary>
-        {data && (
+        {data && !queue.loading && (
           <>
+            <div
+              className="notice"
+              aria-label={t("Exception count definitions")}
+            >
+              <div>
+                <p>
+                  {t(
+                    `Dataset exceptions: ${queue.datasetTotal}. Filtered exceptions: ${queue.total}. Current page: ${queue.items.length} orders.`,
+                  )}
+                </p>
+                <p>
+                  {t(
+                    `Active orders needing scoring evidence: ${queue.summary?.needs_evidence ?? 0}. Missing evidence does not mean low risk.`,
+                  )}
+                </p>
+                <p>
+                  {t(
+                    "High priority and information-needed orders are subsets of active exceptions. These cards are not additive; excluded source rows may also appear in the queue.",
+                  )}
+                </p>
+                <p>
+                  {t(
+                    `V1 data-quality findings in this selection: ${data.issue_count}. Multiple findings may belong to one order.`,
+                  )}
+                </p>
+              </div>
+            </div>
             <div className="kpi-grid">
               {[
-                [
-                  "Active transport exceptions",
-                  queue.items.filter((row) => row.actionable).length,
-                ],
-                [
-                  "High priority",
-                  queue.items.filter((row) => row.priority_level === "High")
-                    .length,
-                ],
-                [
-                  "Information needed",
-                  queue.items.filter(
-                    (row) => row.priority_level === "Insufficient information",
-                  ).length,
-                ],
-                [
-                  "Review only",
-                  queue.items.filter(
-                    (row) => row.priority_level === "Review only",
-                  ).length,
-                ],
+                ["Active transport exceptions", queue.summary?.active ?? 0],
+                ["High priority", queue.summary?.high ?? 0],
+                ["Information needed", queue.summary?.needs_evidence ?? 0],
+                ["Review only", queue.summary?.review_only ?? 0],
               ].map(([label, value]) => (
                 <div className="kpi" key={String(label)}>
                   <div className="kpi-label">
@@ -724,14 +806,18 @@ export function Exceptions() {
                     <ShieldAlert size={14} />
                   </div>
                   <strong>{t(value)}</strong>
-                  <small>{t("Within the displayed exception queue")}</small>
+                  <small>
+                    {t(
+                      "Across all filtered exception orders, before pagination",
+                    )}
+                  </small>
                 </div>
               ))}
             </div>
             <Panel
               title={t("Prioritized exception queue")}
               subtitle={t(
-                `Showing page ${page + 1} of ${queue.total} findings. Completed delays remain separate from active overdue shipments.`,
+                "Exception totals count orders, not individual reasons. Completed delays remain separate from active overdue shipments.",
               )}
               action={
                 <Button asChild size="sm" variant="ghost">
@@ -747,6 +833,7 @@ export function Exceptions() {
                   <ExceptionRows rows={queue.items} />
                   <div className="table-footer">
                     <span>
+                      {t(`Page ${queue.page + 1} of ${queue.pageCount}`)} ·
                       {t(page * 20 + 1)}–
                       {t(Math.min(page * 20 + 20, queue.total))} {t("of ")}
                       {t(" ")}
@@ -756,7 +843,7 @@ export function Exceptions() {
                       <Button
                         variant="ghost"
                         size="icon"
-                        disabled={page === 0}
+                        disabled={queue.page === 0 || queue.loading}
                         aria-label={t("Previous exception page")}
                         onClick={() => setPage((v) => v - 1)}
                       >
@@ -765,7 +852,9 @@ export function Exceptions() {
                       <Button
                         variant="ghost"
                         size="icon"
-                        disabled={(page + 1) * 20 >= queue.total}
+                        disabled={
+                          (queue.page + 1) * 20 >= queue.total || queue.loading
+                        }
                         aria-label={t("Next exception page")}
                         onClick={() => setPage((v) => v + 1)}
                       >

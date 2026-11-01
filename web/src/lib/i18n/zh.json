@@ -998,5 +998,22 @@
   "Data filesystem is not bounded to at most 1 GiB. Provision a dedicated bounded persistent filesystem before starting this deployment.": "数据文件系统未限制为最多 1 GiB，请在启动前配置专用有界持久文件系统。",
   "Data filesystem reserve is below 8 MiB. Stop writers and perform documented retention or recovery.": "数据文件系统剩余空间低于 8 MiB，请停止写入并按文档执行清理或恢复。",
   "Dedicated data filesystem is unavailable.": "专用数据文件系统不可用。",
-  "Cost Anomalies": "成本异常数"
+  "Cost Anomalies": "成本异常数",
+  "Active filters": "当前生效筛选",
+  "Active filters (AND)": "当前生效筛选（全部条件同时满足）",
+  "No filters: all records in this dataset": "未设置筛选：包含当前数据集全部记录",
+  "Clear all filters": "清除全部筛选",
+  "Filters combine with AND. Search matches shipment IDs only, without case sensitivity.": "多个条件按 AND 组合，须同时满足。关键词仅搜索订单编号，不区分大小写。",
+  "Active exception search": "活动异常订单编号搜索",
+  "Unavailable filter value: {0}": "已保存但当前不可用的筛选值：{0}",
+  "Across all filtered exception orders, before pagination": "当前筛选范围内全部异常订单，未按页截断",
+  "Exception count definitions": "异常数量统计口径",
+  "Dataset exceptions: {0}. Filtered exceptions: {1}. Current page: {2} orders.": "数据集全部异常：{0} 条；当前筛选异常：{1} 条；当前页面：{2} 条订单。",
+  "Active orders needing scoring evidence: {0}. Missing evidence does not mean low risk.": "需补充评分证据的活动订单：{0} 条。证据不足不代表低风险。",
+  "V1 data-quality findings in this selection: {0}. Multiple findings may belong to one order.": "当前筛选范围的 V1 数据质量问题：{0} 项。同一订单可能对应多项问题。",
+  "Exception totals count orders, not individual reasons. Completed delays remain separate from active overdue shipments.": "异常数量按订单记录统计，不是异常原因项数。已完成延误与活动在途逾期分开统计。",
+  "Page {0} of {1}": "第 {0} 页 / 共 {1} 页",
+  "{0} active orders": "{0} 条活动订单",
+  "High priority and information-needed orders are subsets of active exceptions. These cards are not additive; excluded source rows may also appear in the queue.": "高优先级和信息不足都是活动异常的子集，四张卡片不能直接相加；队列还可能包含已排除的源记录。",
+  "Changing dataset, analysis date or shared filters resets the active page and local search. Refreshing the same scope restores them.": "更改数据集、分析日期或共享筛选，会将活动列表重置到第一页并清空局部搜索；同一范围刷新时保留原状态。"
 }

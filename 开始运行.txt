@@ -1,4 +1,4 @@
-﻿原生双语版本：feature/native-zh-en-localization
+﻿原生双语UAT修复版本：fix/uat-chinese-filter-pagination
 默认中文；页面顶部 中文 / EN 切换。请关闭浏览器自动翻译。
 语言切换保留数据和草稿；下载的运营报告仍为英文。
 

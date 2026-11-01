@@ -18,6 +18,7 @@ from scripts.prepare_demo import prepare
 from scripts.start_web import ROOT, WebServers
 
 FLOWS = {
+    "uat": ("browser_uat.py", False, False),
     "i18n-business": ("browser_i18n.py", False, False),
     "i18n-demo": ("browser_i18n.py", True, False),
     "premium": ("browser_premium.py", False, True),
@@ -41,14 +42,16 @@ Browser.new_context = _english_context
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--flows", default=",".join(FLOWS))
+    parser.add_argument("--flows", default=",".join(name for name in FLOWS if name != "uat"))
+    parser.add_argument("--evidence-root", default="docs/i18n")
+    parser.add_argument("--artifact-root", default="artifacts/i18n")
     args = parser.parse_args()
-    docs = ROOT / "docs/i18n"; docs.mkdir(parents=True, exist_ok=True)
+    docs = ROOT / args.evidence_root; docs.mkdir(parents=True, exist_ok=True)
     for label in args.flows.split(","):
         filename, demo, english = FLOWS[label]
         with tempfile.TemporaryDirectory(prefix="logistics-i18n-") as folder:
             password = secrets.token_urlsafe(24)
-            output = ROOT / "artifacts/i18n" / label; output.mkdir(parents=True, exist_ok=True)
+            output = ROOT / args.artifact_root / label; output.mkdir(parents=True, exist_ok=True)
             evidence = docs / f"{label}.json"
             environment = dict(LOGISTICS_INSTANCE_MODE="business", LOGISTICS_WEB_DB_PATH=str(Path(folder)/"workspace.sqlite3"),
                 LOGISTICS_DB_PATH=str(Path(folder)/"history.sqlite3"), LOGISTICS_ALLOWED_ORIGINS="http://127.0.0.1:3100",

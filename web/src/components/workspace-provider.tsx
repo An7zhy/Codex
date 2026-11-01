@@ -7,6 +7,7 @@ import {
   useContext,
   useEffect,
   useMemo,
+  useRef,
   useState,
   type ReactNode,
 } from "react";
@@ -122,16 +123,25 @@ export function WorkspaceProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (!ready) return;
     const controller = new AbortController();
+    setLoading(true);
+    setError("");
+    let recoveringPage = false;
     const timer = setTimeout(() => {
-      setLoading(true);
-      setError("");
       api<Workspace>(`/workspace?${query}`, { signal: controller.signal })
-        .then(setData)
+        .then((result) => {
+          if (controller.signal.aborted) return;
+          if (result.offset > 0 && result.offset >= result.total_rows) {
+            recoveringPage = true;
+            setFilters((old) => ({ ...old, offset: 0 }));
+            return;
+          }
+          setData(result);
+        })
         .catch((err) => {
           if (err.name !== "AbortError") setError(err.message);
         })
         .finally(() => {
-          if (!controller.signal.aborted) setLoading(false);
+          if (!controller.signal.aborted && !recoveringPage) setLoading(false);
         });
     }, 130);
     return () => {
@@ -210,39 +220,96 @@ export function useWorkspace() {
   if (!context) throw new Error("Workspace provider is required.");
   return context;
 }
+export type ExceptionSummary = {
+  records: number;
+  active: number;
+  high: number;
+  needs_evidence: number;
+  review_only: number;
+};
+export function filterScopeKey(query: string) {
+  const params = new URLSearchParams(query);
+  params.delete("offset");
+  params.delete("limit");
+  params.sort();
+  return params.toString();
+}
 export function useExceptionQueue(
   page: number,
   actionable = false,
   search = "",
   limit = 20,
+  setPage?: (page: number) => void,
+  resetOnScopeChange = true,
 ) {
   const { query, data } = useWorkspace();
-  const [queue, setQueue] = useState<{ items: Shipment[]; total: number }>({
-    items: [],
-    total: 0,
-  });
+  const scope = filterScopeKey(query);
+  const previousScope = useRef(scope + ":" + search);
+  const changedScope = previousScope.current !== scope + ":" + search;
+  const requestedPage = changedScope && resetOnScopeChange ? 0 : page;
+  const params = new URLSearchParams(scope);
+  params.set("offset", String(requestedPage * limit));
+  params.set("limit", String(limit));
+  params.set("actionable_only", String(actionable));
+  if (search) params.set("search", search);
+  const requestQuery = params.toString();
+  const key = requestQuery + JSON.stringify(data?.priority_config ?? null);
+  type Result = {
+    items: Shipment[];
+    total: number;
+    dataset_exception_count: number;
+    summary: ExceptionSummary;
+  };
+  const [state, setState] = useState<{ key: string; result: Result } | null>(
+    null,
+  );
   const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [busy, setBusy] = useState(false);
+  useEffect(() => {
+    if (changedScope) {
+      previousScope.current = scope + ":" + search;
+      if (resetOnScopeChange) setPage?.(0);
+    }
+  }, [scope, search, changedScope, setPage, resetOnScopeChange]);
   useEffect(() => {
     const controller = new AbortController();
-    const params = new URLSearchParams(query);
-    params.set("offset", String(page * limit));
-    params.set("limit", String(limit));
-    params.set("actionable_only", String(actionable));
-    if (search) params.set("q", search);
-    setLoading(true);
+    setBusy(true);
     setError("");
-    api<typeof queue>(`/exceptions?${params}`, { signal: controller.signal })
-      .then(setQueue)
+    api<Result>(`/exceptions?${requestQuery}`, { signal: controller.signal })
+      .then((result) => {
+        if (controller.signal.aborted) return;
+        if (
+          requestedPage > 0 &&
+          requestedPage * limit >= result.total &&
+          setPage
+        ) {
+          setPage(0);
+          return;
+        }
+        setState({ key, result });
+      })
       .catch((err) => {
-        if (err.name !== "AbortError") setError(err.message);
+        if (err.name !== "AbortError") {
+          setError(err.message);
+          setState(null);
+        }
       })
       .finally(() => {
-        if (!controller.signal.aborted) setLoading(false);
+        if (!controller.signal.aborted) setBusy(false);
       });
     return () => controller.abort();
-  }, [query, page, actionable, search, limit, data]); // refreshed settings also refresh the queue
-  return { ...queue, error, loading };
+  }, [requestQuery, key, data]);
+  const result = state?.key === key ? state.result : null;
+  return {
+    items: result?.items ?? [],
+    total: result?.total ?? 0,
+    datasetTotal: result?.dataset_exception_count ?? 0,
+    summary: result?.summary,
+    page: requestedPage,
+    pageCount: Math.max(1, Math.ceil((result?.total ?? 0) / limit)),
+    error,
+    loading: busy || (!result && !error),
+  };
 }
 export function WorkspaceBoundary({ children }: { children: ReactNode }) {
   const { t } = useI18n();

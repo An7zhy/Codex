@@ -1,5 +1,19 @@
 # Logistics Insight AI
 
+## Chinese UAT fixes
+
+The `fix/uat-chinese-filter-pagination` branch fixes stale pagination/scope and makes
+active filters and exception counting explicit. Carrier filters remain exact and all
+conditions combine with AND. Exception cards now count the complete filtered queue
+before paging; page size, full dataset exceptions and field-quality findings are
+reported separately. High/missing-evidence counts are subsets of active exceptions.
+
+Use the reproducible **Synthetic Demo Data** in [data/uat](data/uat/README.md),
+with analysis date **2026-10-01 UTC**. No customer data, scoring/optimization formula,
+authentication boundary, database schema or resource allowance was changed.
+See [UAT_BUGFIX_REPORT.md](UAT_BUGFIX_REPORT.md) for confirmed bugs, expected behavior,
+not-reproduced reports and executed test evidence.
+
 ## Native Chinese / English interface
 
 The Next.js website and every platform route now default to **中文**, with a **中文 / EN**

@@ -1,0 +1,97 @@
+{
+  "completed": true,
+  "checks": [
+    "Account-free synthetic viewer loads original calculated KPIs/report and precomputed real CP-SAT result; every direct mutation attempt is denied403",
+    "All eight application routes render read-only demo data at360/1440px without page overflow, blank pages or error states"
+  ],
+  "javascript_errors": [],
+  "responsive_matrix": [
+    {
+      "route": "/app",
+      "width": 360,
+      "document": 360
+    },
+    {
+      "route": "/app/shipments",
+      "width": 360,
+      "document": 360
+    },
+    {
+      "route": "/app/exceptions",
+      "width": 360,
+      "document": 360
+    },
+    {
+      "route": "/app/decisions",
+      "width": 360,
+      "document": 360
+    },
+    {
+      "route": "/app/decisions/history",
+      "width": 360,
+      "document": 360
+    },
+    {
+      "route": "/app/optimization",
+      "width": 360,
+      "document": 360
+    },
+    {
+      "route": "/app/analytics",
+      "width": 360,
+      "document": 360
+    },
+    {
+      "route": "/app/settings",
+      "width": 360,
+      "document": 360
+    },
+    {
+      "route": "/app",
+      "width": 1440,
+      "document": 1440
+    },
+    {
+      "route": "/app/shipments",
+      "width": 1440,
+      "document": 1440
+    },
+    {
+      "route": "/app/exceptions",
+      "width": 1440,
+      "document": 1440
+    },
+    {
+      "route": "/app/decisions",
+      "width": 1440,
+      "document": 1440
+    },
+    {
+      "route": "/app/decisions/history",
+      "width": 1440,
+      "document": 1440
+    },
+    {
+      "route": "/app/optimization",
+      "width": 1440,
+      "document": 1440
+    },
+    {
+      "route": "/app/analytics",
+      "width": 1440,
+      "document": 1440
+    },
+    {
+      "route": "/app/settings",
+      "width": 1440,
+      "document": 1440
+    }
+  ],
+  "verification": {
+    "build_id": "gwdAbMFL7Yid6RN1oY2y7",
+    "frontend_source_sha256": "d8ae5dc75c1d0e79edee60d5b5e1200d86d4517d79b02d6c7f7cf77a74b2ebb6",
+    "original_test_file_sha256": "53b5a5daac915f554cc6511a031cee32ae2c3ff277e8c70ea4e4e590b7294f62",
+    "language_precondition": "en",
+    "temporary_database": true
+  }
+}

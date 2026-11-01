@@ -217,15 +217,26 @@ def workspace(scope: Scoped):
             "priority_config": scope.config.to_dict(), "scope": scope.filters}
 
 
+def exception_summary(queue):
+    """Count existing rule classifications across the full filtered queue, before paging."""
+    return {"records": len(queue), "active": int(queue.actionable.sum()),
+            "high": int(queue.priority_level.eq("High").sum()),
+            "needs_evidence": int(queue.priority_level.eq("Insufficient information").sum()),
+            "review_only": int(queue.priority_level.eq("Review only").sum())}
+
+
 @app.get("/api/exceptions")
-def exception_queue(scope: Scoped, actionable_only: bool = False):
+def exception_queue(scope: Scoped, actionable_only: bool = False, search: str = Query(default="", max_length=200)):
     queue = scope.priorities.loc[scope.priorities.is_exception].copy()
     queue["actionable"] = [active_exception(row) for row in queue.to_dict("records")]
+    if search:
+        queue = queue.loc[queue.shipment_id.str.contains(search, case=False, regex=False, na=False)]
     if actionable_only:
         queue = queue.loc[queue.actionable]
     queue = queue.sort_values(["priority_score", "source_row"], ascending=[False, True], na_position="last")
     return {"items": records(queue.iloc[scope.offset:scope.offset + scope.limit]), "total": len(queue),
-            "offset": scope.offset, "limit": scope.limit}
+            "offset": scope.offset, "limit": scope.limit, "summary": exception_summary(queue),
+            "dataset_exception_count": int(scope.full.is_exception.sum())}
 
 
 @app.get("/api/exports/{kind}")

@@ -1,0 +1,120 @@
+{
+  "completed": true,
+  "checks": [
+    "Uploaded120 via Chinese preview/confirm; all8 exact carrier filters return15 correct IDs each",
+    "Canonical Air/In Transit values remain separated from Chinese labels; AND/keyword/export agree, valid empty intersection exposes all conditions and clear entry; changing a filter resets shipment offset",
+    "Stale shipment offset1000 recovered to0; full exception cards37/0/37/26 stable on page2; filtered carrier1 cards7/0/7/8 with dataset63/filtered15/page15 explicitly distinguished from0 V1 quality findings",
+    "Chinese DecisionCenter one-page buttons correctly disabled; compare123/12, save123 action/notes in SQLite, query history/reload/back restores draft; no insertBefore/pageerror",
+    "120 active50/50/20 paging: exact page2 IDs, refresh persists same scope; previous works; carrier/search/dataset changes reset page and stale local search; original false-empty dataset-switch reproduced case now shows37 active orders"
+  ],
+  "javascript_errors": [],
+  "responsive_matrix": [
+    {
+      "route": "/app/shipments",
+      "locale": "en",
+      "width": 360,
+      "document": 360
+    },
+    {
+      "route": "/app/exceptions",
+      "locale": "en",
+      "width": 360,
+      "document": 360
+    },
+    {
+      "route": "/app/decisions",
+      "locale": "en",
+      "width": 360,
+      "document": 360
+    },
+    {
+      "route": "/app/decisions/history",
+      "locale": "en",
+      "width": 360,
+      "document": 360
+    },
+    {
+      "route": "/app/shipments",
+      "locale": "en",
+      "width": 1440,
+      "document": 1440
+    },
+    {
+      "route": "/app/exceptions",
+      "locale": "en",
+      "width": 1440,
+      "document": 1440
+    },
+    {
+      "route": "/app/decisions",
+      "locale": "en",
+      "width": 1440,
+      "document": 1440
+    },
+    {
+      "route": "/app/decisions/history",
+      "locale": "en",
+      "width": 1440,
+      "document": 1440
+    },
+    {
+      "route": "/app/shipments",
+      "locale": "zh",
+      "width": 360,
+      "document": 360
+    },
+    {
+      "route": "/app/exceptions",
+      "locale": "zh",
+      "width": 360,
+      "document": 360
+    },
+    {
+      "route": "/app/decisions",
+      "locale": "zh",
+      "width": 360,
+      "document": 360
+    },
+    {
+      "route": "/app/decisions/history",
+      "locale": "zh",
+      "width": 360,
+      "document": 360
+    },
+    {
+      "route": "/app/shipments",
+      "locale": "zh",
+      "width": 1440,
+      "document": 1440
+    },
+    {
+      "route": "/app/exceptions",
+      "locale": "zh",
+      "width": 1440,
+      "document": 1440
+    },
+    {
+      "route": "/app/decisions",
+      "locale": "zh",
+      "width": 1440,
+      "document": 1440
+    },
+    {
+      "route": "/app/decisions/history",
+      "locale": "zh",
+      "width": 1440,
+      "document": 1440
+    }
+  ],
+  "dataset_ids": {
+    "mixed": "24e81d95bd5049fba7d682d07755d573",
+    "active": "61f35a96479a42b3adf86a9c80edc821"
+  },
+  "verification": {
+    "build_id": "gwdAbMFL7Yid6RN1oY2y7",
+    "frontend_source_sha256": "d8ae5dc75c1d0e79edee60d5b5e1200d86d4517d79b02d6c7f7cf77a74b2ebb6",
+    "original_test_file_sha256": "2ba4b1937ca607228271b631c4d4eed1033c1072bf434e9194d73aa76d871368",
+    "language_precondition": "fresh browser defaults zh",
+    "temporary_database": true
+  }
+}

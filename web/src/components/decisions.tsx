@@ -3,7 +3,7 @@ import { useI18n } from "@/lib/i18n/provider";
 
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import {
   ArrowUpRight,
   Download,
@@ -14,6 +14,7 @@ import {
 import { Button } from "@/components/ui/button";
 import {
   BusyLabel,
+  LoadingState,
   EmptyState,
   ErrorState,
   Field,
@@ -23,12 +24,14 @@ import {
 } from "@/components/ui/primitives";
 import {
   WorkspaceBoundary,
+  filterScopeKey,
   useExceptionQueue,
   useWorkspace,
 } from "@/components/workspace-provider";
 import { api, jsonBody, money, num } from "@/lib/utils";
 import type { Assumption, CaseRecord, DecisionResult } from "@/lib/types";
 import { useAccess } from "@/components/access";
+import { Filters, ActiveFilterSummary } from "@/components/operations";
 import { useSessionDraft } from "@/lib/session-draft";
 
 export function DecisionNav({ history = false }: { history?: boolean }) {
@@ -55,14 +58,52 @@ type ScenarioState = {
 export function Decisions() {
   const { t, tExact } = useI18n();
   const user = useAccess();
-  const { data, datasetId, asOf, notify } = useWorkspace();
+  const { data, datasetId, asOf, notify, query } = useWorkspace();
   const params = useSearchParams();
-  const [queuePage, setQueuePage] = useSessionDraft("decision-page", 0),
-    [search, setSearch] = useSessionDraft(
-      "decision-search",
-      params.get("shipment") ?? "",
+  const scope = filterScopeKey(query);
+  const requested = params.get("shipment") ?? "";
+  const initialRequested = useRef(requested);
+  const [navigation, setNavigation, navigationReady] = useSessionDraft(
+    "decision-navigation-v2",
+    { scope: "", page: 0, search: "" },
+    (v) => {
+      const value = v as { page: number };
+      return Number.isInteger(value.page) && value.page >= 0;
+    },
+  );
+  const queuePage = navigation.scope === scope ? navigation.page : 0;
+  const search = navigation.scope === scope ? navigation.search : "";
+  function setQueuePage(value: number | ((old: number) => number)) {
+    setNavigation({
+      scope,
+      search,
+      page: typeof value === "function" ? value(queuePage) : value,
+    });
+  }
+  function setSearch(value: string) {
+    setNavigation({ scope, search: value, page: 0 });
+  }
+  useEffect(() => {
+    if (!navigationReady) return;
+    setNavigation((old) =>
+      old.scope === scope
+        ? old
+        : { scope, page: 0, search: initialRequested.current },
     );
-  const queue = useExceptionQueue(queuePage, true, search, 50);
+    initialRequested.current = "";
+  }, [scope, navigationReady]);
+  useEffect(() => {
+    if (navigationReady && requested)
+      setNavigation({ scope, search: requested, page: 0 });
+  }, [requested, navigationReady]);
+  const queue = useExceptionQueue(
+    queuePage,
+    true,
+    search,
+    50,
+    setQueuePage,
+    false,
+  );
   const [defaults, setDefaults] = useState<Assumption[]>([]),
     [selected, setSelected] = useSessionDraft("decision-selected", "");
   const [states, setStates] = useSessionDraft<Record<string, ScenarioState>>(
@@ -240,6 +281,13 @@ export function Decisions() {
           "Drafts and applied comparisons are restored in this browser tab for your account. A changed server context still requires recomparison before saving.",
         )}
       </p>
+      <p className="muted small">
+        {t(
+          "Changing dataset, analysis date or shared filters resets the active page and local search. Refreshing the same scope restores them.",
+        )}
+      </p>
+      <Filters summary={false} />
+      <ActiveFilterSummary search={search} clearSearch={() => setSearch("")} />
       <div className="filters">
         <input
           aria-label={t("Find active exception ID")}
@@ -248,7 +296,6 @@ export function Decisions() {
           value={search}
           onChange={(e) => {
             setSearch(e.target.value);
-            setQueuePage(0);
           }}
         />
         <Button
@@ -259,8 +306,8 @@ export function Decisions() {
           {t("Previous active page")}
         </Button>
         <span>
-          {t(queue.total)} {t(" active exceptions · page ")}
-          {t(queuePage + 1)}
+          {t(`${queue.total} active orders`)} ·{" "}
+          {t(`Page ${queue.page + 1} of ${queue.pageCount}`)}
         </span>
         <Button
           variant="outline"
@@ -271,8 +318,9 @@ export function Decisions() {
         </Button>
       </div>
       {queue.error && <ErrorState message={t(queue.error)} />}
+      {queue.loading && <LoadingState />}
       <WorkspaceBoundary>
-        {data && (
+        {data && !queue.loading && (
           <>
             {active.length ? (
               <>

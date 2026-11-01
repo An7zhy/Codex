@@ -1,6 +1,6 @@
 # 新官网和业务平台：中文本地运行说明
 
-当前双语版本分支：`feature/native-zh-en-localization`（基于稳定的 Sprint 2.5）。本地完整版保留V1—V3，旧Streamlit仍可使用。
+当前UAT修复分支：`fix/uat-chinese-filter-pagination`（基于原生双语版 `feature/native-zh-en-localization`）。本地完整版保留V1—V3，旧Streamlit仍可使用。
 
 ## 原生中文 / 英文切换
 
@@ -25,7 +25,7 @@
 
 ## Windows：首次安装
 
-1. 从 GitHub 下载 **feature/native-zh-en-localization** 分支，解压到独立文件夹，D 盘可以。
+1. 从 GitHub 下载 **fix/uat-chinese-filter-pagination** 分支，解压到独立文件夹，D 盘可以。
    找到包含 `start-web.bat`、`requirements-web.txt`、`backend` 和 `web` 的那一层。
 2. 安装 [Node.js 24 LTS](https://nodejs.org/)，它包含 npm；建议使用 Python 3.12。
    安装后重新打开终端，让 PATH 生效。
@@ -173,3 +173,17 @@ docker compose -f deploy/compose.demo.yml down
 不是这种部署配额。容器版本会拒绝不符合条件的存储，避免把一段Compose配置误当作已有限额。
 Windows原生/Docker Desktop、外部域名HTTPS和真实样本本轮未验收，不代表已经可以接收企业数据。
 测试结果与人工待办详见[SPRINT_2_5_REPORT.md](../SPRINT_2_5_REPORT.md)。
+
+
+## 中文UAT：筛选、异常口径与活动分页
+
+修复分支 `fix/uat-chinese-filter-pagination`；详细证据见根目录 `UAT_BUGFIX_REPORT.md`。
+`data/uat/` 提供120条混合状态和120条活动异常两份 **Synthetic Demo Data**，均为8个虚构承运商各15条。
+分析日期选择 **2026-10-01 UTC**。
+
+- 单选承运商前先点“清除全部筛选”。多条件为AND；关键词只搜索订单编号。
+- 空结果时检查“当前生效筛选”，尤其是从上一页面保留的方式/状态/关键词；已保存但不可用的旧值会明确提示。
+- 异常卡片统计完整筛选范围，不再只统计第一页20条；顶部另外显示全部、筛选后和当前页记录数。
+  高优先级/信息不足属于活动异常子集，不可将四张卡片直接相加；质量问题按字段条目另计。
+- 决策活动列表每页50条，单页会显示第1页/共1页并禁用上下页。
+  同范围刷新保留页码；切换数据集/日期/共享筛选回第一页并清空局部搜索，方案草稿保留。

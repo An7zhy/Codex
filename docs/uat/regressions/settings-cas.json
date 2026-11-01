@@ -1,0 +1,15 @@
+{
+  "completed": true,
+  "checks": [
+    "Original audit81/82 scenario: stale second admin409, urgency81 preserved; navigation preserves draft base1; explicit reload then save succeeds as version3 with both edits",
+    "SQLite audit retains actual actors, times, versions and differences; page refresh retains version3 configuration"
+  ],
+  "javascript_errors": [],
+  "verification": {
+    "build_id": "gwdAbMFL7Yid6RN1oY2y7",
+    "frontend_source_sha256": "d8ae5dc75c1d0e79edee60d5b5e1200d86d4517d79b02d6c7f7cf77a74b2ebb6",
+    "original_test_file_sha256": "53b5a5daac915f554cc6511a031cee32ae2c3ff277e8c70ea4e4e590b7294f62",
+    "language_precondition": "en",
+    "temporary_database": true
+  }
+}

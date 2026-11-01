@@ -1,0 +1,109 @@
+{
+  "verified_at_utc": "2026-11-01T14:47:17.294712+00:00",
+  "baseline": "27fee90",
+  "branch": "fix/uat-chinese-filter-pagination",
+  "environment": {
+    "platform": "Linux-6.18.57-x86_64-with-glibc2.41",
+    "python": "3.12.14",
+    "node": "v24.19.0",
+    "chromium": "Chromium 154.0.8037.57 built on Debian GNU/Linux 13 (trixie)"
+  },
+  "build_id": "gwdAbMFL7Yid6RN1oY2y7",
+  "frontend_source_sha256": "d8ae5dc75c1d0e79edee60d5b5e1200d86d4517d79b02d6c7f7cf77a74b2ebb6",
+  "tests": {
+    "total": 412,
+    "passed": 412,
+    "failed": 0,
+    "skipped": 0,
+    "xfail": 0,
+    "original_cases_retained": 395,
+    "added": 17,
+    "seconds": 141.28
+  },
+  "original_test_files_byte_identical": true,
+  "math_models_priority_config_auth_and_database_schema_unchanged": true,
+  "frontend_checks": [
+    {
+      "dictionary_entries": 1017,
+      "assertions": 3077,
+      "passed": true
+    },
+    {
+      "jsxFiles": 30,
+      "checked_display_keys": 621,
+      "canonical_options": 27,
+      "passed": true
+    },
+    {
+      "read_peak": 1,
+      "reads": 8,
+      "aborted_fetches": 0,
+      "network_and_429_recovery": true,
+      "writes_unchanged": true,
+      "passed": true
+    }
+  ],
+  "browser_flows": {
+    "uat": {
+      "completed": true,
+      "layout_checks": 16,
+      "javascript_errors": []
+    },
+    "i18n-business": {
+      "completed": true,
+      "layout_checks": 36,
+      "javascript_errors": []
+    },
+    "i18n-demo": {
+      "completed": true,
+      "layout_checks": 36,
+      "javascript_errors": []
+    },
+    "premium": {
+      "completed": true,
+      "layout_checks": 0,
+      "javascript_errors": []
+    },
+    "hardening": {
+      "completed": true,
+      "layout_checks": 28,
+      "javascript_errors": []
+    },
+    "uploaded": {
+      "completed": true,
+      "layout_checks": 28,
+      "javascript_errors": []
+    },
+    "settings-cas": {
+      "completed": true,
+      "layout_checks": 0,
+      "javascript_errors": []
+    },
+    "legacy-demo": {
+      "completed": true,
+      "layout_checks": 16,
+      "javascript_errors": []
+    }
+  },
+  "commands": [
+    ".venv/bin/python -m scripts.uat_fixtures",
+    ".venv/bin/python -m pytest -q tests/test_uat_filters.py",
+    ".venv/bin/python -m pytest -q --junitxml=artifacts/uat/pytest.xml",
+    "npm --prefix web run test:i18n",
+    "npm --prefix web run typecheck",
+    "npm --prefix web run build",
+    ".venv/bin/python -m scripts.verify_i18n --flows uat,i18n-business,i18n-demo,premium,hardening,uploaded,settings-cas,legacy-demo --evidence-root docs/uat/regressions --artifact-root artifacts/uat/regressions",
+    ".venv/bin/python -m compileall -q backend src scripts tests",
+    "git diff --check"
+  ],
+  "limitations": [
+    "Actual user120-row source file not supplied",
+    "Forced automatic translation extensions not independently exercised",
+    "Windows/Python3.14, real device browsers and production concurrency/public deployment not verified"
+  ],
+  "intermediate_failure": {
+    "type": "new UI handler regression caught before delivery",
+    "detail": "After combining search/page into a scoped draft, a redundant setPage(0) overwrote the newly typed search. Removed redundant write; exact UAT-0120 assertion retained and passed."
+  },
+  "build_output": "\n> logistics-insight-web@1.0.0 build\n> next build\n\n▲ Next.js 16.4.3 (Turbopack)\n✓ Running next.config.ts took 47ms\n\n  Creating an optimized production build ...\n✓ Compiled successfully in 758ms\n  Running TypeScript ...\n  Finished TypeScript in 6.0s ...\n  Collecting page data using 4 workers ...\n  Generating static pages using 4 workers (0/11) ...\n  Generating static pages using 4 workers (2/11) \n  Generating static pages using 4 workers (5/11) \n  Generating static pages using 4 workers (8/11) \n✓ Generating static pages using 4 workers (11/11) in 325ms\n  Finalizing page optimization ...\n\nRoute (app)\n┌ ƒ /\n├ ƒ /_not-found\n├ ƒ /app\n├ ƒ /app/analytics\n├ ƒ /app/decisions\n├ ƒ /app/decisions/history\n├ ƒ /app/exceptions\n├ ƒ /app/optimization\n├ ƒ /app/settings\n└ ƒ /app/shipments\n\n\nƒ  (Dynamic)  server-rendered on demand\n\nnpm notice\nnpm notice New major version of npm available! 11.9.0 -> 12.2.1\nnpm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.1\nnpm notice To update run: npm install -g npm@12.2.1\nnpm notice\n"
+}

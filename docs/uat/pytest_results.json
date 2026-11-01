@@ -1,0 +1,2479 @@
+{
+  "original_cases": 395,
+  "added_cases": 17,
+  "all_passed": true,
+  "tests": [
+    {
+      "classname": "tests.test_analysis",
+      "name": "test_known_operating_snapshot",
+      "seconds": "0.058",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_analysis",
+      "name": "test_no_delays_and_early_delivery_are_valid",
+      "seconds": "0.050",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_analysis",
+      "name": "test_all_shipments_in_transit_have_no_completed_rate",
+      "seconds": "0.043",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_analysis",
+      "name": "test_bad_planned_dates_are_reviewable_not_fatal[nonsense]",
+      "seconds": "0.052",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_analysis",
+      "name": "test_bad_planned_dates_are_reviewable_not_fatal[01/02/2026]",
+      "seconds": "0.048",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_analysis",
+      "name": "test_bad_planned_dates_are_reviewable_not_fatal[2026-02-30]",
+      "seconds": "0.054",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_analysis",
+      "name": "test_bad_planned_dates_are_reviewable_not_fatal[45678]",
+      "seconds": "0.047",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_analysis",
+      "name": "test_bad_planned_dates_are_reviewable_not_fatal[1999-12-31]",
+      "seconds": "0.052",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_analysis",
+      "name": "test_bad_planned_dates_are_reviewable_not_fatal[2269-01-01]",
+      "seconds": "0.042",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_analysis",
+      "name": "test_delivered_without_valid_actual_is_unverified[]",
+      "seconds": "0.041",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_analysis",
+      "name": "test_delivered_without_valid_actual_is_unverified[None]",
+      "seconds": "0.043",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_analysis",
+      "name": "test_delivered_without_valid_actual_is_unverified[not-a-date]",
+      "seconds": "0.038",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_analysis",
+      "name": "test_duplicates_are_auditable_and_never_double_counted",
+      "seconds": "0.049",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_analysis",
+      "name": "test_missing_id_does_not_remove_the_raw_record",
+      "seconds": "0.045",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_analysis",
+      "name": "test_empty_table_has_defined_kpis",
+      "seconds": "0.037",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_analysis",
+      "name": "test_small_cost_groups_are_not_classified",
+      "seconds": "0.041",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_analysis",
+      "name": "test_cost_outlier_is_compared_only_to_its_route_and_mode",
+      "seconds": "0.058",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_analysis",
+      "name": "test_cost_threshold_is_strict_and_case_insensitive",
+      "seconds": "0.041",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_analysis",
+      "name": "test_invalid_costs_are_excluded_not_silently_zeroed[None]",
+      "seconds": "0.048",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_analysis",
+      "name": "test_invalid_costs_are_excluded_not_silently_zeroed[]",
+      "seconds": "0.041",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_analysis",
+      "name": "test_invalid_costs_are_excluded_not_silently_zeroed[-1]",
+      "seconds": "0.045",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_analysis",
+      "name": "test_invalid_costs_are_excluded_not_silently_zeroed[oops]",
+      "seconds": "0.042",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_analysis",
+      "name": "test_invalid_costs_are_excluded_not_silently_zeroed[inf0]",
+      "seconds": "0.042",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_analysis",
+      "name": "test_invalid_costs_are_excluded_not_silently_zeroed[inf1]",
+      "seconds": "0.046",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_analysis",
+      "name": "test_invalid_costs_are_excluded_not_silently_zeroed[1,2]",
+      "seconds": "0.047",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_analysis",
+      "name": "test_invalid_costs_are_excluded_not_silently_zeroed[NaN]",
+      "seconds": "0.056",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_analysis",
+      "name": "test_zero_and_well_formed_thousands_costs_are_valid",
+      "seconds": "0.045",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_analysis",
+      "name": "test_delivery_before_shipping_is_rejected",
+      "seconds": "0.045",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_analysis",
+      "name": "test_invalid_optional_shipping_date_prevents_unverifiable_time_metrics",
+      "seconds": "0.044",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_analysis",
+      "name": "test_missing_plan_does_not_remove_verified_delivery",
+      "seconds": "0.052",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_analysis",
+      "name": "test_future_actual_and_status_conflicts_are_not_completed_delays",
+      "seconds": "0.040",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_analysis",
+      "name": "test_cutoff_includes_the_entire_day_and_respects_offsets",
+      "seconds": "0.042",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_analysis",
+      "name": "test_carrier_rates_use_eligible_deliveries_not_all_shipments",
+      "seconds": "0.043",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_analysis",
+      "name": "test_analysis_does_not_mutate_input",
+      "seconds": "0.041",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_analysis",
+      "name": "test_last_fractional_second_is_inside_the_inclusive_cutoff",
+      "seconds": "0.049",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_app",
+      "name": "test_demo_dashboard_and_in_transit_filter",
+      "seconds": "1.550",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_app",
+      "name": "test_no_matching_filter_and_upload_empty_state",
+      "seconds": "0.729",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_audit_history",
+      "name": "test_request_retries_do_not_duplicate_or_overwrite_resolved_outcomes",
+      "seconds": "0.008",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_audit_history",
+      "name": "test_concurrent_identical_request_inserts_once",
+      "seconds": "0.006",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_audit_history",
+      "name": "test_additive_migration_preserves_existing_v2_case",
+      "seconds": "0.005",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_audit_history",
+      "name": "test_invalid_history_types_and_nonfinite_json_are_rejected[shipment_id-None]",
+      "seconds": "0.003",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_audit_history",
+      "name": "test_invalid_history_types_and_nonfinite_json_are_rejected[shipment_id-123]",
+      "seconds": "0.003",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_audit_history",
+      "name": "test_invalid_history_types_and_nonfinite_json_are_rejected[resolution_notes-None]",
+      "seconds": "0.004",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_audit_history",
+      "name": "test_invalid_history_types_and_nonfinite_json_are_rejected[origin-None]",
+      "seconds": "0.003",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_audit_history",
+      "name": "test_invalid_history_types_and_nonfinite_json_are_rejected[assumptions_json-[]]",
+      "seconds": "0.003",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_audit_history",
+      "name": "test_invalid_history_types_and_nonfinite_json_are_rejected[assumptions_json-{\"value\": NaN}]",
+      "seconds": "0.004",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_audit_history",
+      "name": "test_invalid_history_types_and_nonfinite_json_are_rejected[priority_snapshot_json-{\"value\": Infinity}]",
+      "seconds": "0.003",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_audit_history",
+      "name": "test_legacy_bad_metadata_does_not_block_outcome_updates",
+      "seconds": "1.602",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_audit_regressions",
+      "name": "test_extra_csv_fields_cannot_silently_shift_shipment_columns",
+      "seconds": "0.003",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_audit_regressions",
+      "name": "test_duplicate_named_headers_are_rejected_before_pandas_mangling[csv]",
+      "seconds": "0.005",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_audit_regressions",
+      "name": "test_duplicate_named_headers_are_rejected_before_pandas_mangling[xlsx]",
+      "seconds": "0.033",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_audit_regressions",
+      "name": "test_damaged_excel_xml_is_an_input_error_not_an_uncaught_exception",
+      "seconds": "0.097",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_audit_regressions",
+      "name": "test_extreme_costs_cannot_overflow_kpis",
+      "seconds": "0.075",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_audit_regressions",
+      "name": "test_unchanged_repeated_save_click_reuses_case",
+      "seconds": "3.965",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_audit_regressions",
+      "name": "test_invalid_saved_metadata_is_rejected[assumptions_json]",
+      "seconds": "0.004",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_audit_regressions",
+      "name": "test_invalid_saved_metadata_is_rejected[priority_snapshot_json]",
+      "seconds": "0.004",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_audit_regressions",
+      "name": "test_mutated_priority_config_is_revalidated",
+      "seconds": "0.041",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_audit_regressions",
+      "name": "test_independent_component_weights_have_hand_calculated_results[urgency-100]",
+      "seconds": "0.046",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_audit_regressions",
+      "name": "test_independent_component_weights_have_hand_calculated_results[delay-50]",
+      "seconds": "0.051",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_audit_regressions",
+      "name": "test_independent_component_weights_have_hand_calculated_results[financial-50]",
+      "seconds": "0.054",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_audit_regressions",
+      "name": "test_independent_component_weights_have_hand_calculated_results[value-50]",
+      "seconds": "0.048",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_audit_regressions",
+      "name": "test_independent_component_weights_have_hand_calculated_results[downstream-40]",
+      "seconds": "0.048",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_audit_regressions",
+      "name": "test_sqlite_case_survives_separate_processes",
+      "seconds": "1.700",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_audit_workloads",
+      "name": "test_requested_workload_sizes_match_independent_expected_counts[100]",
+      "seconds": "0.070",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_audit_workloads",
+      "name": "test_requested_workload_sizes_match_independent_expected_counts[500]",
+      "seconds": "0.126",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_audit_workloads",
+      "name": "test_requested_workload_sizes_match_independent_expected_counts[5000]",
+      "seconds": "0.720",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_copilot_app",
+      "name": "test_scenario_edit_save_and_actual_outcome_update",
+      "seconds": "2.804",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_copilot_app",
+      "name": "test_bad_priority_settings_and_unavailable_database_preserve_v1",
+      "seconds": "1.126",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_copilot_app",
+      "name": "test_evaluation_tab_runs_without_credentials",
+      "seconds": "1.273",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_copilot_app",
+      "name": "test_similar_case_is_visible_in_decision_center",
+      "seconds": "0.611",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_copilot_app",
+      "name": "test_valid_custom_config_is_supported_by_ui_controls",
+      "seconds": "0.503",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_decisions_history",
+      "name": "test_action_tradeoffs_and_modified_assumptions",
+      "seconds": "0.003",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_decisions_history",
+      "name": "test_unknown_deadline_and_unavailable_action_have_no_invented_outcomes",
+      "seconds": "0.003",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_decisions_history",
+      "name": "test_invalid_scenarios_are_rejected[kwargs0]",
+      "seconds": "0.001",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_decisions_history",
+      "name": "test_invalid_scenarios_are_rejected[kwargs1]",
+      "seconds": "0.001",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_decisions_history",
+      "name": "test_invalid_scenarios_are_rejected[kwargs2]",
+      "seconds": "0.001",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_decisions_history",
+      "name": "test_invalid_scenarios_are_rejected[kwargs3]",
+      "seconds": "0.002",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_decisions_history",
+      "name": "test_invalid_scenarios_are_rejected[kwargs4]",
+      "seconds": "0.001",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_decisions_history",
+      "name": "test_invalid_scenarios_are_rejected[kwargs5]",
+      "seconds": "0.001",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_decisions_history",
+      "name": "test_invalid_scenarios_are_rejected[kwargs6]",
+      "seconds": "0.002",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_decisions_history",
+      "name": "test_invalid_scenarios_are_rejected[kwargs7]",
+      "seconds": "0.001",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_decisions_history",
+      "name": "test_missing_or_duplicate_action_names_are_rejected",
+      "seconds": "0.001",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_decisions_history",
+      "name": "test_sqlite_persistence_updates_and_unknown_outcomes",
+      "seconds": "0.012",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_decisions_history",
+      "name": "test_similar_cases_require_exact_direction_mode_and_exception",
+      "seconds": "0.015",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_decisions_history",
+      "name": "test_history_inputs_and_queries_are_parameterized",
+      "seconds": "0.006",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_decisions_history",
+      "name": "test_invalid_history_records_are_not_saved[kwargs0]",
+      "seconds": "0.004",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_decisions_history",
+      "name": "test_invalid_history_records_are_not_saved[kwargs1]",
+      "seconds": "0.003",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_decisions_history",
+      "name": "test_invalid_history_records_are_not_saved[kwargs2]",
+      "seconds": "0.006",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_decisions_history",
+      "name": "test_invalid_history_records_are_not_saved[kwargs3]",
+      "seconds": "0.004",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_evaluation",
+      "name": "test_enrichment_preserves_all_v1_kpis",
+      "seconds": "0.119",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_evaluation",
+      "name": "test_reference_comparison_coverage_and_sensitivity",
+      "seconds": "0.122",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_evaluation",
+      "name": "test_zero_pairs_is_not_reported_as_perfect_agreement",
+      "seconds": "0.003",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_evaluation",
+      "name": "test_ties_and_reversed_ranking_are_counted",
+      "seconds": "0.003",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_evaluation",
+      "name": "test_reference_labels_exist_in_authored_fixture",
+      "seconds": "0.003",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_hardening",
+      "name": "test_all_sensitive_routes_reject_anonymous_before_validation[GET-/api/workspace]",
+      "seconds": "0.666",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_hardening",
+      "name": "test_all_sensitive_routes_reject_anonymous_before_validation[GET-/api/datasets]",
+      "seconds": "0.644",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_hardening",
+      "name": "test_all_sensitive_routes_reject_anonymous_before_validation[GET-/api/exceptions]",
+      "seconds": "0.681",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_hardening",
+      "name": "test_all_sensitive_routes_reject_anonymous_before_validation[GET-/api/settings]",
+      "seconds": "0.657",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_hardening",
+      "name": "test_all_sensitive_routes_reject_anonymous_before_validation[GET-/api/cases]",
+      "seconds": "0.658",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_hardening",
+      "name": "test_all_sensitive_routes_reject_anonymous_before_validation[GET-/api/cases/export]",
+      "seconds": "0.650",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_hardening",
+      "name": "test_all_sensitive_routes_reject_anonymous_before_validation[GET-/api/exports/shipments]",
+      "seconds": "0.640",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_hardening",
+      "name": "test_all_sensitive_routes_reject_anonymous_before_validation[GET-/api/exports/report]",
+      "seconds": "0.675",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_hardening",
+      "name": "test_all_sensitive_routes_reject_anonymous_before_validation[GET-/api/optimization/runs/latest]",
+      "seconds": "0.624",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_hardening",
+      "name": "test_all_sensitive_routes_reject_anonymous_before_validation[GET-/api/optimization/runs/id/export/json]",
+      "seconds": "0.631",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_hardening",
+      "name": "test_all_sensitive_routes_reject_anonymous_before_validation[GET-/api/decisions/defaults]",
+      "seconds": "0.626",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_hardening",
+      "name": "test_all_sensitive_routes_reject_anonymous_before_validation[GET-/api/evaluation]",
+      "seconds": "0.635",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_hardening",
+      "name": "test_all_sensitive_routes_reject_anonymous_before_validation[GET-/api/demo/xlsx]",
+      "seconds": "0.631",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_hardening",
+      "name": "test_all_sensitive_routes_reject_anonymous_before_validation[POST-/api/datasets]",
+      "seconds": "0.645",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_hardening",
+      "name": "test_all_sensitive_routes_reject_anonymous_before_validation[POST-/api/datasets/preview]",
+      "seconds": "0.637",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_hardening",
+      "name": "test_all_sensitive_routes_reject_anonymous_before_validation[POST-/api/cases]",
+      "seconds": "0.664",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_hardening",
+      "name": "test_all_sensitive_routes_reject_anonymous_before_validation[POST-/api/optimization/runs]",
+      "seconds": "0.660",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_hardening",
+      "name": "test_all_sensitive_routes_reject_anonymous_before_validation[PUT-/api/settings/priority]",
+      "seconds": "0.639",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_hardening",
+      "name": "test_all_sensitive_routes_reject_anonymous_before_validation[PATCH-/api/cases/id]",
+      "seconds": "0.651",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_hardening",
+      "name": "test_all_sensitive_routes_reject_anonymous_before_validation[DELETE-/api/datasets/id]",
+      "seconds": "0.658",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_hardening",
+      "name": "test_all_sensitive_routes_reject_anonymous_before_validation[GET-/api/auth/session]",
+      "seconds": "0.764",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_hardening",
+      "name": "test_viewer_cannot_write_even_with_valid_cookie[POST-/api/datasets]",
+      "seconds": "0.684",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_hardening",
+      "name": "test_viewer_cannot_write_even_with_valid_cookie[POST-/api/cases]",
+      "seconds": "0.666",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_hardening",
+      "name": "test_viewer_cannot_write_even_with_valid_cookie[PATCH-/api/cases/id]",
+      "seconds": "0.681",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_hardening",
+      "name": "test_viewer_cannot_write_even_with_valid_cookie[POST-/api/optimization/runs]",
+      "seconds": "0.732",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_hardening",
+      "name": "test_viewer_cannot_write_even_with_valid_cookie[PUT-/api/settings/priority]",
+      "seconds": "0.734",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_hardening",
+      "name": "test_viewer_cannot_write_even_with_valid_cookie[DELETE-/api/datasets/id]",
+      "seconds": "0.683",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_hardening",
+      "name": "test_roles_allow_same_organization_reads_but_settings_require_admin",
+      "seconds": "0.919",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_hardening",
+      "name": "test_write_origin_and_login_csrf_are_rejected[None]",
+      "seconds": "0.655",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_hardening",
+      "name": "test_write_origin_and_login_csrf_are_rejected[https://evil.example]",
+      "seconds": "0.658",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_hardening",
+      "name": "test_write_origin_and_login_csrf_are_rejected[null]",
+      "seconds": "0.638",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_hardening",
+      "name": "test_login_cookie_logout_rotation_expiration_and_disable",
+      "seconds": "0.891",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_hardening",
+      "name": "test_invalid_login_rate_limited_and_no_passwords_in_events",
+      "seconds": "1.218",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_hardening",
+      "name": "test_invalid_password_is_not_echoed_in_validation_errors",
+      "seconds": "0.634",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_hardening",
+      "name": "test_forged_session_and_client_tenant_do_not_grant_access",
+      "seconds": "0.682",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_hardening",
+      "name": "test_separate_organization_instance_cannot_use_other_session_or_ids",
+      "seconds": "1.460",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_hardening",
+      "name": "test_currency_exclusion_applies_core_kpis_cost_threshold_and_report",
+      "seconds": "1.003",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_hardening",
+      "name": "test_import_preview_and_explicit_confirmation_cover_duplicates_dates",
+      "seconds": "0.736",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_hardening",
+      "name": "test_comparison_context_pinning_and_unavailable_actions",
+      "seconds": "1.656",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_hardening",
+      "name": "test_full_exception_queue_and_history_export_exceed_old_caps",
+      "seconds": "1.968",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_hardening",
+      "name": "test_complete_body_limit_and_extra_parts_rejected_before_import",
+      "seconds": "0.664",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_hardening",
+      "name": "test_chunked_body_cannot_bypass_total_limit",
+      "seconds": "0.687",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_hardening",
+      "name": "test_pilot_mode_requires_https_secure_cookie_configuration",
+      "seconds": "0.684",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_hardening",
+      "name": "test_workspace_quota_rejects_before_storage_write",
+      "seconds": "0.642",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_hardening",
+      "name": "test_case_quota_preserves_idempotent_retry",
+      "seconds": "0.668",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_hardening",
+      "name": "test_xlsx_expansion_and_column_budget",
+      "seconds": "0.008",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_hardening",
+      "name": "test_solver_concurrency_timeout_and_simulation_budget",
+      "seconds": "0.698",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_hardening",
+      "name": "test_solver_real_worker_is_killed_and_reaped_on_scaled_timeout",
+      "seconds": "0.716",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_hardening",
+      "name": "test_dataset_delete_and_backup_restore_retention",
+      "seconds": "0.809",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_io_reporting",
+      "name": "test_demo_upload_to_metrics_exceptions_and_report[csv]",
+      "seconds": "0.093",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_io_reporting",
+      "name": "test_demo_upload_to_metrics_exceptions_and_report[xlsx]",
+      "seconds": "0.227",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_io_reporting",
+      "name": "test_demo_is_reproducible_and_excel_is_labelled",
+      "seconds": "0.113",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_io_reporting",
+      "name": "test_unreadable_or_wrong_schema_inputs_have_actionable_errors[-empty.csv]",
+      "seconds": "0.002",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_io_reporting",
+      "name": "test_unreadable_or_wrong_schema_inputs_have_actionable_errors[   \\n-empty.csv]",
+      "seconds": "0.001",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_io_reporting",
+      "name": "test_unreadable_or_wrong_schema_inputs_have_actionable_errors[not-an-excel-file-bad.xlsx]",
+      "seconds": "0.001",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_io_reporting",
+      "name": "test_unreadable_or_wrong_schema_inputs_have_actionable_errors[x\\n1-wrong.csv]",
+      "seconds": "0.003",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_io_reporting",
+      "name": "test_unreadable_or_wrong_schema_inputs_have_actionable_errors[hello-wrong.txt]",
+      "seconds": "0.001",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_io_reporting",
+      "name": "test_unreadable_or_wrong_schema_inputs_have_actionable_errors[\\xff\\xfe-bad.csv]",
+      "seconds": "0.001",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_io_reporting",
+      "name": "test_header_only_csv_is_valid_empty_data",
+      "seconds": "0.056",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_io_reporting",
+      "name": "test_csv_preserves_leading_zero_ids_and_normalizes_headers",
+      "seconds": "0.006",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_io_reporting",
+      "name": "test_csv_formula_text_is_escaped_but_numbers_remain_numeric",
+      "seconds": "0.004",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_io_reporting",
+      "name": "test_filtered_report_uses_only_selected_rows_and_escapes_user_content",
+      "seconds": "0.050",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_parameter_interactions",
+      "name": "test_apply_weights_changes_the_same_shipment_score_and_preserves_context",
+      "seconds": "2.390",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_parameter_interactions",
+      "name": "test_calculate_commits_cost_and_time_and_parameters_survive_switching_shipments",
+      "seconds": "2.923",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_parameter_interactions",
+      "name": "test_evaluation_results_refresh_after_applied_weights_without_disappearing",
+      "seconds": "1.853",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_planning_imports",
+      "name": "test_mapping_and_hand_calculated_small_instance",
+      "seconds": "0.043",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_planning_imports",
+      "name": "test_no_guessing_or_silent_unit_currency_coercion[transport_options-currency-EUR]",
+      "seconds": "0.007",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_planning_imports",
+      "name": "test_no_guessing_or_silent_unit_currency_coercion[transport_options-currency-]",
+      "seconds": "0.005",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_planning_imports",
+      "name": "test_no_guessing_or_silent_unit_currency_coercion[constraints-currency-CNY]",
+      "seconds": "0.005",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_planning_imports",
+      "name": "test_no_guessing_or_silent_unit_currency_coercion[constraints-penalty_currency-EUR]",
+      "seconds": "0.010",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_planning_imports",
+      "name": "test_no_guessing_or_silent_unit_currency_coercion[shipments-weight_unit-lb]",
+      "seconds": "0.006",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_planning_imports",
+      "name": "test_no_guessing_or_silent_unit_currency_coercion[capacity-weight_unit-tonnes]",
+      "seconds": "0.006",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_planning_imports",
+      "name": "test_no_guessing_or_silent_unit_currency_coercion[shipments-volume_unit-L]",
+      "seconds": "0.006",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_planning_imports",
+      "name": "test_no_guessing_or_silent_unit_currency_coercion[capacity-volume_unit-cbm]",
+      "seconds": "0.005",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_planning_imports",
+      "name": "test_no_guessing_or_silent_unit_currency_coercion[transport_options-time_unit-days]",
+      "seconds": "0.004",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_planning_imports",
+      "name": "test_no_guessing_or_silent_unit_currency_coercion[transport_options-quoted_cost--1]",
+      "seconds": "0.004",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_planning_imports",
+      "name": "test_no_guessing_or_silent_unit_currency_coercion[transport_options-quoted_cost-NaN]",
+      "seconds": "0.004",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_planning_imports",
+      "name": "test_no_guessing_or_silent_unit_currency_coercion[transport_options-quoted_cost-inf]",
+      "seconds": "0.004",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_planning_imports",
+      "name": "test_no_guessing_or_silent_unit_currency_coercion[transport_options-quoted_cost-1,234]",
+      "seconds": "0.003",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_planning_imports",
+      "name": "test_no_guessing_or_silent_unit_currency_coercion[transport_options-quoted_cost-1e309]",
+      "seconds": "0.004",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_planning_imports",
+      "name": "test_no_guessing_or_silent_unit_currency_coercion[shipments-weight-0]",
+      "seconds": "0.004",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_planning_imports",
+      "name": "test_no_guessing_or_silent_unit_currency_coercion[shipments-volume-0]",
+      "seconds": "0.005",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_planning_imports",
+      "name": "test_no_guessing_or_silent_unit_currency_coercion[capacity-shipment_capacity-1.5]",
+      "seconds": "0.005",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_planning_imports",
+      "name": "test_no_guessing_or_silent_unit_currency_coercion[capacity-shipment_capacity-true]",
+      "seconds": "0.005",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_planning_imports",
+      "name": "test_no_guessing_or_silent_unit_currency_coercion[transport_options-expected_transit_hours-0]",
+      "seconds": "0.005",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_planning_imports",
+      "name": "test_no_guessing_or_silent_unit_currency_coercion[shipments-delivery_deadline-2026-10-01]",
+      "seconds": "0.005",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_planning_imports",
+      "name": "test_no_guessing_or_silent_unit_currency_coercion[shipments-delivery_deadline-2026-10-01T12:00:00]",
+      "seconds": "0.005",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_planning_imports",
+      "name": "test_no_guessing_or_silent_unit_currency_coercion[constraints-planning_start-10/01/2026]",
+      "seconds": "0.006",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_planning_imports",
+      "name": "test_no_guessing_or_silent_unit_currency_coercion[shipments-delivery_deadline-2026-09-01T00:00:00Z]",
+      "seconds": "0.006",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_planning_imports",
+      "name": "test_no_guessing_or_silent_unit_currency_coercion[transport_options-shipment_id-missing]",
+      "seconds": "0.005",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_planning_imports",
+      "name": "test_no_guessing_or_silent_unit_currency_coercion[transport_options-service_id-missing]",
+      "seconds": "0.006",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_planning_imports",
+      "name": "test_no_guessing_or_silent_unit_currency_coercion[transport_options-quote_status-verified_by_app]",
+      "seconds": "0.005",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_planning_imports",
+      "name": "test_no_guessing_or_silent_unit_currency_coercion[transport_options-quote_reference-]",
+      "seconds": "0.005",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_planning_imports",
+      "name": "test_no_guessing_or_silent_unit_currency_coercion[capacity-capacity_status-live]",
+      "seconds": "0.005",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_planning_imports",
+      "name": "test_no_guessing_or_silent_unit_currency_coercion[constraints-allow_unassigned-yes]",
+      "seconds": "0.004",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_planning_imports",
+      "name": "test_no_guessing_or_silent_unit_currency_coercion[constraints-time_limit_seconds-11]",
+      "seconds": "0.004",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_planning_imports",
+      "name": "test_no_guessing_or_silent_unit_currency_coercion[constraints-source_label-]",
+      "seconds": "0.004",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_planning_imports",
+      "name": "test_no_guessing_or_silent_unit_currency_coercion[constraints-data_kind-real_verified]",
+      "seconds": "0.004",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_planning_imports",
+      "name": "test_duplicate_ids_and_pairs_rejected[shipments]",
+      "seconds": "0.005",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_planning_imports",
+      "name": "test_duplicate_ids_and_pairs_rejected[capacity]",
+      "seconds": "0.004",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_planning_imports",
+      "name": "test_duplicate_ids_and_pairs_rejected[transport_options]",
+      "seconds": "0.006",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_planning_imports",
+      "name": "test_missing_extra_columns_empty_input_and_service_time_conflicts",
+      "seconds": "0.010",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_planning_imports",
+      "name": "test_timezones_and_verified_declarations_are_explicit",
+      "seconds": "0.004",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_planning_imports",
+      "name": "test_native_excel_boolean_is_not_mistaken_for_missing_soft_mode",
+      "seconds": "0.052",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_planning_imports",
+      "name": "test_api_preview_confirmation_solve_export_and_restart[xlsx]",
+      "seconds": "1.636",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_planning_imports",
+      "name": "test_api_preview_confirmation_solve_export_and_restart[csv]",
+      "seconds": "1.556",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_planning_imports",
+      "name": "test_api_invalid_preview_cannot_be_confirmed_or_rewritten",
+      "seconds": "0.783",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_planning_imports",
+      "name": "test_new_routes_preserve_authentication[GET-/api/planning/contract]",
+      "seconds": "0.679",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_planning_imports",
+      "name": "test_new_routes_preserve_authentication[GET-/api/planning/templates/xlsx]",
+      "seconds": "0.672",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_planning_imports",
+      "name": "test_new_routes_preserve_authentication[GET-/api/planning/imports]",
+      "seconds": "0.645",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_planning_imports",
+      "name": "test_new_routes_preserve_authentication[GET-/api/planning/imports/unknown]",
+      "seconds": "0.642",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_planning_imports",
+      "name": "test_new_routes_preserve_authentication[GET-/api/planning/imports/unknown/export/json]",
+      "seconds": "0.639",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_planning_imports",
+      "name": "test_new_routes_preserve_authentication[POST-/api/planning/imports/preview]",
+      "seconds": "0.626",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_planning_imports",
+      "name": "test_new_routes_preserve_authentication[POST-/api/planning/imports/unknown/confirm]",
+      "seconds": "0.635",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_planning_imports",
+      "name": "test_new_routes_preserve_authentication[POST-/api/planning/runs]",
+      "seconds": "0.627",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_planning_imports",
+      "name": "test_new_routes_preserve_authentication[DELETE-/api/planning/imports/unknown]",
+      "seconds": "0.651",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_planning_imports",
+      "name": "test_viewer_and_operator_permissions_and_origin",
+      "seconds": "0.704",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_planning_imports",
+      "name": "test_independent_instance_and_server_identity_scope",
+      "seconds": "0.925",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_planning_imports",
+      "name": "test_uploaded_100_orders_end_to_end_through_real_worker",
+      "seconds": "2.015",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_planning_imports",
+      "name": "test_infeasibility_and_soft_assignment_are_not_fake_success[budget]",
+      "seconds": "0.067",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_planning_imports",
+      "name": "test_infeasibility_and_soft_assignment_are_not_fake_success[weight]",
+      "seconds": "0.043",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_planning_imports",
+      "name": "test_infeasibility_and_soft_assignment_are_not_fake_success[volume]",
+      "seconds": "0.060",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_planning_imports",
+      "name": "test_infeasibility_and_soft_assignment_are_not_fake_success[slots]",
+      "seconds": "0.041",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_planning_imports",
+      "name": "test_infeasibility_and_soft_assignment_are_not_fake_success[deadline]",
+      "seconds": "0.064",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_planning_imports",
+      "name": "test_infeasibility_and_soft_assignment_are_not_fake_success[route]",
+      "seconds": "0.042",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_planning_imports",
+      "name": "test_infeasibility_and_soft_assignment_are_not_fake_success[no_options]",
+      "seconds": "0.041",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_planning_imports",
+      "name": "test_uploaded_adapter_preserves_solver_status[FEASIBLE]",
+      "seconds": "0.037",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_planning_imports",
+      "name": "test_uploaded_adapter_preserves_solver_status[UNKNOWN]",
+      "seconds": "0.024",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_planning_imports",
+      "name": "test_uploaded_adapter_preserves_solver_status[MODEL_INVALID]",
+      "seconds": "0.037",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_planning_imports",
+      "name": "test_templates_limits_formulas_and_empty_files",
+      "seconds": "1.020",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_planning_imports",
+      "name": "test_uploaded_parse_budget_and_error_count_disclosure",
+      "seconds": "0.019",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_planning_imports",
+      "name": "test_sparse_excel_tail_cannot_hide_unread_shipments",
+      "seconds": "0.064",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_planning_imports",
+      "name": "test_deleted_source_cannot_be_resurrected_by_inflight_solve",
+      "seconds": "0.858",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_planning_imports",
+      "name": "test_infeasible_export_has_valid_empty_schema_and_trace_identifier",
+      "seconds": "1.495",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_planning_imports",
+      "name": "test_planning_backup_retention_and_import_quota",
+      "seconds": "1.592",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_priority",
+      "name": "test_hand_calculated_score_and_explanation",
+      "seconds": "0.050",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_priority",
+      "name": "test_level_threshold_uses_the_reported_score_precision",
+      "seconds": "0.050",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_priority",
+      "name": "test_high_value_cannot_fill_missing_financial_information",
+      "seconds": "0.061",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_priority",
+      "name": "test_invalid_optional_context_is_not_zero_imputed[estimated_delay_hours--1]",
+      "seconds": "0.046",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_priority",
+      "name": "test_invalid_optional_context_is_not_zero_imputed[estimated_delay_hours-inf]",
+      "seconds": "0.049",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_priority",
+      "name": "test_invalid_optional_context_is_not_zero_imputed[estimated_delay_hours-bad]",
+      "seconds": "0.049",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_priority",
+      "name": "test_invalid_optional_context_is_not_zero_imputed[financial_impact_basis-]",
+      "seconds": "0.046",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_priority",
+      "name": "test_invalid_optional_context_is_not_zero_imputed[shipment_value-None]",
+      "seconds": "0.055",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_priority",
+      "name": "test_invalid_optional_context_is_not_zero_imputed[shipment_value--10]",
+      "seconds": "0.048",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_priority",
+      "name": "test_invalid_optional_context_is_not_zero_imputed[downstream_dependency_count-1.5]",
+      "seconds": "0.051",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_priority",
+      "name": "test_invalid_optional_context_is_not_zero_imputed[downstream_risk_basis-]",
+      "seconds": "0.041",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_priority",
+      "name": "test_invalid_optional_context_is_not_zero_imputed[delivery_deadline-not-a-date]",
+      "seconds": "0.043",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_priority",
+      "name": "test_zero_weight_explicitly_disables_a_component",
+      "seconds": "0.060",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_priority",
+      "name": "test_configuration_errors_are_actionable[kwargs0]",
+      "seconds": "0.007",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_priority",
+      "name": "test_configuration_errors_are_actionable[kwargs1]",
+      "seconds": "0.002",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_priority",
+      "name": "test_configuration_errors_are_actionable[kwargs2]",
+      "seconds": "0.003",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_priority",
+      "name": "test_configuration_errors_are_actionable[kwargs3]",
+      "seconds": "0.001",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_priority",
+      "name": "test_configuration_errors_are_actionable[kwargs4]",
+      "seconds": "0.001",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_priority",
+      "name": "test_configuration_errors_are_actionable[kwargs5]",
+      "seconds": "0.003",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_priority",
+      "name": "test_configuration_errors_are_actionable[kwargs6]",
+      "seconds": "0.001",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_priority",
+      "name": "test_configuration_errors_are_actionable[kwargs7]",
+      "seconds": "0.001",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_priority",
+      "name": "test_configuration_errors_are_actionable[kwargs8]",
+      "seconds": "0.002",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_priority",
+      "name": "test_completed_normal_and_unidentified_rows_have_no_active_priority",
+      "seconds": "0.161",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_priority",
+      "name": "test_deadline_fallback_is_explicit_and_input_is_unchanged",
+      "seconds": "0.055",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_priority",
+      "name": "test_empty_selection_and_reference_labels_cannot_change_scores",
+      "seconds": "0.052",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_production_readiness",
+      "name": "test_release_gate_sensitive_dataset_list_requires_authentication",
+      "seconds": "0.237",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_production_readiness",
+      "name": "test_release_gate_configuration_write_requires_authentication",
+      "seconds": "0.221",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_production_readiness",
+      "name": "test_release_gate_unrelated_session_cannot_read_dataset",
+      "seconds": "0.221",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_production_readiness",
+      "name": "test_release_gate_conflicting_currency_must_be_rejected_or_flagged",
+      "seconds": "0.299",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_production_readiness",
+      "name": "test_release_gate_readiness_detects_unavailable_database",
+      "seconds": "0.221",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_production_readiness",
+      "name": "test_reordered_trimmed_uppercase_columns_supported",
+      "seconds": "0.043",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_production_readiness",
+      "name": "test_public_transport_sample_has_attribution_but_not_shipment_schema",
+      "seconds": "0.005",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_production_readiness",
+      "name": "test_iso_offsets_are_equivalent_and_date_only_is_midnight",
+      "seconds": "0.082",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_production_readiness",
+      "name": "test_bad_numeric_requests_return_client_errors[{\"cost_weight\":NaN}]",
+      "seconds": "0.243",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_production_readiness",
+      "name": "test_bad_numeric_requests_return_client_errors[{\"cost_weight\":1e309}]",
+      "seconds": "0.245",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_production_readiness",
+      "name": "test_bad_numeric_requests_return_client_errors[{\"cost_weight\":-1}]",
+      "seconds": "0.229",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_production_readiness",
+      "name": "test_bad_numeric_requests_return_client_errors[{\"count\":true}]",
+      "seconds": "0.229",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_production_readiness",
+      "name": "test_sql_parameters_do_not_interpret_injection",
+      "seconds": "0.237",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_production_readiness",
+      "name": "test_expected_time_feasibility_is_not_high_reliability",
+      "seconds": "0.002",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_readiness",
+      "name": "test_original_audit_two_admin_scenario_is_409_and_preserves_first_write",
+      "seconds": "0.884",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_readiness",
+      "name": "test_true_concurrent_sqlite_connections_have_exactly_one_winner",
+      "seconds": "0.837",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_readiness",
+      "name": "test_version_is_mandatory_strict_integer[None]",
+      "seconds": "0.833",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_readiness",
+      "name": "test_version_is_mandatory_strict_integer[True]",
+      "seconds": "1.017",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_readiness",
+      "name": "test_version_is_mandatory_strict_integer[0]",
+      "seconds": "0.971",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_readiness",
+      "name": "test_version_is_mandatory_strict_integer[-1]",
+      "seconds": "1.488",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_readiness",
+      "name": "test_version_is_mandatory_strict_integer[1.5]",
+      "seconds": "0.897",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_readiness",
+      "name": "test_version_is_mandatory_strict_integer[1]",
+      "seconds": "0.911",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_readiness",
+      "name": "test_settings_version_and_audit_do_not_bypass_roles[None]",
+      "seconds": "0.841",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_readiness",
+      "name": "test_settings_version_and_audit_do_not_bypass_roles[viewer]",
+      "seconds": "0.955",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_readiness",
+      "name": "test_settings_version_and_audit_do_not_bypass_roles[operator]",
+      "seconds": "0.899",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_readiness",
+      "name": "test_aba_change_invalidates_old_comparison_even_when_config_values_match",
+      "seconds": "1.153",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_readiness",
+      "name": "test_additive_old_settings_migration_preserves_values_and_assigns_version_one",
+      "seconds": "0.009",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_readiness",
+      "name": "test_demo_is_account_free_read_only_and_has_actual_calculated_outputs",
+      "seconds": "0.356",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_readiness",
+      "name": "test_demo_denies_writes_before_parsing_even_with_forged_admin[POST-/api/auth/login]",
+      "seconds": "0.002",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_readiness",
+      "name": "test_demo_denies_writes_before_parsing_even_with_forged_admin[POST-/api/datasets]",
+      "seconds": "0.003",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_readiness",
+      "name": "test_demo_denies_writes_before_parsing_even_with_forged_admin[POST-/api/datasets/preview]",
+      "seconds": "0.002",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_readiness",
+      "name": "test_demo_denies_writes_before_parsing_even_with_forged_admin[POST-/api/planning/imports/preview]",
+      "seconds": "0.002",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_readiness",
+      "name": "test_demo_denies_writes_before_parsing_even_with_forged_admin[POST-/api/planning/runs]",
+      "seconds": "0.003",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_readiness",
+      "name": "test_demo_denies_writes_before_parsing_even_with_forged_admin[POST-/api/optimization/runs]",
+      "seconds": "0.003",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_readiness",
+      "name": "test_demo_denies_writes_before_parsing_even_with_forged_admin[POST-/api/decisions/compare]",
+      "seconds": "0.002",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_readiness",
+      "name": "test_demo_denies_writes_before_parsing_even_with_forged_admin[POST-/api/cases]",
+      "seconds": "0.002",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_readiness",
+      "name": "test_demo_denies_writes_before_parsing_even_with_forged_admin[PATCH-/api/cases/id]",
+      "seconds": "0.002",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_readiness",
+      "name": "test_demo_denies_writes_before_parsing_even_with_forged_admin[PUT-/api/settings/priority]",
+      "seconds": "0.004",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_readiness",
+      "name": "test_demo_denies_writes_before_parsing_even_with_forged_admin[DELETE-/api/datasets/demo]",
+      "seconds": "0.003",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_readiness",
+      "name": "test_demo_no_account_store_and_no_mutable_sql_connections",
+      "seconds": "0.010",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_readiness",
+      "name": "test_demo_refuses_business_path_overrides_before_touching_databases",
+      "seconds": "0.003",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_readiness",
+      "name": "test_business_accounts_and_scope_cannot_be_reused_in_demo",
+      "seconds": "1.102",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_readiness",
+      "name": "test_seed_rebuild_never_overwrites_existing_directory",
+      "seconds": "0.002",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_readiness",
+      "name": "test_demo_refuses_tampered_seed_and_recovers_with_original_files",
+      "seconds": "0.160",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_readiness",
+      "name": "test_demo_cannot_bless_modified_business_data_even_with_updated_manifest",
+      "seconds": "0.013",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_readiness",
+      "name": "test_demo_budget_limits_releases_on_error_and_resets",
+      "seconds": "0.001",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_readiness",
+      "name": "test_demo_query_and_get_body_are_bounded",
+      "seconds": "0.010",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_readiness",
+      "name": "test_deployment_refuses_unbounded_or_exhausted_storage",
+      "seconds": "0.855",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_readiness",
+      "name": "test_audit_insert_failure_rolls_back_configuration_and_version",
+      "seconds": "0.868",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_readiness",
+      "name": "test_demo_refuses_accounts_even_with_forged_updated_manifest",
+      "seconds": "0.006",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_readiness",
+      "name": "test_invalid_instance_mode_fails_closed_before_business_read",
+      "seconds": "1.028",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_transport_app",
+      "name": "test_workspace_navigation_and_v1_regression",
+      "seconds": "1.683",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_transport_app",
+      "name": "test_weights_applied_only_on_submit_and_selection_retained",
+      "seconds": "1.018",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_transport_app",
+      "name": "test_budget_shortage_penalty_mode_and_invalid_draft",
+      "seconds": "0.887",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_transport_app",
+      "name": "test_capacity_deadline_and_empty_controls",
+      "seconds": "0.870",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_transport_app",
+      "name": "test_ui_does_not_call_unproved_result_optimal[FEASIBLE]",
+      "seconds": "0.714",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_transport_app",
+      "name": "test_ui_does_not_call_unproved_result_optimal[UNKNOWN]",
+      "seconds": "0.758",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_transport_engine",
+      "name": "test_cost_time_risk_preferences_have_known_different_results",
+      "seconds": "0.021",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_transport_engine",
+      "name": "test_shared_resources_enforced_and_other_service_used[weight_capacity_kg-4]",
+      "seconds": "0.008",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_transport_engine",
+      "name": "test_shared_resources_enforced_and_other_service_used[volume_capacity_m3-1]",
+      "seconds": "0.010",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_transport_engine",
+      "name": "test_shared_resources_enforced_and_other_service_used[shipment_capacity-1]",
+      "seconds": "0.010",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_transport_engine",
+      "name": "test_global_budget_infeasible_even_each_order_can_fit",
+      "seconds": "0.006",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_transport_engine",
+      "name": "test_capacity_insufficient_strict_vs_penalized",
+      "seconds": "0.012",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_transport_engine",
+      "name": "test_penalty_can_trade_off_fulfillment",
+      "seconds": "0.012",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_transport_engine",
+      "name": "test_ineligible_candidate_never_scores_or_wins[change0-Route mismatch]",
+      "seconds": "0.007",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_transport_engine",
+      "name": "test_ineligible_candidate_never_scores_or_wins[change1-Expected arrival exceeds hard deadline]",
+      "seconds": "0.008",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_transport_engine",
+      "name": "test_ineligible_candidate_never_scores_or_wins[change2-Weight exceeds service capacity]",
+      "seconds": "0.009",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_transport_engine",
+      "name": "test_ineligible_candidate_never_scores_or_wins[change3-Volume exceeds service capacity]",
+      "seconds": "0.007",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_transport_engine",
+      "name": "test_ineligible_candidate_never_scores_or_wins[change4-No shipment slots]",
+      "seconds": "0.008",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_transport_engine",
+      "name": "test_single_order_checks_and_recommendations",
+      "seconds": "0.010",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_transport_engine",
+      "name": "test_weights_normalized_proportionally_and_zero_rejected",
+      "seconds": "0.001",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_transport_engine",
+      "name": "test_deadline_boundary_is_eligible_but_uncertain",
+      "seconds": "0.003",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_transport_engine",
+      "name": "test_conservative_quantization_does_not_overbook_or_overspend",
+      "seconds": "0.016",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_transport_engine",
+      "name": "test_empty_and_missing_candidates",
+      "seconds": "0.011",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_transport_engine",
+      "name": "test_solver_matches_independent_exhaustive_enumeration[Lowest Cost]",
+      "seconds": "0.012",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_transport_engine",
+      "name": "test_solver_matches_independent_exhaustive_enumeration[Fastest Delivery]",
+      "seconds": "0.010",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_transport_engine",
+      "name": "test_solver_matches_independent_exhaustive_enumeration[Optimized Allocation]",
+      "seconds": "0.008",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_transport_engine",
+      "name": "test_all_solver_status_mappings[status0-OPTIMAL]",
+      "seconds": "0.001",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_transport_engine",
+      "name": "test_all_solver_status_mappings[status1-FEASIBLE]",
+      "seconds": "0.001",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_transport_engine",
+      "name": "test_all_solver_status_mappings[status2-INFEASIBLE]",
+      "seconds": "0.001",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_transport_engine",
+      "name": "test_all_solver_status_mappings[status3-UNKNOWN]",
+      "seconds": "0.001",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_transport_engine",
+      "name": "test_all_solver_status_mappings[status4-MODEL_INVALID]",
+      "seconds": "0.001",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_transport_engine",
+      "name": "test_nonoptimal_states_never_misrepresented[FEASIBLE]",
+      "seconds": "0.008",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_transport_engine",
+      "name": "test_nonoptimal_states_never_misrepresented[UNKNOWN]",
+      "seconds": "0.013",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_transport_engine",
+      "name": "test_nonoptimal_states_never_misrepresented[MODEL_INVALID]",
+      "seconds": "0.010",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_transport_engine",
+      "name": "test_real_tiny_time_limit_returns_unknown",
+      "seconds": "0.038",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_transport_engine",
+      "name": "test_invalid_costs_blocked[-1]",
+      "seconds": "0.001",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_transport_engine",
+      "name": "test_invalid_costs_blocked[nan]",
+      "seconds": "0.001",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_transport_engine",
+      "name": "test_invalid_costs_blocked[inf]",
+      "seconds": "0.001",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_transport_engine",
+      "name": "test_invalid_costs_blocked[True]",
+      "seconds": "0.001",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_transport_engine",
+      "name": "test_invalid_costs_blocked[100]",
+      "seconds": "0.001",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_transport_engine",
+      "name": "test_missing_or_invalid_order_inputs[kwargs0]",
+      "seconds": "0.001",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_transport_engine",
+      "name": "test_missing_or_invalid_order_inputs[kwargs1]",
+      "seconds": "0.001",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_transport_engine",
+      "name": "test_missing_or_invalid_order_inputs[kwargs2]",
+      "seconds": "0.001",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_transport_engine",
+      "name": "test_missing_or_invalid_order_inputs[kwargs3]",
+      "seconds": "0.001",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_transport_engine",
+      "name": "test_duplicate_unknown_references_and_invalid_configuration",
+      "seconds": "0.001",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_transport_engine",
+      "name": "test_audit_detects_invalid_assignment",
+      "seconds": "0.009",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_transport_engine",
+      "name": "test_demo_adjustments_do_not_mutate_original",
+      "seconds": "0.003",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_transport_experiments",
+      "name": "test_lognormal_moments_and_late_probability",
+      "seconds": "0.017",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_transport_experiments",
+      "name": "test_seed_reproducible_order_independent_and_different_seed_changes",
+      "seconds": "0.010",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_transport_experiments",
+      "name": "test_common_service_shock_and_deterministic_times",
+      "seconds": "0.009",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_transport_experiments",
+      "name": "test_three_constrained_strategies_share_scenarios_and_denominators",
+      "seconds": "0.048",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_transport_experiments",
+      "name": "test_unassigned_never_removed_from_all_order_denominator",
+      "seconds": "0.022",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_transport_experiments",
+      "name": "test_infeasible_not_reported_as_zero_cost_benefit",
+      "seconds": "0.027",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_transport_experiments",
+      "name": "test_empty_rates_not_zero_or_hundred_percent",
+      "seconds": "0.021",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_transport_experiments",
+      "name": "test_json_replay_uses_full_inputs_not_claimed_saved_results",
+      "seconds": "0.101",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_transport_experiments",
+      "name": "test_invalid_replay_reports_input_error[]",
+      "seconds": "0.001",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_transport_experiments",
+      "name": "test_invalid_replay_reports_input_error[{}]",
+      "seconds": "0.001",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_transport_experiments",
+      "name": "test_invalid_replay_reports_input_error[[]]",
+      "seconds": "0.001",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_transport_experiments",
+      "name": "test_invalid_replay_reports_input_error[{\"schema\":\"unsupported\"}]",
+      "seconds": "0.001",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_transport_experiments",
+      "name": "test_invalid_scenario_counts[0]",
+      "seconds": "0.001",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_transport_experiments",
+      "name": "test_invalid_scenario_counts[-1]",
+      "seconds": "0.001",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_transport_experiments",
+      "name": "test_invalid_scenario_counts[1.5]",
+      "seconds": "0.001",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_transport_experiments",
+      "name": "test_invalid_scenario_counts[True]",
+      "seconds": "0.002",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_transport_experiments",
+      "name": "test_required_workloads_remain_feasible_and_respect_capacities[100]",
+      "seconds": "3.121",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_transport_experiments",
+      "name": "test_required_workloads_remain_feasible_and_respect_capacities[500]",
+      "seconds": "3.685",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_uat_filters",
+      "name": "test_each_of_eight_carriers_has_exactly_fifteen[1]",
+      "seconds": "0.463",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_uat_filters",
+      "name": "test_each_of_eight_carriers_has_exactly_fifteen[2]",
+      "seconds": "0.388",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_uat_filters",
+      "name": "test_each_of_eight_carriers_has_exactly_fifteen[3]",
+      "seconds": "0.406",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_uat_filters",
+      "name": "test_each_of_eight_carriers_has_exactly_fifteen[4]",
+      "seconds": "0.395",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_uat_filters",
+      "name": "test_each_of_eight_carriers_has_exactly_fifteen[5]",
+      "seconds": "0.380",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_uat_filters",
+      "name": "test_each_of_eight_carriers_has_exactly_fifteen[6]",
+      "seconds": "0.395",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_uat_filters",
+      "name": "test_each_of_eight_carriers_has_exactly_fifteen[7]",
+      "seconds": "0.372",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_uat_filters",
+      "name": "test_each_of_eight_carriers_has_exactly_fifteen[8]",
+      "seconds": "0.389",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_uat_filters",
+      "name": "test_filters_are_literal_canonical_values_and_combine_with_and[scope0-expected0]",
+      "seconds": "0.528",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_uat_filters",
+      "name": "test_filters_are_literal_canonical_values_and_combine_with_and[scope1-expected1]",
+      "seconds": "0.500",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_uat_filters",
+      "name": "test_filters_are_literal_canonical_values_and_combine_with_and[scope2-expected2]",
+      "seconds": "0.517",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_uat_filters",
+      "name": "test_filters_are_literal_canonical_values_and_combine_with_and[scope3-expected3]",
+      "seconds": "0.473",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_uat_filters",
+      "name": "test_filters_are_literal_canonical_values_and_combine_with_and[scope4-expected4]",
+      "seconds": "0.477",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_uat_filters",
+      "name": "test_filters_are_literal_canonical_values_and_combine_with_and[scope5-expected5]",
+      "seconds": "0.442",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_uat_filters",
+      "name": "test_page_counts_do_not_change_full_exception_summary",
+      "seconds": "0.852",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_uat_filters",
+      "name": "test_active_pages_exhaust_all_120_without_duplicates_and_local_search_intersects_global",
+      "seconds": "0.913",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_uat_filters",
+      "name": "test_raw_offset_contract_and_empty_results_remain_explicit",
+      "seconds": "0.480",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_web_api",
+      "name": "test_api_default_kpis_are_existing_python_calculations",
+      "seconds": "0.372",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_web_api",
+      "name": "test_filter_pagination_exports_share_same_scope",
+      "seconds": "0.747",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_web_api",
+      "name": "test_upload_and_new_store_instance_persistence[csv]",
+      "seconds": "0.356",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_web_api",
+      "name": "test_upload_and_new_store_instance_persistence[xlsx]",
+      "seconds": "0.443",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_web_api",
+      "name": "test_invalid_uploads_are_actionable_and_do_not_replace_demo[-empty.csv]",
+      "seconds": "0.373",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_web_api",
+      "name": "test_invalid_uploads_are_actionable_and_do_not_replace_demo[foo,bar\\n1,2-missing.csv]",
+      "seconds": "0.386",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_web_api",
+      "name": "test_invalid_uploads_are_actionable_and_do_not_replace_demo[bad-bad.xlsx]",
+      "seconds": "0.482",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_web_api",
+      "name": "test_invalid_uploads_are_actionable_and_do_not_replace_demo[bad-wrong.txt]",
+      "seconds": "0.360",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_web_api",
+      "name": "test_header_only_and_field_errors_do_not_crash",
+      "seconds": "0.412",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_web_api",
+      "name": "test_settings_change_score_not_v1_kpis_and_persist",
+      "seconds": "0.666",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_web_api",
+      "name": "test_decision_time_and_cost_are_independent",
+      "seconds": "0.496",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_web_api",
+      "name": "test_case_save_retry_update_stale_version_and_similarity",
+      "seconds": "0.838",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_web_api",
+      "name": "test_invalid_decision_requests_are_not_successful[change0]",
+      "seconds": "0.304",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_web_api",
+      "name": "test_invalid_decision_requests_are_not_successful[change1]",
+      "seconds": "0.298",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_web_api",
+      "name": "test_invalid_decision_requests_are_not_successful[change2]",
+      "seconds": "0.218",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_web_api",
+      "name": "test_invalid_optimizer_input_rejected[body0]",
+      "seconds": "0.232",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_web_api",
+      "name": "test_invalid_optimizer_input_rejected[body1]",
+      "seconds": "1.351",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_web_api",
+      "name": "test_invalid_optimizer_input_rejected[body2]",
+      "seconds": "0.348",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_web_api",
+      "name": "test_invalid_optimizer_input_rejected[body3]",
+      "seconds": "0.241",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_web_api",
+      "name": "test_invalid_optimizer_input_rejected[body4]",
+      "seconds": "0.250",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_web_api",
+      "name": "test_optimizer_real_results_export_and_persistence",
+      "seconds": "1.506",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_web_api",
+      "name": "test_optimizer_shortage_and_empty_are_honest",
+      "seconds": "3.871",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_web_api",
+      "name": "test_invalid_query_parameters[as_of=bad-date]",
+      "seconds": "0.236",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_web_api",
+      "name": "test_invalid_query_parameters[offset=-1]",
+      "seconds": "0.239",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_web_api",
+      "name": "test_invalid_query_parameters[limit=100000]",
+      "seconds": "0.259",
+      "status": "passed"
+    }
+  ]
+}
